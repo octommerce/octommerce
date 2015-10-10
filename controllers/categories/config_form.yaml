@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Category
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/category/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\Category
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/categories
+
+# Create page
+create:
+    title: Create Category
+    redirect: octommerce/octommerce/categories/update/:id
+    redirectClose: octommerce/octommerce/categories
+
+# Update page
+update:
+    title: Edit Category
+    redirect: octommerce/octommerce/categories
+    redirectClose: octommerce/octommerce/categories
+
+# Preview page
+preview:
+    title: Preview Category

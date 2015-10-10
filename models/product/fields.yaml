@@ -1,0 +1,90 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+
+    name:
+        label: Name
+        span: left
+        placeholder: New Product
+        required: true
+
+    slug:
+        label: Slug
+        span: right
+        disabled: true
+        preset:
+            field: name
+            type: slug
+
+    sku:
+        label: SKU
+        span: left
+
+tabs:
+    stretch: true
+    fields:
+
+        price:
+            tab: Information
+            type: number
+            label: Price
+            span: left
+            placeholder: "0.00"
+            required: true
+
+        sale_price:
+            tab: Information
+            type: number
+            label: Sale Price
+            span: right
+
+        discount_type:
+            tab: Information
+            label: Discount Type
+            type: dropdown
+            span: left
+            options:
+                null: No discount
+                price: Price
+                percentage: Percentage
+                shipping_price: Shipping Price
+                shipping_percentage: Shipping Percentage
+
+        discount_amount:
+            tab: Information
+            type: number
+            label: Discount Amount
+            span: right
+            placeholder: "0.00"
+
+        description:
+            tab: Information
+            label: Description
+            type: richeditor
+
+        categories:
+            tab: Categories
+            type: relation
+            commentAbove: Select categories
+
+
+
+
+secondaryTabs:
+
+    fields:
+
+        is_published:
+            label: Published?
+            type: switch
+
+        images:
+            label: Images
+            type: fileupload
+            mode: image
+            imageHeight: 260
+            imageWidth: 260
+
+

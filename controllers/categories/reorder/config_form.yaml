@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Categories/ Reorder
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/categories/reorder/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\Categories/Reorder
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/categories/reorder
+
+# Create page
+create:
+    title: Create Categories/ Reorder
+    redirect: octommerce/octommerce/categories/reorder/update/:id
+    redirectClose: octommerce/octommerce/categories/reorder
+
+# Update page
+update:
+    title: Edit Categories/ Reorder
+    redirect: octommerce/octommerce/categories/reorder
+    redirectClose: octommerce/octommerce/categories/reorder
+
+# Preview page
+preview:
+    title: Preview Categories/ Reorder

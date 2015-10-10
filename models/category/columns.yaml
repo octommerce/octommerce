@@ -1,0 +1,19 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    name:
+        label: Name
+        searchable: true
+    description:
+        label: Description
+        searchable: true
+    products_count:
+        label: Products Count
+        relation: products
+        valueFrom: count
+        default: 0

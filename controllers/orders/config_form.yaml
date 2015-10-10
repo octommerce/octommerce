@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Order
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/order/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\Order
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/orders
+
+# Create page
+create:
+    title: Create Order
+    redirect: octommerce/octommerce/orders/update/:id
+    redirectClose: octommerce/octommerce/orders
+
+# Update page
+update:
+    title: Edit Order
+    redirect: octommerce/octommerce/orders
+    redirectClose: octommerce/octommerce/orders
+
+# Preview page
+preview:
+    title: Preview Order

@@ -1,0 +1,17 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+
+    name:
+        label: Name
+        span: left
+
+    description:
+        label: Description
+        span: full
+
+    keywords:
+        label: Keywords
+        span: full
