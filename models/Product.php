@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Octommerce\Octommerce\Classes\ProductManager;
 
 /**
  * Product Model
@@ -11,6 +12,8 @@ class Product extends Model
     use \October\Rain\Database\Traits\Validation;
     use \October\Rain\Database\Traits\Sluggable;
     use \October\Rain\Database\Traits\Sortable;
+
+    protected $manager;
 
     /**
      * @var string The database table used by the model.
@@ -48,18 +51,24 @@ class Product extends Model
     protected $fillable = [];
 
     /**
+     * @var array Jsonable fields
+     */
+    protected $jsonable = ['options'];
+
+    /**
      * @var array Relations
      */
     public $hasOne = [
-        'tax' => 'Octommerce\Octommerce\Models\Cart',
-        'currency' => 'Octommerce\Octommerce\Models\Cart',
+        'currency' => 'Octommerce\Octommerce\Models\Currency',
     ];
 
     public $hasMany = [
         'reviews' => 'Octommerce\Octommerce\Models\Review',
     ];
 
-    public $belongsTo = [];
+    public $belongsTo = [
+        'tax' => 'Octommerce\Octommerce\Models\Tax',
+    ];
 
     public $belongsToMany = [
         'attributes' => 'Octommerce\Octommerce\Models\ProductAttribute',
@@ -69,7 +78,11 @@ class Product extends Model
             'table' => 'octommerce_octommerce_category_product',
         ],
 
-        'carts' => 'Octommerce\Octommerce\Models\Cart',
+        'carts' => [
+            'Octommerce\Octommerce\Models\Cart',
+            'table' => 'octommerce_octommerce_cart_product',
+        ],
+
         'lists' => 'Octommerce\Octommerce\Models\List',
     ];
 
@@ -82,5 +95,23 @@ class Product extends Model
         'images' => ['System\Models\File'],
         'files' => ['System\Models\File'],
     ];
+
+    public function __construct()
+    {
+        // parent::construct();
+
+        $this->manager = ProductManager::instance();
+    }
+
+    public function getTypeOptions()
+    {
+        $list = [];
+
+        foreach($this->manager->types as $type) {
+            $list[$type['code']] = $type['name'];
+        }
+
+        return $list;
+    }
 
 }
