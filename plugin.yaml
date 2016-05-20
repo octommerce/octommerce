@@ -1,0 +1,56 @@
+plugin:
+    name: 'octommerce.octommerce::lang.plugin.name'
+    description: 'octommerce.octommerce::lang.plugin.description'
+    author: 'Trias Nur Rahman'
+    icon: icon-shopping-cart
+    homepage: ''
+navigation:
+    products:
+        label: Products
+        url: octommerce/octommerce/products
+        icon: icon-tags
+        permissions:
+            - octommerce.octommerce.access_products
+        sideMenu:
+            products:
+                label: 'All Products'
+                url: octommerce/octommerce/products
+                icon: icon-barcode
+            attributes:
+                label: Attributes
+                url: octommerce/octommerce/attributes
+                icon: icon-flag
+            categories:
+                label: Categories
+                url: octommerce/octommerce/categories
+                icon: icon-table
+            lists:
+                label: Lists
+                url: octommerce/octommerce/lists
+                icon: icon-reorder
+    commerce:
+        label: Commerce
+        url: octommerce/octommerce/orders
+        icon: icon-shopping-cart
+        permissions:
+            - octommerce.octommerce.access_orders
+        sideMenu:
+            orders:
+                label: Orders
+                url: octommerce/octommerce/orders
+                icon: icon-shopping-cart
+            payments:
+                label: Payments
+                url: octommerce/octommerce/payments
+                icon: icon-credit-card
+            shippings:
+                label: Shippings
+                url: octommerce/octommerce/shippings
+                icon: icon-send
+permissions:
+    octommerce.octommerce.access_products:
+        tab: Products
+        label: 'Access Products'
+    octommerce.octommerce.access_orders:
+        tab: Orders
+        label: 'Access Orders'
