@@ -40,13 +40,13 @@ class CreateProductsTable extends Migration
             $table->integer('max_qty')->unsigned()->nullable();
 
             // price
-            $table->decimal('price', 10, 2)->unsigned()->default('0.00');
+            $table->decimal('price', 12, 2)->unsigned()->default('0.00');
             $table->integer('currency_id')->unsigned()->nullable();
 
             // discount
             $table->enum('discount_type', ['percent', 'price', 'shipping_percent', 'shipping_price'])->nullable();
-            $table->decimal('discount_amount', 10, 2)->unsigned()->nullable();
-            $table->decimal('sale_price', 10, 2)->unsigned()->nullable();
+            $table->decimal('discount_amount', 12, 2)->unsigned()->nullable();
+            $table->decimal('sale_price', 12, 2)->unsigned()->nullable();
 
             // tax
             $table->integer('tax_id')->unsigned()->nullable();
