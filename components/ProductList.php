@@ -129,7 +129,6 @@ class ProductList extends ComponentBase
         $this->productParam = $this->property('productParam');
         $this->productPageIdParam = $this->property('categorySlug');
 
-        dd($this->products);
     }
 
     public function listProducts()
