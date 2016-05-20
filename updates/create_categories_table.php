@@ -37,6 +37,7 @@ class CreateCategoriesTable extends Migration
 
     public function down()
     {
+        Schema::dropIfExists('octommerce_octommerce_category_product');
         Schema::dropIfExists('octommerce_octommerce_categories');
     }
 
