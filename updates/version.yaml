@@ -3,3 +3,4 @@
     - create_products_table.php
     - create_categories_table.php
     - create_carts_table.php
+    - create_taxes_table.php

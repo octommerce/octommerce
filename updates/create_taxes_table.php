@@ -12,6 +12,12 @@ class CreateTaxesTable extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
+
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->decimal('amount', 12, 2)->default(0);
+            $table->string('type')->default('percentage');
+
             $table->timestamps();
         });
     }
