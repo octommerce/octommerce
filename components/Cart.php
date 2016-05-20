@@ -12,8 +12,8 @@ class Cart extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'cart Component',
-            'description' => 'No description provided yet...'
+            'name'        => 'Cart Component',
+            'description' => 'Use it on every page.'
         ];
     }
 

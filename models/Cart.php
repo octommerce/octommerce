@@ -35,7 +35,10 @@ class Cart extends Model
     ];
 
     public $belongsToMany = [
-        'products' => 'Octommerce\Octommerce\Models\Product',
+        'products' => [
+            'Octommerce\Octommerce\Models\Product',
+            'table' => 'octommerce_octommerce_cart_product',
+        ]
     ];
     public $morphTo = [];
     public $morphOne = [];
