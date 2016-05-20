@@ -38,7 +38,8 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'Octommerce\Octommerce\Components\Cart'     => 'cart',
+            'Octommerce\Octommerce\Components\Cart'        => 'cart',
+            'Octommerce\Octommerce\Components\ProductList' => 'productList',
         ];
     }
 
