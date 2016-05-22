@@ -43,10 +43,17 @@ class Plugin extends PluginBase
         ];
     }
 
-    public function registerPermissions()
+    public function registerSettings()
     {
         return [
-            //
+            'config' => [
+                'label'       => 'Octommerce',
+                'icon'        => 'icon-shopping-cart',
+                'description' => 'Configure Octommerce plugins.',
+                'class'       => 'Octommerce\Octommerce\Models\Settings',
+                'permissions' => ['octommerce.octommerce.manage_plugins'],
+                'order'       => 60
+            ]
         ];
     }
 

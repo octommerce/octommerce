@@ -1,0 +1,9 @@
+fields: {  }
+tabs:
+    fields:
+        default_currency:
+            label: 'Default Currency'
+            oc.commentPosition: ''
+            span: auto
+            type: relation
+            tab: General
