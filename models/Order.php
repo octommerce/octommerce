@@ -29,7 +29,12 @@ class Order extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [];
-    public $belongsToMany = [];
+    public $belongsToMany = [
+        'products' => [
+            'Ocotommerce\Octommerce\Models\Product',
+            'table' => 'octommerce_octommerce_order_product',
+        ]
+    ];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];

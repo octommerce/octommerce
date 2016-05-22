@@ -4,3 +4,6 @@
     - create_categories_table.php
     - create_carts_table.php
     - create_taxes_table.php
+    - create_currencies_table.php
+    - create_orders_table.php
+    - seed_currencies_table.php

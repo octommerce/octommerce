@@ -20,6 +20,6 @@ class Orders extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Octommerce.Octommerce', 'octommerce', 'orders');
+        BackendMenu::setContext('Octommerce.Octommerce', 'commerce', 'orders');
     }
 }

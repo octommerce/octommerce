@@ -1,2 +1,20 @@
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item control-chart" data-control="chart-pie">
+            <ul>
+                <li data-color="#95b753">Success <span><?= isset($ordersSuccess) ? $ordersSuccess : 0 ?></span></li>
+                <li data-color="#e5a91a">Pending <span><?= isset($ordersPending) ? $ordersPending : 0 ?></span></li>
+            </ul>
+        </div>
+        <!-- <div class="scoreboard-item title-value">
+            <h4>This Month</h4>
+            <p class="positive"><small>IDR</small> 2,3B</p>
+        </div> -->
+        <div class="scoreboard-item title-value">
+            <h4>Today</h4>
+            <p><?= isset($ordersToday) ? $ordersToday : 0 ?></p>
+        </div>
+    </div>
+</div>
 
 <?= $this->listRender() ?>

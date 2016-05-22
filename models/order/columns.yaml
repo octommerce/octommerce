@@ -3,6 +3,56 @@
 # ===================================
 
 columns:
-    id:
-        label: ID
+    order_no:
+        label: Order No
         searchable: true
+    name:
+        label: Name
+        searchable: true
+    email:
+        label: Email
+        searchable: true
+    phone:
+        label: Phone
+        searchable: true
+    products:
+        label: Products
+        relation: products
+        valueFrom: name
+        searchable: true
+    subtotal:
+        label: Subtotal
+        searchable: true
+    discount:
+        label: Discount
+        searchable: true
+        invisible: true
+    tax:
+        label: Tax
+        searchable: true
+        invisible: true
+        type: number
+    total:
+        label: Total
+#        searchable: true
+    paid_amount:
+        label: Paid
+    status:
+        label: Status
+        searchable: true
+        type: partial
+        path: $/turez/commerce/models/order/_status_column.htm
+        width: 100px
+    is_followed_up:
+        label: Followed Up
+        type: switch
+        searchable: true
+    created_at:
+        label: Created At
+        searchable: true
+    pdf:
+        label: PDF
+        clickable: false
+        sortable: false
+        type: partial
+        path: $/turez/commerce/models/order/_pdf_column.htm

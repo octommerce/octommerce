@@ -155,6 +155,7 @@ tabs:
                 inch: inch
                 m: m
             span: auto
+            default: cm
             type: dropdown
             tab: Physical
 secondaryTabs:
