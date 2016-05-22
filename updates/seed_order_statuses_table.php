@@ -3,7 +3,7 @@
 use October\Rain\Database\Updates\Seeder;
 use Octommerce\Octommerce\Models\OrderStatus;
 
-class SeedCurrenciesTable extends Seeder
+class SeedOrderStatuses extends Seeder
 {
 
     public function run()
