@@ -28,7 +28,10 @@ class Review extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'product' => 'Octommerce\Octommerce\Models\Product',
+        'user' => 'RainLab\User\Models\User',
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];

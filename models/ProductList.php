@@ -29,7 +29,12 @@ class ProductList extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [];
-    public $belongsToMany = [];
+    public $belongsToMany = [
+        'products' => [
+            'Octommerce\Octommerce\Models\Product',
+            'table' => 'octommerce_octommerce_product_product_list',
+        ],
+    ];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];

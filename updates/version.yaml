@@ -1,9 +1,16 @@
 1.0.1:
     - First version of Octommerce
-    - create_products_table.php
-    - create_categories_table.php
-    - create_carts_table.php
-    - create_taxes_table.php
     - create_currencies_table.php
+    - create_taxes_table.php
+    - create_categories_table.php
+    - create_products_table.php
+    - create_product_lists_table.php
+    - create_product_product_list_table.php
+    - create_reviews_table.php
+    - create_carts_table.php
     - create_orders_table.php
+    - create_order_statuses_table.php
+    - create_order_status_logs_table.php
+    - seed_categories_table.php
     - seed_currencies_table.php
+    - seed_order_statuses_table.php

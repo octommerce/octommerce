@@ -25,7 +25,6 @@ class Product extends Model
      */
     public $rules = [
         'name' => 'required',
-        'slug' => 'required',
         'price' => 'required|regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'discount_price' => 'regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
     ];
@@ -83,7 +82,15 @@ class Product extends Model
             'table' => 'octommerce_octommerce_cart_product',
         ],
 
-        'lists' => 'Octommerce\Octommerce\Models\List',
+        'orders' => [
+            'Octommerce\Octommerce\Models\Order',
+            'table' => 'octommerce_octommerce_order_product',
+        ],
+
+        'lists' => [
+            'Octommerce\Octommerce\Models\ProductList',
+            'table' => 'octommerce_octommerce_product_product_list',
+        ],
     ];
 
     public $morphTo = [];

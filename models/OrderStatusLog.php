@@ -3,20 +3,19 @@
 use Model;
 
 /**
- * OrderStatus Model
+ * OrderStatusLog Model
  */
-class OrderStatus extends Model
+class OrderStatusLog extends Model
 {
-    use \October\Rain\Database\Traits\Sortable;
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'octommerce_octommerce_order_statuses';
+    public $table = 'octommerce_octommerce_order_status_logs';
 
     public $timestamps = false;
 
-    protected $primaryKey = 'code';
+    protected $dates = ['timestamp'];
 
     /**
      * @var array Guarded fields
@@ -28,12 +27,18 @@ class OrderStatus extends Model
      */
     protected $fillable = [];
 
+    protected $jsonable = ['data'];
+
     /**
      * @var array Relations
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'order' => 'Octommerce\Octommerce\Models\Order',
+        'status' => 'Octommerce\Octommerce\Models\OrderStatus',
+        'admin' => 'Backend\Models\User',
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];

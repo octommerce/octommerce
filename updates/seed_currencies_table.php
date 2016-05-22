@@ -71,7 +71,7 @@ class SeedCurrenciesTable extends Seeder
             'thousand_separator' => ',',
             'place_symbol_before' => true,
             'is_enabled' => true,
-            'is_primary' => true,
+            'is_primary' => false,
         ]);
     }
 

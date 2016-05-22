@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->string('slug');
             $table->text('description')->nullable();
             $table->text('keywords')->nullable();
+            $table->string('color')->nullable();
 
             $table->integer('parent_id')->unsigned()->index()->nullable();
             $table->integer('nest_left');

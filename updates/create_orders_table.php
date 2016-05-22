@@ -36,6 +36,7 @@ class CreateOrdersTable extends Migration
 
         Schema::create('octommerce_octommerce_order_product', function($table)
         {
+            $table->engine = 'InnoDB';
             $table->integer('order_id')->unsigned();
             $table->integer('product_id')->unsigned();
 

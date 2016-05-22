@@ -12,6 +12,16 @@ class CreateReviewsTable extends Migration
         {
             $table->engine = 'InnoDB';
             $table->increments('id');
+
+            $table->integer('product_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
+
+            $table->string('title')->nullable();
+            $table->text('content')->nullable();
+            $table->integer('rating')->unsigned()->nullable();
+
+            $table->boolean('is_buyer')->default(0);
+
             $table->timestamps();
         });
     }
