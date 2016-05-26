@@ -3,7 +3,7 @@
 use October\Rain\Database\Updates\Seeder;
 use Octommerce\Octommerce\Models\Category;
 
-class SeedCurrenciesTable extends Seeder
+class SeedCategoriesTable extends Seeder
 {
 
     public function run()
