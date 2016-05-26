@@ -7,11 +7,18 @@ fields:
     name:
         label: Name
         span: left
-
     description:
         label: Description
+        type: textarea
         span: full
-
     keywords:
         label: Keywords
         span: full
+    images:
+        label: Images
+        type: fileupload
+        mode: image
+    color:
+        label: Color
+        type: colorpicker
+
