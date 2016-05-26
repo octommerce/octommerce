@@ -46,7 +46,7 @@ tabs:
         description:
             tab: Information
             label: Description
-            type: richeditor
+            type: markdown
         tax:
             label: Tax
             oc.commentPosition: ''

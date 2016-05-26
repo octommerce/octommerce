@@ -48,7 +48,7 @@ tabs:
         description:
             tab: Information
             label: Description
-            type: richeditor
+            type: markdown
         tax:
             label: Tax
             oc.commentPosition: ''
@@ -207,6 +207,7 @@ secondaryTabs:
         is_published:
             label: 'Published?'
             type: switch
+            default: true
             tab: Misc
         images:
             label: Images
