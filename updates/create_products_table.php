@@ -76,6 +76,22 @@ class CreateProductsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        Schema::create('octommerce_octommerce_product_up_sell', function($table)
+        {
+            $table->engine = 'InnoDB';
+
+            $table->integer('product_id')->unsigned();
+            $table->integer('up_sell_id')->unsigned();
+        });
+
+        Schema::create('octommerce_octommerce_product_cross_sell', function($table)
+        {
+            $table->engine = 'InnoDB';
+
+            $table->integer('product_id')->unsigned();
+            $table->integer('cross_sell_id')->unsigned();
+        });
     }
 
     public function down()

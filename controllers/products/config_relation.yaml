@@ -1,0 +1,25 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+variations:
+    label: Variation
+    list: ~/plugins/octommerce/octommerce/models/product/columns_relation_product.yaml
+    form: ~/plugins/octommerce/octommerce/models/product/fields_relation_product.yaml
+    view:
+        toolbarButtons: create|delete
+        showCheckboxes: true
+
+up_sells:
+    label: Up Sell
+    list: ~/plugins/octommerce/octommerce/models/product/columns_relation_product.yaml
+    view:
+        toolbarButtons: link|unlink
+        showCheckboxes: true
+
+cross_sells:
+    label: Cross Sell
+    list: ~/plugins/octommerce/octommerce/models/product/columns_relation_product.yaml
+    view:
+        toolbarButtons: link|unlink
+        showCheckboxes: true

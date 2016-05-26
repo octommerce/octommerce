@@ -19,6 +19,7 @@ class Plugin extends PluginBase
 
         $productManager->registerTypes([
             'Octommerce\Octommerce\ProductTypes\Simple',
+            'Octommerce\Octommerce\ProductTypes\Variable',
         ]);
 
         \Octommerce\Octommerce\Controllers\Products::extendFormFields(function($form, $model, $context) use($productManager) {

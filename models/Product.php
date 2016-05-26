@@ -10,6 +10,7 @@ class Product extends Model
 {
     use \October\Rain\Database\Traits\SoftDeleting;
     use \October\Rain\Database\Traits\Validation;
+    use \October\Rain\Database\Traits\SimpleTree;
     use \October\Rain\Database\Traits\Sluggable;
     use \October\Rain\Database\Traits\Sortable;
 
@@ -62,10 +63,18 @@ class Product extends Model
     ];
 
     public $hasMany = [
+        'variations' => [
+            'Octommerce\Octommerce\Models\Product',
+            'key' => 'parent_id',
+        ],
         'reviews' => 'Octommerce\Octommerce\Models\Review',
     ];
 
     public $belongsTo = [
+        'parent'=> [
+            'Octommerce\Octommerce\Models\Product',
+            'key' => 'parent_id',
+        ],
         'tax' => 'Octommerce\Octommerce\Models\Tax',
     ];
 
@@ -75,6 +84,18 @@ class Product extends Model
         'categories' => [
             'Octommerce\Octommerce\Models\Category',
             'table' => 'octommerce_octommerce_category_product',
+        ],
+
+        'up_sells' => [
+            'Octommerce\Octommerce\Models\Product',
+            'table' => 'octommerce_octommerce_product_up_sell',
+            'key' => 'up_sell_id',
+        ],
+
+        'cross_sells' => [
+            'Octommerce\Octommerce\Models\Product',
+            'table' => 'octommerce_octommerce_product_cross_sell',
+            'key' => 'cross_sell_id',
         ],
 
         'carts' => [
@@ -119,6 +140,15 @@ class Product extends Model
         }
 
         return $list;
+    }
+
+    public function filterFields($fields, $context = null)
+    {
+        // Hide category on update
+        if($context == 'update' && $this->parent) {
+            isset($fields->type) ? $fields->type->hidden = true : '';
+            isset($fields->categories) ? $fields->categories->hidden = true : '';
+        }
     }
 
 }
