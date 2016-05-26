@@ -96,6 +96,8 @@ class CreateProductsTable extends Migration
 
     public function down()
     {
+        Schema::dropIfExists('octommerce_octommerce_product_cross_sell');
+        Schema::dropIfExists('octommerce_octommerce_product_up_sell');
         Schema::dropIfExists('octommerce_octommerce_products');
     }
 

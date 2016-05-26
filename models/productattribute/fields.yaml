@@ -1,8 +1,133 @@
-# ===================================
-#  Form Field Definitions
-# ===================================
-
 fields:
-    id:
-        label: ID
-        disabled: true
+    name:
+        label: Name
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    type:
+        label: Type
+        oc.commentPosition: ''
+        options:
+            text: Text
+            boolean: Boolean
+            select: Select
+            color: Color
+            number: Number
+            date: Date
+        span: auto
+        type: dropdown
+
+    #
+    # Default Values
+    #
+    _default[text]:
+        label: Default
+        type: text
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[text]
+    _default[boolean]:
+        label: Default
+        type: switch
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[boolean]
+    _default[select]:
+        label: Default
+        type: text
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[select]
+    _default[color]:
+        label: Default
+        type: colorpicker
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[color]
+    _default[number]:
+        label: Default
+        type: number
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[number]
+    _default[date]:
+        label: Default
+        type: datepicker
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[date]
+
+    #
+    # Options
+    #
+    # _options[select][options]:
+    #     label: Options
+    #     type: datatable
+    #     rowSorting: days
+    #     btnAddRowLabel: Add Option
+    #     btnDeleteRowLabel: Remove Option
+    #     span: right
+    #     columns:
+    #         key:
+    #             title: Key
+    #         value:
+    #             title: Value
+    #     trigger:
+    #         action: show
+    #         field: type
+    #         condition: value[select]
+    _options[select][options]:
+        label: Options
+        type: repeater
+        prompt: Add new option
+        span: right
+        form:
+            fields:
+                key:
+                    label: Key
+                    type: text
+                    span: auto
+                value:
+                    label: Value
+                    type: text
+                    span: auto
+        trigger:
+            action: show
+            field: type
+            condition: value[select]
+    _options[select][allow_multiple]:
+        label: Allow Multiple?
+        type: switch
+        span: right
+        trigger:
+            action: show
+            field: type
+            condition: value[select]
+    _options[number][min]:
+        label: Minimum
+        type: number
+        span: right
+        trigger:
+            action: show
+            field: type
+            condition: value[number]
+    _options[number][max]:
+        label: Maximum
+        type: number
+        span: right
+        trigger:
+            action: show
+            field: type
+            condition: value[number]

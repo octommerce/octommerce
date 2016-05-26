@@ -31,6 +31,7 @@ class CreateProductListsTable extends Migration
 
     public function down()
     {
+        Schema::dropIfExists('octommerce_octommerce_product_product_list');
         Schema::dropIfExists('octommerce_octommerce_product_lists');
     }
 

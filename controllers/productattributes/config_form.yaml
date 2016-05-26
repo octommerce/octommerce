@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Product Attribute
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/productattribute/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\ProductAttribute
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/productattributes
+
+# Create page
+create:
+    title: Create Product Attribute
+    redirect: octommerce/octommerce/productattributes/update/:id
+    redirectClose: octommerce/octommerce/productattributes
+
+# Update page
+update:
+    title: Edit Product Attribute
+    redirect: octommerce/octommerce/productattributes
+    redirectClose: octommerce/octommerce/productattributes
+
+# Preview page
+preview:
+    title: Preview Product Attribute

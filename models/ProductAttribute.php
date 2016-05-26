@@ -7,6 +7,7 @@ use Model;
  */
 class ProductAttribute extends Model
 {
+    use \October\Rain\Database\Traits\Purgeable;
 
     /**
      * @var string The database table used by the model.
@@ -19,9 +20,16 @@ class ProductAttribute extends Model
     protected $guarded = ['*'];
 
     /**
+     * @var array List of attributes to purge.
+     */
+    protected $purgeable = ['_default', '_options'];
+
+    /**
      * @var array Fillable fields
      */
     protected $fillable = [];
+
+    protected $jsonable = ['options'];
 
     /**
      * @var array Relations

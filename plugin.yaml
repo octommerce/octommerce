@@ -18,7 +18,7 @@ navigation:
                 icon: icon-barcode
             attributes:
                 label: Attributes
-                url: octommerce/octommerce/attributes
+                url: octommerce/octommerce/productattributes
                 icon: icon-flag
             categories:
                 label: Categories
