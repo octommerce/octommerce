@@ -7,7 +7,7 @@ use Model;
  */
 class OrderStatus extends Model
 {
-    use \October\Rain\Database\Traits\Sortable;
+    // use \October\Rain\Database\Traits\Sortable;
 
     /**
      * @var string The database table used by the model.
@@ -16,7 +16,7 @@ class OrderStatus extends Model
 
     public $timestamps = false;
 
-    protected $primaryKey = 'code';
+    public $primaryKey = 'code';
 
     /**
      * @var array Guarded fields
