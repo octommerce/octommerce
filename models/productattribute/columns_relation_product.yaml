@@ -1,0 +1,14 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: Name
+        searchable: true
+    type:
+        label: Type
+        searchable: true
+    pivot[value]:
+        label: Value
+        searchable: true

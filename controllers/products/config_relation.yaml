@@ -2,6 +2,17 @@
 #  Relation Behavior Config
 # ===================================
 
+attributes:
+    label: Attribute
+    list: ~/plugins/octommerce/octommerce/models/productattribute/columns_relation_product.yaml
+    form: ~/plugins/octommerce/octommerce/models/productattribute/fields_relation_product.yaml
+    deferredBinding: true
+    view:
+        toolbarButtons: add|remove
+        showCheckboxes: true
+    pivot:
+        form: $/octommerce/octommerce/models/productattribute/fields_relation_product.yaml
+
 variations:
     label: Variation
     list: ~/plugins/octommerce/octommerce/models/product/columns_relation_product.yaml

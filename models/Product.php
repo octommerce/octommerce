@@ -79,7 +79,12 @@ class Product extends Model
     ];
 
     public $belongsToMany = [
-        'attributes' => 'Octommerce\Octommerce\Models\ProductAttribute',
+        'attributes' => [
+            'Octommerce\Octommerce\Models\ProductAttribute',
+            'table'    => 'octommerce_octommerce_product_product_attribute',
+            'otherKey' => 'attribute_id',
+            'pivot'    => ['value']
+        ],
 
         'categories' => [
             'Octommerce\Octommerce\Models\Category',
@@ -149,6 +154,11 @@ class Product extends Model
             isset($fields->type) ? $fields->type->hidden = true : '';
             isset($fields->categories) ? $fields->categories->hidden = true : '';
         }
+    }
+
+    public function getAttributeIdOptions()
+    {
+        return ProductAttribute::lists('name', 'id');
     }
 
 }
