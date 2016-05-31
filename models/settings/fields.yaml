@@ -7,3 +7,9 @@ tabs:
             span: auto
             type: relation
             tab: General
+        base_location:
+            label: 'Base Location'
+            oc.commentPosition: ''
+            span: auto
+            type: relation
+            tab: General

@@ -23,6 +23,7 @@ class Settings extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [
+        'base_location' => 'Octommerce\Octommerce\Models\City',
         'default_currency' => 'Octommerce\Octommerce\Models\Currency',
     ];
     public $belongsToMany = [];

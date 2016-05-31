@@ -154,6 +154,7 @@ tabs:
                 kg: kg
                 ounce: ounce
                 pound: pound
+                lbs: lbs
             span: auto
             default: kg
             type: dropdown
@@ -198,8 +199,9 @@ tabs:
             options:
                 mm: mm
                 cm: cm
-                inch: inch
+                in: in
                 m: m
+                yd: yd
             span: auto
             default: cm
             type: dropdown
