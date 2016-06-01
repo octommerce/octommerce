@@ -61,8 +61,21 @@ class Plugin extends PluginBase
     public function registerMarkupTags()
     {
         return [
-            //
+            'filters' => [
+                'currency' => [$this, 'currencyFormat'],
+            ],
         ];
+    }
+
+    public function currencyFormat($value, $pretty = false, $currency = 'IDR')
+    {
+        $value = number_format($value);
+
+        if($pretty && strlen($value) > 4) {
+            $value = '<span class="price-highlight">' . substr_replace($value, '</span>', strlen($value) - 4, 0);
+        }
+
+        return $currency . ' ' . $value;
     }
 
 }
