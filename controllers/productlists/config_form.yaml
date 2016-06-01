@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Product List
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/productlist/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\ProductList
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/productlists
+
+# Create page
+create:
+    title: Create Product List
+    redirect: octommerce/octommerce/productlists/update/:id
+    redirectClose: octommerce/octommerce/productlists
+
+# Update page
+update:
+    title: Edit Product List
+    redirect: octommerce/octommerce/productlists
+    redirectClose: octommerce/octommerce/productlists
+
+# Preview page
+preview:
+    title: Preview Product List

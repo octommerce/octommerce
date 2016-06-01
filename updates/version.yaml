@@ -15,3 +15,4 @@
     - seed_categories_table.php
     - seed_currencies_table.php
     - seed_order_statuses_table.php
+    - seed_product_lists_table.php

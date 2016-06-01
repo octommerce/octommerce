@@ -6,3 +6,13 @@ columns:
     id:
         label: ID
         searchable: true
+    name:
+        label: Name
+        searchable: true
+    slug:
+        label: Slug
+    description:
+        label: Description
+    products_count:
+        label: Products Count
+        type: number
