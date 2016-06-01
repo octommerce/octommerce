@@ -73,6 +73,8 @@ class CreateProductsTable extends Migration
             $table->dateTime('available_from')->nullable();
             $table->dateTime('available_to')->nullable();
 
+            $table->integer('sort_order')->unsigned()->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });
