@@ -16,11 +16,18 @@ class Category extends Model
      */
     public $table = 'octommerce_octommerce_categories';
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     /**
      * Validation rules
      */
     public $rules = [
         'name' => 'required',
+    ];
+
+    public $translatable = [
+        'name',
+        'description',
     ];
 
     /**

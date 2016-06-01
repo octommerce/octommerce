@@ -21,6 +21,8 @@ class Product extends Model
      */
     public $table = 'octommerce_octommerce_products';
 
+    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+
     /**
      * Validation rules
      */
@@ -29,6 +31,30 @@ class Product extends Model
         'price' => 'required|regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'discount_price' => 'regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
     ];
+
+    /**
+     * @var array Attributes that support translation, if available.
+     */
+    public $translatable = [
+        'name',
+        'description',
+    ];
+
+    /**
+     * The attributes on which the post list can be ordered
+     * @var array
+     */
+    public static $allowedSortingOptions = array(
+        'name asc' => 'Name (ascending)',
+        'name desc' => 'Name (descending)',
+        'created_at asc' => 'Created (ascending)',
+        'created_at desc' => 'Created (descending)',
+        'price asc' => 'Price (ascending)',
+        'price desc' => 'Price (descending)',
+        'random' => 'Random',
+        'sort_order asc' => 'Reordered (ascending)',
+        'sort_order desc' => 'Reordered (descending)'
+    );
 
     /**
      * @var array Generate slugs for these attributes.
@@ -116,6 +142,7 @@ class Product extends Model
         'lists' => [
             'Octommerce\Octommerce\Models\ProductList',
             'table' => 'octommerce_octommerce_product_product_list',
+            'otherKey' => 'list_id',
         ],
     ];
 
@@ -161,4 +188,8 @@ class Product extends Model
         return ProductAttribute::lists('name', 'id');
     }
 
+    public function inList($listSlug)
+    {
+        return in_array($listSlug, $this->lists->pluck('slug'));
+    }
 }
