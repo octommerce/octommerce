@@ -57,6 +57,11 @@ class Category extends Model
             'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_category_product',
         ],
+        'products_count' => [
+            'Octommerce\Octommerce\Models\Product',
+            'table' => 'octommerce_octommerce_category_product',
+            'count' => true
+        ],
     ];
 
     public $morphTo = [];
