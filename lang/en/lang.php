@@ -33,5 +33,6 @@
                 'id_param_title' => 'Slug param name',
                 'id_param_desc' => 'The URL route parameter used for looking up the product by its slug.',
             ],
+        ],
     ],
 ];
