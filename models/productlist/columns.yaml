@@ -15,4 +15,6 @@ columns:
         label: Description
     products_count:
         label: Products Count
-        type: number
+        relation: products_count
+        valueFrom: count
+        default: 0
