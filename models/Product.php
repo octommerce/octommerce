@@ -188,8 +188,14 @@ class Product extends Model
         return ProductAttribute::lists('name', 'id');
     }
 
+    public function getSalePriceAttribut()
+    {
+
+    }
+
     public function inList($listSlug)
     {
-        return in_array($listSlug, $this->lists->pluck('slug'));
+        return in_array($listSlug, $this->lists->pluck('slug')->toArray());
     }
+
 }
