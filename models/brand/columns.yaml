@@ -1,0 +1,15 @@
+columns:
+    id:
+        label: ID
+        searchable: true
+        invisible: true
+    name:
+        label: Name
+        searchable: true
+    is_published:
+        label: Published
+    products_count:
+        label: Products Count
+        relation: products_count
+        valueFrom: count
+        default: 0

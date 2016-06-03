@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Classes\ProductManager;
 
 /**
@@ -102,6 +103,9 @@ class Product extends Model
             'key' => 'parent_id',
         ],
         'tax' => 'Octommerce\Octommerce\Models\Tax',
+        'brand' => [
+            'Octommerce\Octommerce\Models\Brand'
+        ]
     ];
 
     public $belongsToMany = [
@@ -196,6 +200,11 @@ class Product extends Model
     public function inList($listSlug)
     {
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
+    }
+
+    public function getBrandIdOptions($keyValue = null)
+    {
+        return Brand::lists('name', 'id');
     }
 
 }

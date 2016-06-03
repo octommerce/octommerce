@@ -8,6 +8,11 @@ columns:
         label: Name
         type: text
         searchable: true
+    brand_id:
+        label: Brand
+        relation: brand
+        select: name
+        searchable: true
     price:
         label: Price
         type: number

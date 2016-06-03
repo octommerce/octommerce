@@ -16,3 +16,7 @@
     - seed_currencies_table.php
     - seed_order_statuses_table.php
     - seed_product_lists_table.php
+1.0.2:
+    - Add brands.
+    - create_brands_table.php
+    - add_brand_id_to_products_table.php

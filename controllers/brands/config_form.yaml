@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Brand
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/brand/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\Brand
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/brands
+
+# Create page
+create:
+    title: Create Brand
+    redirect: octommerce/octommerce/brands/update/:id
+    redirectClose: octommerce/octommerce/brands
+
+# Update page
+update:
+    title: Edit Brand
+    redirect: octommerce/octommerce/brands
+    redirectClose: octommerce/octommerce/brands
+
+# Preview page
+preview:
+    title: Preview Brand

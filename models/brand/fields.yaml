@@ -1,0 +1,17 @@
+fields:
+    name:
+        label: Name
+        type: text
+        span: auto
+        required: true
+    is_published:
+        label: Published?
+        type: switch
+        default: true
+        comment: Is this brand published?
+    description:
+        label: Description
+        type: textarea
+    keywords:
+        label: Keywords
+        type: text

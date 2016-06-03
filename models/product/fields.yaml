@@ -13,6 +13,11 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: dropdown
+    brand_id:
+        label: Brands
+        span: auto
+        type: dropdown
+        placeholder: Please select one...
 tabs:
     fields:
         price:

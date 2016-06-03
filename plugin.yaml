@@ -24,6 +24,10 @@ navigation:
                 label: Categories
                 url: octommerce/octommerce/categories
                 icon: icon-table
+            brands:
+                label: Brands
+                url: octommerce/octommerce/brands
+                icon: icon-eye
             lists:
                 label: Lists
                 url: octommerce/octommerce/productlists
