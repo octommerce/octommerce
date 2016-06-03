@@ -18,7 +18,7 @@ variations:
     list: ~/plugins/octommerce/octommerce/models/product/columns_relation_product.yaml
     form: ~/plugins/octommerce/octommerce/models/product/fields_relation_product.yaml
     view:
-        toolbarButtons: create|delete
+        toolbarButtons: create|delete|add|remove
         showCheckboxes: true
 
 up_sells:

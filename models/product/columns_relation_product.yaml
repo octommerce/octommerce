@@ -7,6 +7,7 @@ columns:
     name:
         label: Name
         type: text
+        searchable: true
     price:
         label: Price
         type: number
