@@ -8,6 +8,7 @@ use Octommerce\Octommerce\Models\Products;
  */
 class Brand extends Model
 {
+    use \October\Rain\Database\Traits\Sluggable;
     use \October\Rain\Database\Traits\Validation;
 
     /**
@@ -33,6 +34,11 @@ class Brand extends Model
     ];
 
     /**
+     * @var array Generate slugs for these attributes.
+     */
+    protected $slugs = ['slug' => 'name'];
+
+    /**
      * @var array Relations
      */
     public $hasOne = [];
@@ -51,6 +57,8 @@ class Brand extends Model
     public $morphOne = [];
     public $morphMany = [];
     public $attachOne = [];
-    public $attachMany = [];
+    public $attachMany = [
+        'images' => ['System\Models\File'],
+    ];
 
 }

@@ -15,3 +15,12 @@ fields:
     keywords:
         label: Keywords
         type: text
+secondaryTabs:
+    fields:
+        images:
+            label: Images
+            type: fileupload
+            mode: image
+            imageHeight: 260
+            imageWidth: 260
+            tab: Misc
