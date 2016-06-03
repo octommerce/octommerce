@@ -74,9 +74,15 @@ tabs:
         #                 span: auto
         #     tab: Attributes
         categories:
-            tab: Categories
+            tab: Categories & Lists
             type: relation
+            span: auto
             commentAbove: 'Select categories'
+        lists:
+            tab: Categories & Lists
+            type: relation
+            span: auto
+            commentAbove: 'Select lists'
         manage_stock:
             label: 'Manage Stock?'
             span: full

@@ -5,10 +5,12 @@ use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
 {
-
+    public $category;
+    public $list;
     public $products;
 
     public function componentDetails()
@@ -28,40 +30,26 @@ class ProductList extends ComponentBase
                 'default'     => '{{ :slug }}',
                 'type'        => 'string'
             ],
-            'useCategoryFilter' => [
-                'title'       => 'octommerce.octommerce::lang.component.product_list.param.usecategoryfilter_param_title',
-                'description' => 'octommerce.octommerce::lang.component.product_list.param.usecategoryfilter_param_desc',
-                'type'        => 'checkbox',
-                'default'     => 0,
-                'group'       => 'Filter',
-            ],
             'categoryFilter' => [
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.categoryfilter_param_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.categoryfilter_param_desc',
-                'type'        => 'string',
+                'type'        => 'dropdown',
                 'default'     => '',
                 'group'       => 'Filter',
             ],
-            'productPage' => [
-                'title'       => 'octommerce.octommerce::lang.component.product_list.param.product_page_title',
-                'description' => 'octommerce.octommerce::lang.component.product_list.param.product_page_desc',
+            'listFilter' => [
+                'title'       => 'octommerce.octommerce::lang.component.product_list.param.listfilter_param_title',
+                'description' => 'octommerce.octommerce::lang.component.product_list.param.listfilter_param_desc',
                 'type'        => 'dropdown',
-                'default'     => 'products/:slug',
-                'group'       => 'Products',
-            ],
-            'productPageSlug' => [
-                'title'       => 'octommerce.octommerce::lang.component.product_list.param.product_page_id_title',
-                'description' => 'octommerce.octommerce::lang.component.product_list.param.product_page_id_desc',
-                'default'     => '{{ :slug }}',
-                'type'        => 'string',
-                'group'       => 'Products',
+                'default'     => '',
+                'group'       => 'Filter',
             ],
             'noProductsMessage' => [
                 'title'        => 'octommerce.octommerce::lang.component.product_list.param.no_product_title',
                 'description'  => 'octommerce.octommerce::lang.component.product_list.param.no_product_desc',
                 'type'         => 'string',
                 'default'      => 'No product found',
-                'group'       => 'Products'
+                'group'        => 'Filter'
             ],
             'productsPerPage' => [
                 'title'             => 'octommerce.octommerce::lang.component.product_list.param.products_per_page_title',
@@ -81,10 +69,14 @@ class ProductList extends ComponentBase
         ];
     }
 
-
-    public function getProductPageOptions()
+    public function getCategoryFilterOptions()
     {
-        return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+        return ['' => '- none -'] + Category::lists('name', 'slug');
+    }
+
+    public function getListFilterOptions()
+    {
+        return ['' => '- none -'] + ProductListModel::lists('name', 'slug');
     }
 
     public function getSortOrderOptions()
@@ -94,18 +86,6 @@ class ProductList extends ComponentBase
 
     public function onRun()
     {
-        // Use strict method only to avoid conflicts whith other plugins
-        $this->productPage = $this->property('productPage');
-
-        $category = $this->category = $this->loadCategory();
-
-        // Return error only if category filter is not used
-        // if ($this->property('useCategoryFilter') == 0) {
-        //     if (!$category) {
-        //         $this->setStatusCode(404);
-        //         return $this->controller->run('404');
-        //     }
-        // }
 
         $currentPage = post('page');
         $products = $this->products = $this->listProducts();
@@ -133,31 +113,33 @@ class ProductList extends ComponentBase
 
     public function listProducts()
     {
-        $categories = $this->category ? $this->category->id : null;
+        $query = Product::whereIsPublished(1)
+            ->with('categories')
+            ->with('lists');
 
-        if ($this->property('useCategoryFilter') == 1 && $this->property('categoryFilter') != '') {
-            $category = Category::whereSlug($this->property('categoryFilter'))->first();
-            $categories = $category->id;
+        if ($this->property('categoryFilter') != '') {
+            $category = $this->category = Category::whereSlug($this->property('categoryFilter'))->first();
+
+            if ($category) {
+                $query->whereHas('categories', function($q) use ($category) {
+                    $q->whereId($category->id);
+                });
+            }
         }
 
-        $products = Product::with('categories')
-            ->whereIsPublished(1)
-            ->paginate($this->property('productsPerPage'));
+        if ($this->property('listFilter') != '') {
+            $list = $this->list = ProductListModel::whereSlug($this->property('listFilter'))->first();
+
+            if ($list) {
+                $query->whereHas('categories', function($q) use ($list) {
+                    $q->whereId($list->id);
+                });
+            }
+        }
+
+        $products = $query->paginate($this->property('productsPerPage'));
 
         return $products;
-    }
-
-    protected function loadCategory()
-    {
-        $category = Category::whereSlug($this->property('categorySlug'))->first();
-
-        if (!$category) {
-            return null;
-        }
-
-        $this->page->title = $category->name;
-
-        return $category;
     }
 
 }
