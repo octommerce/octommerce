@@ -1,0 +1,18 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    sku:
+        label: SKU
+    name:
+        label: Name
+    price:
+        label: Price
+    qty:
+        label: Qty
+    sale_price:
+        label: 'Sale Price'

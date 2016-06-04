@@ -12,11 +12,13 @@ class Products extends Controller
         'Backend.Behaviors.FormController',
         'Backend.Behaviors.ListController',
         'Backend.Behaviors.RelationController',
+        'Backend.Behaviors.ImportExportController',
     ];
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
+    public $importExportConfig = 'config_import_export.yaml';
 
     public $bodyClass = 'compact-container';
 
