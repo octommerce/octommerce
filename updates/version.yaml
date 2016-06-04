@@ -20,3 +20,7 @@
     - Add brands.
     - create_brands_table.php
     - add_brand_id_to_products_table.php
+1.0.3:
+    - Add cities
+    - create_cities_table.php
+    - seed_cities_table.php
