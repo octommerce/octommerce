@@ -74,21 +74,30 @@ class Cart
         // Get the latest update
         $cart = $this->getCart();
 
-        return $this->cart;
+        return $cart;
     }
 
     public function removeItem($productId, $qty = 1)
     {
+        $product = $this->getItem($productId);
+        $cart = $this->getCart();
+
         $cart->products()->detach([$product->id]);
 
-        return $this->cart;
+        $cart = $this->getCart();
+
+        return $cart;
     }
 
     public function clear()
     {
+        $cart = $this->getCart();
+
         $cart->products()->detach();
 
-        return $this->cart;
+        $cart = $this->getCart();
+
+        return $cart;
     }
 
     protected function prepareVars()
