@@ -16,7 +16,7 @@ class Cart extends Model
     /**
      * @var array Guarded fields
      */
-    protected $guarded = ['*'];
+    protected $guarded = [];
 
     /**
      * @var array Fillable fields
@@ -31,13 +31,14 @@ class Cart extends Model
     public $hasMany = [];
 
     public $belongsTo = [
-        // 'user' => '',
+        'user' => 'RainLab\User\Models\User',
     ];
 
     public $belongsToMany = [
         'products' => [
             'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_cart_product',
+            'pivot' => ['qty', 'price', 'discount', 'data'],
         ]
     ];
     public $morphTo = [];
@@ -46,4 +47,14 @@ class Cart extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function getTotalPriceAttribute()
+    {
+        $total = 0;
+
+        foreach($this->products as $product) {
+            $total += ($product->pivot->qty * ($product->pivot->price - $product->pivot->discount));
+        }
+
+        return $total;
+    }
 }

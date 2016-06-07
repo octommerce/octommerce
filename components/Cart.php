@@ -9,6 +9,8 @@ use Octommerce\Octommerce\Models\Product;
 class Cart extends ComponentBase
 {
 
+    public $cart;
+
     public function componentDetails()
     {
         return [
@@ -25,16 +27,15 @@ class Cart extends ComponentBase
     public function onRun()
     {
 
-      // dd(Session::getId());
-        $cart = CartModel::whereSessionId(Session::getId())->first();
-
-        $this->cart = $cart;
+        $this->cart = CartModel::whereSessionId(Session::getId())->first();
     }
 
     public function onAdd()
     {
         $user = Auth::getUser();
-        $product = Product::find(post('id'));
+
+        $product = Product::find(post('product_id'));
+        $qty = post('qty') ? post('qty') : 1;
 
         if (!$product) {
             throw new \ApplicationException('Product not found.');
@@ -45,23 +46,19 @@ class Cart extends ComponentBase
         ]);
 
         //attach user_id when user login
-        $cart->user_id = Auth::check()?$user->id:null; $cart->save();
+        $cart->user_id = Auth::check() ? $user->id : null ;
+
+        $cart->save();
 
         $productData = [
-            'width' => post('width'),
-            'height' => post('height'),
-            'material' => post('materialDetailInput'),
-            'offset_top' => post('offset_top'),
-            'offset_left' => post('offset_left'),
+            //
         ];
-
-
 
         $cart->products()->attach([
             $product->id => [
-                'qty' => 1, // default to 1
-                'discount' => $product->discount_price,
-                'price' => $this->countOrder(), // temporary
+                'qty' => $qty,
+                'discount' => 0,
+                'price' => $product->price, // temporary
                 'data' => json_encode($productData),
             ]
         ]);
