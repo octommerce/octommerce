@@ -38,7 +38,7 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Product successfully added to cart.',
-            '#cartCounter' => $cart->products->count(),
+            '.cart-counter' => $cart->products->count(),
         ];
     }
 
@@ -48,7 +48,7 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Cart is successfully updated.',
-            '#cartCounter' => $cart->products->count(),
+            '.cart-counter' => $cart->products->count(),
         ];
     }
 
@@ -58,7 +58,7 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Product successfully removed from cart.',
-            '#cartCounter' => $cart->products->count(),
+            '.cart-counter' => $cart->products->count(),
         ];
     }
 
@@ -68,7 +68,7 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Cart is successfully cleared.',
-            '#cartCounter' => $cart->products->count(),
+            '.cart-counter' => $cart->products->count(),
         ];
     }
 
