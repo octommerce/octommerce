@@ -2,6 +2,7 @@
 
 use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
+use Illuminate\Foundation\AliasLoader;
 
 /**
  * Octommerce Plugin Information File
@@ -32,9 +33,13 @@ class Plugin extends PluginBase
         });
     }
 
+    /**
+     * Register method, called when the plugin is first registered.
+     */
     public function register()
     {
-        //
+        $alias = AliasLoader::getInstance();
+        $alias->alias('Cart', 'Octommerce\Octommerce\Facades\Cart');
     }
 
     public function registerComponents()
