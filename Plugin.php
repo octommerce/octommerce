@@ -3,6 +3,7 @@
 use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
+use Octommerce\Octommerce\Models\Category;
 
 /**
  * Octommerce Plugin Information File
@@ -31,6 +32,31 @@ class Plugin extends PluginBase
             $productManager->addCustomFields($form);
 
         });
+        /*
+         * Register menu items for the RainLab.Pages and RainLab.Sitemap plugin
+         */
+        \Event::listen('pages.menuitem.listTypes', function () {
+            return [
+                'all-catalog-categories' => 'All Catalog categories',
+                'catalog-category' => 'Catalog category',
+            ];
+        });
+
+        \Event::listen('pages.menuitem.getTypeInfo', function ($type) {
+            if ($type == 'url') {
+                return [];
+            }
+
+            if ($type == 'all-catalog-categories'|| $type == 'catalog-category') {
+                return Category::getMenuTypeInfo($type);
+            }
+        });
+
+        \Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
+            if ($type == 'all-catalog-categories' || $type == 'catalog-category') {
+                return Category::resolveMenuItem($item, $url, $theme);
+            }
+        });
     }
 
     /**
@@ -45,6 +71,7 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
+            'Octommerce\Octommerce\Components\Order'         => 'order',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',

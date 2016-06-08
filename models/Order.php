@@ -14,7 +14,7 @@ class Order extends Model
      */
     public $table = 'octommerce_octommerce_orders';
 
-    protected $dates = ['deleted_at'];
+    // protected $dates = ['deleted_at'];
 
     /**
      * @var array Guarded fields
@@ -26,7 +26,7 @@ class Order extends Model
      */
     protected $fillable = [];
 
-    protected $dates = ['expired_at'];
+    protected $dates = ['expired_at', 'deleted_at'];
 
     /**
      * The attributes that should be appended to native types.
