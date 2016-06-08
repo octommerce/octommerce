@@ -7,6 +7,17 @@ class OrderManager
 {
 	use \October\Rain\Support\Traits\Singleton;
 
+    public function create($data)
+    {
+        $order = new Order;
+
+        $order->name = $data['name'];
+
+        $order->save();
+
+        //TODO:
+    }
+
     public function checkExpiredOrders()
     {
         Order::whereStatus('pending')
