@@ -1,8 +1,10 @@
 <?php namespace Octommerce\Octommerce;
 
+use Event;
 use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
+use Octommerce\Octommerce\Models\Category;
 
 /**
  * Octommerce Plugin Information File
@@ -30,6 +32,26 @@ class Plugin extends PluginBase
 
             $productManager->addCustomFields($form);
 
+        });
+
+        /*
+         * Register menu items for the RainLab.Pages plugin
+         */
+        Event::listen('pages.menuitem.listTypes', function() {
+            return [
+                'product-category' => 'Product Category',
+                'all-product-categories' => 'All Product Categories'
+            ];
+        });
+
+        Event::listen('pages.menuitem.getTypeInfo', function($type) {
+            if ($type == 'product-category' || $type == 'all-product-categories')
+                return Category::getMenuTypeInfo($type);
+        });
+
+        Event::listen('pages.menuitem.resolveItem', function($type, $item, $url, $theme) {
+            if ($type == 'product-category' || $type == 'all-product-categories')
+                return Category::resolveMenuItem($item, $url, $theme);
         });
     }
 
