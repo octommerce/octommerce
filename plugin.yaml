@@ -24,6 +24,12 @@ navigation:
                 label: Categories
                 url: octommerce/octommerce/categories
                 icon: icon-table
+            reorder:
+                label: Reorder Categories
+                icon: icon-exchange
+                url: octommerce/octommerce/categories/reorder
+                attributes:
+                      data-menu-item: categories
             brands:
                 label: Brands
                 url: octommerce/octommerce/brands
@@ -47,10 +53,6 @@ navigation:
                 label: Payments
                 url: octommerce/octommerce/payments
                 icon: icon-credit-card
-            shippings:
-                label: Shippings
-                url: octommerce/octommerce/shippings
-                icon: icon-send
 permissions:
     octommerce.octommerce.access_products:
         tab: Products
