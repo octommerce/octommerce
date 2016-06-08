@@ -32,7 +32,9 @@ showSorting: true
 #     direction: desc
 
 # Display checkboxes next to each record
-# showCheckboxes: true
+showCheckboxes: true
+
+showTree: true
 
 # Toolbar widget configuration
 toolbar:

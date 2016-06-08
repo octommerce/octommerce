@@ -24,12 +24,6 @@ navigation:
                 label: Categories
                 url: octommerce/octommerce/categories
                 icon: icon-table
-            reorder:
-                label: Reorder Categories
-                icon: icon-exchange
-                url: octommerce/octommerce/categories/reorder
-                attributes:
-                      data-menu-item: categories
             brands:
                 label: Brands
                 url: octommerce/octommerce/brands
