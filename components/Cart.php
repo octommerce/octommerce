@@ -34,7 +34,7 @@ class Cart extends ComponentBase
 
     public function onAdd()
     {
-        $cart = $this->page['cart'] = CartHelper::addItem(post('product_id'), post('qty'));
+        $cart = $this->page['cart'] = CartHelper::addItem(post('product_id'), post('qty') ?: 1);
 
         return [
             'result' => 'Product successfully added to cart.',
