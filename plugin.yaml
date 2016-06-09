@@ -32,6 +32,10 @@ navigation:
                 label: Lists
                 url: octommerce/octommerce/productlists
                 icon: icon-reorder
+            reviews:
+                label: Reviews
+                url: octommerce/octommerce/reviews
+                icon: icon-comments
     commerce:
         label: Commerce
         url: octommerce/octommerce/orders

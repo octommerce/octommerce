@@ -1,8 +1,39 @@
-# ===================================
-#  Form Field Definitions
-# ===================================
-
 fields:
-    id:
-        label: ID
-        disabled: true
+    product:
+        label: Product
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: sku
+        list: $/octommerce/octommerce/models/product/columns.yaml
+        span: auto
+        type: recordfinder
+    user:
+        label: User
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: ''
+        list: $/rainlab/user/models/user/columns.yaml
+        span: auto
+        type: recordfinder
+    title:
+        label: Title
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    rating:
+        label: Rating
+        oc.commentPosition: ''
+        options:
+            1: '1'
+            2: '2'
+            3: '3'
+            4: '4'
+            5: '5'
+        span: auto
+        type: dropdown
+    content:
+        label: Content
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
