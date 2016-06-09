@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use Cms\Classes\ComponentBase;
+use Octommerce\Octommerce\Classes\OrderManager;
 use DB;
 use Auth;
 use Session;
@@ -15,6 +16,7 @@ use Octommerce\Octommerce\Models\Order as OrderModel;
 
 class Checkout extends ComponentBase
 {
+    public $orderManager;
 
     public function componentDetails()
     {
@@ -33,117 +35,68 @@ class Checkout extends ComponentBase
                 'default'    =>  ':token',
                 'description'=>  'Token of payment url',
             ],
+            'redirectPage' => [
+                'title'       => 'Redirect Page',
+                'description' => 'What page when the order is successfully submitted.',
+                'type'        => 'string',
+            ],
         ];
     }
 
-    public function onSubmitOrder() {
-        DB::beginTransaction();
-        try {
-            $post = post();
-            // $this->getOrRegisterUser($post);
-            if(Auth::check()) {
-                $cartItems = CartModel::whereSessionId(Session::getId())->first();
-                $cost = new Cost();
-                $cost->onSelectCity();
-                if(!$cartItems) {
-                    return "You have no order";
-                }else if($cost->onSelectCity()['shippingCost'] == 0) {
-                    return "Sorry, you haven't selected appropriate destination city";
-                }
-                $user = $this->user = Auth::getUser();
-                $order = new Order();
-                $order->user_id        = $user->id;
-                $order->name           = $user->name;
-                $order->email          = $user->email;
-                $order->phone          = $user->telephone;
-                $order->address        = $user->address1;
-                $order->postcode       = $user->postcode;
-                $order->order_quantity = count($cartItems->products);
-                $order->subtotal       = $cost->onSelectCity()['subTotal'];
-                $order->shipping_cost  = $cost->onSelectCity()['shippingCost'];
-                $order->insurance_cost = $cost->onSelectCity()['insuranceCost'];
-                $order->expired_at     = Carbon::now()->addMinutes(60);
-                $order->save();
-                $counter = 0;
-                foreach ($cartItems->products as $key => $product) {
-                    $data = json_decode($product->pivot->data, true);
-                    $textData = [
-                        'char_sample' => $data['char_sample'],
-                        //'char_length' => $data['char_length'],
-                        'font' => $data['font'],
-                        'font_size' => $data['font_size'],
-                        'font_x' => $data['font_x'],
-                        'font_y' => $data['font_y'],
-                    ];
-                    $order->products()->attach([
-                        $product->id => [
-                            'item' => $product->title,
-                            'width' => $data['width'],
-                            'height' => $data['height'],
-                            'offset_top' => $data['offset_top'],
-                            'offset_left' => $data['offset_left'],
-                            'price' => $product->pivot->price,
-                            'material' => $data['material'],
-                            'discount' => $product->discount_price,
-                            'text_data' => json_encode($textData),
-                        ]
-                    ]);
-                    // $counter = $key+1;
-                    // $arrayName = "item{$counter}_details";
-                    $itemDetails[$key] = [
-                        'id' => $product->id,
-                        'price' => $product->pivot->price - $product->pivot->discount,
-                        'quantity' => $product->pivot->qty,
-                        'name'  => $product->title
-                    ];
-                    $counter+=1;
-                }
-                DB::commit();
+    // public function __construct()
+    // {
+    //     parent::__construct();
+    //
+    //     $this->orderManager = OrderManager::instance();
+    // }
 
-                $cartItems->products()->detach();
+    public function onSubmitOrder()
+    {
+        $data = post();
 
-                $itemDetails[$counter] = [
-                    'id' => "shipping",
-                    'price' => $order->shipping_cost,
-                    'quantity' => 1,
-                    'name' => 'Shipping Cost'
-                ];
+        $this->orderManager->create($data);
 
-                if($order->insurance_cost > 0) {
-                    $itemDetails[$counter+1] = [
-                        'id' => "insurance",
-                        'price' => $order->insurance_cost,
-                        'quantity' => 1,
-                        'name' => 'Insurance Cost'
-                    ];
-                }
+        //return Redirect::to($this->property('redirectPage'));
 
-                $customer_details = array(
-                    'first_name'    => $user->name, //optional
-                    'email'         => $user->email, //mandatory
-                    'phone'         => $user->telephone, //mandatory
-                    );
+        return Redirect::to('/');
+    }
 
-                $transactionData = array(
-                        'order_id' => $order->invoice_no,
-                        'gross_amount' => $order->subtotal + $order->shipping_cost + $order->insurance_cost
-                );
+    public function onSubmit() {
 
-                $transaction = array(
-                    'transaction_details' => $transactionData,
-                    'customer_details'    => $customer_details,
-                    'item_details'        => $itemDetails
-                );
-                // return json_encode($transaction);
-                $vtweb = new VTWeb();
-                return $vtweb->onCheckout(json_encode($transaction));
-            }
+        $order = new OrderModel();
 
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
+        //$this->getOrRegisterUser();
+
+        if(!$cart = CartModel::whereSessionId(Session::getId())->first()) {
+            return "You have no orders.";
         }
 
+        $data = post();
+
+        $order->name = $data['name'];
+
+				$order->email = $data['email'];
+
+				$order->phone = $data['phone'];
+
+				$order->subtotal = $cart->total_price;
+
+        $order->save();
+
+				foreach($cart->products as $product) {
+            $order->products()->attach([
+                $product->id => [
+                    'qty' 			=> $product->pivot->qty,
+										'price' 		=> $product->pivot->price,
+										'discount'  => $product->pivot->discount,
+										'name'			=> $product->name
+                ]
+            ]);
+				}
+
+        $cart->products()->detach();
+        return Redirect::to($this->property('redirectPage'));
+        //TODO:
     }
 
 protected function getOrRegisterUser($data, $update = true)
@@ -151,7 +104,7 @@ protected function getOrRegisterUser($data, $update = true)
         if (! Auth::check()) {
             $dataUser['name'] = $data['name'];
             $dataUser['email'] = $data['email'];
-            $dataUser['telephone'] = $data['telephone'];
+            $dataUser['phone'] = $data['phone'];
             $dataUser['password'] = $this->generateRandomString(5);
             $dataUser['password_confirmation'] = $dataUser['password'];
             $dataUser['state_id'] = $data['state_id'];

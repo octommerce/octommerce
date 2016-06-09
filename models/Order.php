@@ -40,14 +40,14 @@ class Order extends Model
      */
     public $hasOne = [];
     public $hasMany = [
-        'status_logs' => 'Ocotommerce\Octommerce\Models\OrderStatusLog',
+        'status_logs' => 'Octommerce\Octommerce\Models\OrderStatusLog',
     ];
     public $belongsTo = [
         'user' => 'RainLab\User\Models\User'
     ];
     public $belongsToMany = [
         'products' => [
-            'Ocotommerce\Octommerce\Models\Product',
+            'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_order_product',
         ],
     ];

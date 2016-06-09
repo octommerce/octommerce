@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Octommerce\Octommerce\Models\Order;
+use Octommerce\Octommerce\Models\Cart;
 
 class OrderManager
 {
@@ -11,7 +12,28 @@ class OrderManager
     {
         $order = new Order;
 
+				$orderDetail = $order->products;
+
+				$cart = Cart::whereSessionId(Session::getId())->first();
+
         $order->name = $data['name'];
+
+				$order->email = $data['email'];
+
+				$order->phone = $data['phone'];
+
+				$order->subtotal = $cart->total_price;
+
+				foreach ($cart->products as $product) {
+            $order->products()->attach([
+                $product->id => [
+                    'qty' 			=> $product->pivot->qty,
+										'price' 		=> $product->pivot->price,
+										'discount'  => $product->pivot->discount,
+										'name'			=> $product->name
+                ]
+            ]);
+				}
 
         $order->save();
 
