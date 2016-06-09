@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Carbon\Carbon;
 use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Classes\ProductManager;
 
@@ -65,7 +66,7 @@ class Product extends Model
     /**
      * @var array Soft deletes.
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'available_from', 'available_to'];
 
     /**
      * @var array Guarded fields
@@ -192,9 +193,42 @@ class Product extends Model
         return ProductAttribute::lists('name', 'id');
     }
 
-    public function getSalePriceAttribut()
+    public function getSalePriceAttribute($value)
     {
+        if (!$value) {
+            return $this->price;
+        }
+    }
 
+    public function scopeDisplayed($query)
+    {
+        // return $query->
+    }
+
+    public function isAvailable($qty = 1)
+    {
+        // Check stock management
+        if (!$this->manage_stock) {
+            return true;
+        }
+
+        if ($this->qty < $qty ||
+            $this->available_from > Carbon::now() ||
+            $this->available_to < Carbon::now()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function holdStock($qty)
+    {
+        //
+    }
+
+    public function releaseStock($qty)
+    {
+        //
     }
 
     public function inList($listSlug)
