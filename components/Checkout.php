@@ -1,16 +1,18 @@
 <?php namespace Octommerce\Octommerce\Components;
 
-use Cms\Classes\ComponentBase;
-use Octommerce\Octommerce\Classes\OrderManager;
-use DB;
+use Db;
 use Auth;
-use Session;
-use Carbon\Carbon;
 use Mail;
 use Flash;
 use Input;
-use RainLab\User\Models\User;
+use Exception;
+use Session;
 use Redirect;
+use Carbon\Carbon;
+use Cms\Classes\Page;
+use Cms\Classes\ComponentBase;
+use RainLab\User\Models\User;
+use Octommerce\Octommerce\Classes\OrderManager;
 use Octommerce\Octommerce\Models\Cart as CartModel;
 use Octommerce\Octommerce\Models\Order as OrderModel;
 
@@ -38,9 +40,14 @@ class Checkout extends ComponentBase
             'redirectPage' => [
                 'title'       => 'Redirect Page',
                 'description' => 'What page when the order is successfully submitted.',
-                'type'        => 'string',
+                'type'        => 'dropdown',
             ],
         ];
+    }
+
+    public function getRedirectPageOptions()
+    {
+        return Page::getNameList();
     }
 
     // public function __construct()
@@ -61,42 +68,57 @@ class Checkout extends ComponentBase
         return Redirect::to('/');
     }
 
-    public function onSubmit() {
+    public function onSubmit()
+    {
 
-        $order = new OrderModel();
+        try {
 
-        //$this->getOrRegisterUser();
+            Db::beginTransaction();
+            //$this->getOrRegisterUser();
 
-        if(!$cart = CartModel::whereSessionId(Session::getId())->first()) {
-            return "You have no orders.";
+            $cart = Cart::getCart();
+
+            if (!$cart) {
+                return "You have no orders.";
+            }
+
+            $data = post();
+
+            $order = new OrderModel();
+            $order->name = $data['name'];
+    		$order->email = $data['email'];
+    		$order->phone = $data['phone'];
+    		$order->subtotal = $cart->total_price;
+            $order->save();
+
+            foreach($cart->products as $product) {
+                $order->products()->attach([
+                    $product->id => [
+                        'qty'      => $product->pivot->qty,
+                        'price'    => $product->pivot->price,
+                        'discount' => $product->pivot->discount,
+                        'name'     => $product->name
+                    ],
+                ]);
+            }
+
+            Cart::clear();
+
+            //TODO:
+            // Create invoice from Responsiv.Pay Plugin
+            // and then get the hash for redirection
+
+            $hash = 'hash-here';
+
+            Db::commit();
+        }
+        catch (Exception $e) {
+            Db::rollBack();
+
+            throw new \ApplicationException($e->getMessage());
         }
 
-        $data = post();
-
-        $order->name = $data['name'];
-
-				$order->email = $data['email'];
-
-				$order->phone = $data['phone'];
-
-				$order->subtotal = $cart->total_price;
-
-        $order->save();
-
-				foreach($cart->products as $product) {
-            $order->products()->attach([
-                $product->id => [
-                    'qty' 			=> $product->pivot->qty,
-										'price' 		=> $product->pivot->price,
-										'discount'  => $product->pivot->discount,
-										'name'			=> $product->name
-                ]
-            ]);
-				}
-
-        $cart->products()->detach();
-        return Redirect::to($this->property('redirectPage'));
-        //TODO:
+        return Redirect::to(Page::url($this->property('redirectPage'), ['hash' => $hash]));
     }
 
 protected function getOrRegisterUser($data, $update = true)
