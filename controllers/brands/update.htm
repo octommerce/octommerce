@@ -9,9 +9,15 @@
 
     <?= Form::open(['class' => 'layout']) ?>
 
-        <div class="layout-row">
-            <?= $this->formRender() ?>
-        </div>
+        <!-- Primary content -->
+        <?php Block::put('form-contents') ?>
+            <div class="layout-row min-size">
+                <?= $this->formRenderOutsideFields() ?>
+            </div>
+
+            <div class="layout-row">
+                <?= $this->formRenderPrimaryTabs() ?>
+            </div>
 
         <div class="form-buttons">
             <div class="loading-indicator-container">
@@ -45,8 +51,21 @@
                 </span>
             </div>
         </div>
+    <?php Block::endPut() ?>
 
-    <?= Form::close() ?>
+       <!-- Complimentary sidebar -->
+       <?php Block::put('form-sidebar') ?>
+           <div class="hide-tabs">
+               <?= $this->formRenderSecondaryTabs() ?>
+           </div>
+       <?php Block::endPut() ?>
+
+       <!-- Layout execution -->
+       <?php Block::put('body') ?>
+           <?= Form::open(['class'=>'layout stretch', 'data-change-monitor' => 'true']) ?>
+               <?= $this->makeLayout('form-with-sidebar') ?>
+           <?= Form::close() ?>
+       <?php Block::endPut() ?>
 
 <?php else: ?>
 
