@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce;
 
+use Event;
 use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
@@ -32,30 +33,25 @@ class Plugin extends PluginBase
             $productManager->addCustomFields($form);
 
         });
+
         /*
-         * Register menu items for the RainLab.Pages and RainLab.Sitemap plugin
+         * Register menu items for the RainLab.Pages plugin
          */
-        \Event::listen('pages.menuitem.listTypes', function () {
+        Event::listen('pages.menuitem.listTypes', function() {
             return [
-                'all-catalog-categories' => 'All Catalog categories',
-                'catalog-category' => 'Catalog category',
+                'product-category' => 'Product Category',
+                'all-product-categories' => 'All Product Categories'
             ];
         });
 
-        \Event::listen('pages.menuitem.getTypeInfo', function ($type) {
-            if ($type == 'url') {
-                return [];
-            }
-
-            if ($type == 'all-catalog-categories'|| $type == 'catalog-category') {
+        Event::listen('pages.menuitem.getTypeInfo', function($type) {
+            if ($type == 'product-category' || $type == 'all-product-categories')
                 return Category::getMenuTypeInfo($type);
-            }
         });
 
-        \Event::listen('pages.menuitem.resolveItem', function ($type, $item, $url, $theme) {
-            if ($type == 'all-catalog-categories' || $type == 'catalog-category') {
+        Event::listen('pages.menuitem.resolveItem', function($type, $item, $url, $theme) {
+            if ($type == 'product-category' || $type == 'all-product-categories')
                 return Category::resolveMenuItem($item, $url, $theme);
-            }
         });
     }
 

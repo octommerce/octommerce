@@ -3,16 +3,16 @@
 # ===================================
 
 # Model List Column configuration
-list: $/octommerce/octommerce/models/categories/reorder/columns.yaml
+list: $/octommerce/octommerce/models/review/columns.yaml
 
 # Model Class name
-modelClass: Octommerce\Octommerce\Models\Categories/Reorder
+modelClass: Octommerce\Octommerce\Models\Review
 
 # List Title
-title: Manage Categories/ Reorders
+title: Manage Reviews
 
 # Link URL for each record
-recordUrl: octommerce/octommerce/categories/reorder/update/:id
+recordUrl: octommerce/octommerce/reviews/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records

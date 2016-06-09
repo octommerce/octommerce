@@ -1,8 +1,24 @@
-# ===================================
-#  List Column Definitions
-# ===================================
-
 columns:
-    id:
-        label: ID
+    product:
+        label: Product
+        type: text
         searchable: true
+        select: name
+        relation: product
+    user:
+        label: User
+        type: text
+        searchable: true
+        select: name
+        relation: user
+    title:
+        label: Title
+        type: text
+        searchable: true
+    content:
+        label: Content
+        type: text
+        searchable: true
+    created_at:
+        label: Date
+        type: datetime

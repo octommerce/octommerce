@@ -4,9 +4,9 @@ use BackendMenu;
 use Backend\Classes\Controller;
 
 /**
- * Categories/ Reorder Back-end Controller
+ * Reviews Back-end Controller
  */
-class Categories/Reorder extends Controller
+class Reviews extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
@@ -20,6 +20,6 @@ class Categories/Reorder extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('Octommerce.Octommerce', 'octommerce', 'categories/reorder');
+        BackendMenu::setContext('Octommerce.Octommerce', 'products', 'reviews');
     }
 }

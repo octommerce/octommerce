@@ -5,14 +5,31 @@
 columns:
     id:
         label: ID
-        searchable: true
     sku:
         label: SKU
+    parent_sku:
+        label: Parent
     name:
         label: Name
     price:
         label: Price
-    qty:
-        label: Qty
+    price:
+        label: Price
     sale_price:
         label: 'Sale Price'
+    description:
+        label: Description
+    manage_stock:
+        label: Manage Stock?
+    stock_status:
+        label: 'Stock Status'
+    qty:
+        label: Qty
+    is_virtual:
+        label: 'Is Virtual?'
+    brand:
+        label: Brand
+    categories:
+        label: Categories
+    is_published:
+        label: 'Is Published?'
