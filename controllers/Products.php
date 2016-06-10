@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Octommerce\Octommerce\Models\Product;
 
 /**
  * Products Back-end Controller
@@ -27,6 +28,13 @@ class Products extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Octommerce.Octommerce', 'products', 'products');
+    }
+
+    public function index()
+    {
+        $this->vars['totalProducts'] = number_format(Product::count());
+
+        return $this->asExtension('ListController')->index();
     }
 
 }

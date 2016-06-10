@@ -4,6 +4,14 @@ columns:
         type: number
         searchable: true
         invisible: true
+    images:
+        label: ""
+        type: partial
+        path: $/octommerce/octommerce/controllers/products/_imagethumb.htm
+        width: 40px
+        sortable: false
+    sku:
+        label: SKU
     name:
         label: Name
         type: text
@@ -16,9 +24,22 @@ columns:
     price:
         label: Price
         type: number
-    qty:
-        label: Qty
-        type: number
     sale_price:
         label: 'Sale Price'
         type: number
+    manage_Stock:
+        label: 'Manage Stock'
+        type: switch
+    qty:
+        label: Qty
+        type: number
+    categories:
+        label: Categories
+        relation: categories
+        select: name
+        invisible: true
+    lists:
+        label: Lists
+        relation: lists
+        select: name
+        invisible: true

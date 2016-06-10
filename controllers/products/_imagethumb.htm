@@ -1,0 +1,5 @@
+<?php if($value->count()): ?>
+<div style="margin: -10px auto">
+    <img src="<?= $value->first()->getThumb(40, 40, ['mode' => 'crop']) ?>" alt="<?= $value->first()->title ?>">
+</div>
+<?php endif; ?>
