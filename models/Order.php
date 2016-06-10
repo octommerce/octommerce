@@ -8,23 +8,26 @@ use Model;
 class Order extends Model
 {
     use \October\Rain\Database\Traits\SoftDeleting;
+    use \October\Rain\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.
      */
     public $table = 'octommerce_octommerce_orders';
 
-    // protected $dates = ['deleted_at'];
+    /**
+     * Validation rules
+     */
+    public $rules = [
+        'name' => 'required|between:6,255',
+        'email' => 'required|between:6,255|email',
+        'phone' => 'required',
+    ];
 
     /**
      * @var array Guarded fields
      */
-    protected $guarded = ['*'];
-
-    /**
-     * @var array Fillable fields
-     */
-    protected $fillable = [];
+    protected $guarded = [];
 
     protected $dates = ['expired_at', 'deleted_at'];
 

@@ -22,7 +22,7 @@ class Cart
     public function addItem($productId, $qty = 1, $data = [])
     {
         $product = $this->getItem($productId);
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         $existingProduct = $this->findExistingItem($productId);
 
@@ -43,7 +43,7 @@ class Cart
         }
 
         // Get the latest update
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         return $cart;
     }
@@ -51,7 +51,7 @@ class Cart
     public function updateItem($productId, $qty = null, $data = [])
     {
         $product = $this->getItem($productId);
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         $existingProduct = $this->findExistingItem($productId);
 
@@ -72,7 +72,7 @@ class Cart
         }
 
         // Get the latest update
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         return $cart;
     }
@@ -80,32 +80,27 @@ class Cart
     public function removeItem($productId, $qty = 1)
     {
         $product = $this->getItem($productId);
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         $cart->products()->detach([$product->id]);
 
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         return $cart;
     }
 
     public function clear()
     {
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         $cart->products()->detach();
 
-        $cart = $this->getCart();
+        $cart = $this->get();
 
         return $cart;
     }
 
-    protected function prepareVars()
-    {
-        $this->getCart();
-    }
-
-    protected function getCart($cartId = null)
+    public function get($cartId = null)
     {
         if ($cartId) {
             return CartModel::find($cartId);
@@ -122,6 +117,11 @@ class Cart
         }
 
         return $cart;
+    }
+
+    protected function prepareVars()
+    {
+        $this->get();
     }
 
     // protected function getUser($userId = null)

@@ -15,6 +15,8 @@ use RainLab\User\Models\User;
 use Octommerce\Octommerce\Classes\OrderManager;
 use Octommerce\Octommerce\Models\Cart as CartModel;
 use Octommerce\Octommerce\Models\Order as OrderModel;
+use Responsiv\Pay\Models\Invoice;
+use Responsiv\Pay\Models\InvoiceItem;
 
 class Checkout extends ComponentBase
 {
@@ -76,19 +78,22 @@ class Checkout extends ComponentBase
             Db::beginTransaction();
             //$this->getOrRegisterUser();
 
-            $cart = Cart::getCart();
+            $cart = \Cart::get();
 
             if (!$cart) {
-                return "You have no orders.";
+                throw new Exception('You have no item in cart.');
             }
 
             $data = post();
 
             $order = new OrderModel();
-            $order->name = $data['name'];
-    		$order->email = $data['email'];
-    		$order->phone = $data['phone'];
-    		$order->subtotal = $cart->total_price;
+            $order->fill([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'subtotal' => $cart->total_price,
+            ]);
+
             $order->save();
 
             foreach($cart->products as $product) {
@@ -102,13 +107,32 @@ class Checkout extends ComponentBase
                 ]);
             }
 
-            Cart::clear();
+           //TODO:
+            // - Create user
+            // - Create invoice from Responsiv.Pay Plugin
+            //   and then get the hash for redirection
 
-            //TODO:
-            // Create invoice from Responsiv.Pay Plugin
-            // and then get the hash for redirection
+            $invoice = Invoice::create([
+                'first_name' => $order->name,
+                'email' => $order->email,
+                'phone' => $order->phone,
+            ]);
 
-            $hash = 'hash-here';
+            foreach($cart->products as $product) {
+                $invoiceItem = InvoiceItem::create([
+                    'description' => $product->name,
+                    'quantity' => $product->pivot->qty,
+                    'price' => $product->pivot->price,
+                    'discount' => $product->pivot->discount,
+                ]);
+
+                $invoiceItem->invoice()->associate($invoice);
+                $invoiceItem->save();
+            }
+
+            $invoice->save();
+
+            \Cart::clear();
 
             Db::commit();
         }
@@ -118,7 +142,7 @@ class Checkout extends ComponentBase
             throw new \ApplicationException($e->getMessage());
         }
 
-        return Redirect::to(Page::url($this->property('redirectPage'), ['hash' => $hash]));
+        return Redirect::to(Page::url($this->property('redirectPage'), ['hash' => $invoice->hash]));
     }
 
 protected function getOrRegisterUser($data, $update = true)
