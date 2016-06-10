@@ -193,12 +193,12 @@ class Product extends Model
         return ProductAttribute::lists('name', 'id');
     }
 
-    public function getSalePriceAttribute($value)
-    {
-        if (!$value) {
-            return $this->price;
-        }
-    }
+    // public function getSalePriceAttribute($value)
+    // {
+    //     if (!$value) {
+    //         return $this->price;
+    //     }
+    // }
 
     public function scopeDisplayed($query)
     {
