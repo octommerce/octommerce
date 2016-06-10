@@ -72,6 +72,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
+            'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
         ];
     }
 
