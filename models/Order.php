@@ -56,7 +56,9 @@ class Order extends Model
     ];
     public $morphTo = [];
     public $morphOne = [];
-    public $morphMany = [];
+    public $morphMany = [
+        'invoices' => ['Responsiv\Pay\Models\Invoice', 'name' => 'related']
+    ];
     public $attachOne = [];
     public $attachMany = [];
 

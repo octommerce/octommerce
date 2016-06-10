@@ -33,12 +33,6 @@ class Checkout extends ComponentBase
     public function defineProperties()
     {
          return [
-            'token' => [
-                'title'      =>  'Token',
-                'type'       =>  'text',
-                'default'    =>  ':token',
-                'description'=>  'Token of payment url',
-            ],
             'redirectPage' => [
                 'title'       => 'Redirect Page',
                 'description' => 'What page when the order is successfully submitted.',
@@ -58,17 +52,6 @@ class Checkout extends ComponentBase
     //
     //     $this->orderManager = OrderManager::instance();
     // }
-
-    public function onSubmitOrder()
-    {
-        $data = post();
-
-        $this->orderManager->create($data);
-
-        //return Redirect::to($this->property('redirectPage'));
-
-        return Redirect::to('/');
-    }
 
     public function onSubmit()
     {
@@ -127,6 +110,8 @@ class Checkout extends ComponentBase
 
                 $invoice->items()->save($invoiceItem);
             }
+
+            $order->invoices()->add($invoice);
 
             $invoice->save();
 
