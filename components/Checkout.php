@@ -86,8 +86,7 @@ class Checkout extends ComponentBase
 
             $data = post();
 
-            $order = new OrderModel();
-            $order->fill([
+            $order = new OrderModel([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
@@ -119,15 +118,14 @@ class Checkout extends ComponentBase
             ]);
 
             foreach($cart->products as $product) {
-                $invoiceItem = InvoiceItem::create([
+                $invoiceItem = new InvoiceItem([
                     'description' => $product->name,
                     'quantity' => $product->pivot->qty,
                     'price' => $product->pivot->price,
                     'discount' => $product->pivot->discount,
                 ]);
 
-                $invoiceItem->invoice()->associate($invoice);
-                $invoiceItem->save();
+                $invoice->items()->save($invoiceItem);
             }
 
             $invoice->save();
