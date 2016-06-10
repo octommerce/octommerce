@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use DB;
 use Carbon\Carbon;
 use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Classes\ProductManager;
@@ -239,6 +240,17 @@ class Product extends Model
     public function getBrandIdOptions($keyValue = null)
     {
         return Brand::lists('name', 'id');
+    }
+
+    public function getRelatedProductsAttribute(){
+        $getCategories = $this->categories->lists('id');
+        $products = self::whereHas('categories', function($query) use ($getCategories) {
+                        $query->whereIn('id', $getCategories);
+                    })
+                    ->where('id','<>',$this->id)
+                    ->orderBy(DB::raw('RAND()'))
+                    ->get();
+        return $products;
     }
 
 }
