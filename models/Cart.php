@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Octommerce\Octommerce\Models\Settings;
 
 /**
  * Cart Model
@@ -56,5 +57,10 @@ class Cart extends Model
         }
 
         return $total;
+    }
+
+    public function getIsAllowedCheckoutAttribute()
+    {
+        return $this->total_price >= Settings::get('checkout_min_subtotal', 0);
     }
 }

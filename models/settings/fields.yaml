@@ -13,3 +13,9 @@ tabs:
             span: auto
             type: relation
             tab: General
+        checkout_min_subtotal:
+            label: 'Minimum Subtotal'
+            span: auto
+            type: number
+            default: 0
+            tab: Checkout
