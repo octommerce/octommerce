@@ -41,7 +41,7 @@ columns:
         label: Status
         searchable: true
         type: partial
-        path: $/turez/commerce/models/order/_status_column.htm
+        path: $/octommerce/octommerce/controllers/orders/_status_column.htm
         width: 100px
     is_followed_up:
         label: Followed Up
@@ -55,4 +55,4 @@ columns:
         clickable: false
         sortable: false
         type: partial
-        path: $/turez/commerce/models/order/_pdf_column.htm
+        path: $/octommerce/octommerce/controllers/orders/_pdf_column.htm

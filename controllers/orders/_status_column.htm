@@ -1,0 +1,15 @@
+<?php
+switch($value) {
+    case 'pending':
+        $css = 'text-warning';
+        break;
+    case 'paid':
+        $css = 'text-success';
+        break;
+    default:
+        $css = '';
+}
+?>
+<span class="oc-icon-circle <?= $css ?>">
+    <?= ucfirst($value) ?>
+</span>

@@ -62,6 +62,11 @@ class Order extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function getTotalAttribute()
+    {
+        return $this->subtotal - $this->discount;
+    }
+
     public function sendEmailToUser()
     {
         $order = $this;
