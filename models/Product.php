@@ -19,6 +19,8 @@ class Product extends Model
 
     protected $manager;
 
+    public $productsCount;
+
     /**
      * @var string The database table used by the model.
      */
@@ -242,15 +244,26 @@ class Product extends Model
         return Brand::lists('name', 'id');
     }
 
-    public function getRelatedProductsAttribute(){
+    public function getRelatedProductsAttribute()
+    {
+
         $getCategories = $this->categories->lists('id');
-        $products = self::whereHas('categories', function($query) use ($getCategories) {
+        $relatedCategories = self::whereHas('categories', function($query) use ($getCategories) {
                         $query->whereIn('id', $getCategories);
                     })
                     ->where('id','<>',$this->id)
                     ->orderBy(DB::raw('RAND()'))
+                    ->take(4)
                     ->get();
-        return $products;
-    }
 
+        $productsCount = $relatedCategories->count();
+        //Get limit based on how much related categories have. Is it less than 4 or not?
+        $limit = $productsCount < 4 ? 4 - $productsCount : 0;
+        $related = self::where('id', '<>', $this->id)
+                   ->orderBy(DB::raw('RAND()'))
+                   ->take($limit)
+                   ->get();
+        
+        return array_merge($relatedCategories->toArray(), $related->toArray());
+    }
 }
