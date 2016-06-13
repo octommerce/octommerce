@@ -51,6 +51,10 @@ navigation:
                 label: Payments
                 url: octommerce/octommerce/payments
                 icon: icon-credit-card
+            orderstatuses:
+                label: Order Statuses
+                url: octommerce/octommerce/orderstatuses
+                icon: icon-tasks
 permissions:
     octommerce.octommerce.access_products:
         tab: Products
@@ -58,3 +62,6 @@ permissions:
     octommerce.octommerce.access_orders:
         tab: Orders
         label: 'Access Orders'
+    octommerce.octommerce.access_order_statuses:
+        tab: Orders
+        label: 'Access Order Statuses'

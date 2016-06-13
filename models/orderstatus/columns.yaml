@@ -3,6 +3,20 @@
 # ===================================
 
 columns:
-    id:
-        label: ID
-        searchable: true
+    name: 
+        label: Name
+
+    is_active: 
+        label: Active
+        type: switch
+
+    send_email: 
+        label: Email customer
+        type: switch
+
+    attach_pdf: 
+        label: Attach invoice pdf
+        type: switch
+
+    template_code: 
+        label: Mail template

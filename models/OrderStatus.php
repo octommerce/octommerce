@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use System\Models\MailTemplate;
 
 /**
  * OrderStatus Model
@@ -41,4 +42,23 @@ class OrderStatus extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * Returns an array of template codes and ids.
+     * @return array
+     */
+    public static function listAllTemplates()
+    {
+        $templates = (array) MailTemplate::lists('code', 'id');
+
+        return $templates;
+    }
+
+    public function getTemplateCodeAttribute()
+    {
+        $template = MailTemplate::find($this->mail_template_id);
+
+        if ($template) {
+            return $template->code; 
+        }
+    }
 }
