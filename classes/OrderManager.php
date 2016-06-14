@@ -27,9 +27,9 @@ class OrderManager
             $user = $this->getOrRegisterUser($data);
 
             $order = new Order([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
                 'user_id' => $user->id,
                 'subtotal' => $cart->total_price,
             ]);
