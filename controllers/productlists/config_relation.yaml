@@ -1,0 +1,12 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+products:
+    label: Product
+    list: ~/plugins/octommerce/octommerce/models/product/columns.yaml
+    form: ~/plugins/octommerce/octommerce/models/product/fields.yaml
+    deferredBinding: true
+    view:
+        toolbarButtons: add|remove
+        showCheckboxes: true

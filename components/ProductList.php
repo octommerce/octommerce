@@ -5,12 +5,14 @@ use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
 {
     public $category;
     public $list;
+    public $brand;
     public $products;
 
     public function componentDetails()
@@ -40,6 +42,13 @@ class ProductList extends ComponentBase
             'listFilter' => [
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.listfilter_param_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.listfilter_param_desc',
+                'type'        => 'dropdown',
+                'default'     => '',
+                'group'       => 'Filter',
+            ],
+            'brandFilter' => [
+                'title'       => 'octommerce.octommerce::lang.component.product_list.param.brandfilter_param_title',
+                'description' => 'octommerce.octommerce::lang.component.product_list.param.brandfilter_param_desc',
                 'type'        => 'dropdown',
                 'default'     => '',
                 'group'       => 'Filter',
@@ -77,6 +86,11 @@ class ProductList extends ComponentBase
     public function getListFilterOptions()
     {
         return ['' => '- none -'] + ProductListModel::lists('name', 'slug');
+    }
+
+    public function getBrandFilterOptions()
+    {
+        return ['' => '- none -'] + Brand::lists('name', 'slug');
     }
 
     public function getSortOrderOptions()
@@ -133,6 +147,16 @@ class ProductList extends ComponentBase
             if ($list) {
                 $query->whereHas('categories', function($q) use ($list) {
                     $q->whereId($list->id);
+                });
+            }
+        }
+
+        if ($this->property('brandFilter') != '') {
+            $brand = $this->brand = Brand::whereSlug($this->property('brandFilter'))->first();
+
+            if ($brand) {
+                $query->whereHas('brand', function($q) use ($brand) {
+                    $q->whereId($brand->id);
                 });
             }
         }

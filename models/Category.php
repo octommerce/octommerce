@@ -1,6 +1,11 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Str;
 use Model;
+use URL;
+use October\Rain\Router\Helper as RouterHelper;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\Theme;
 
 /**
  * Category Model
@@ -73,6 +78,11 @@ class Category extends Model
         'images' => ['System\Models\File'],
     ];
 
+    public function afterDelete()
+    {
+        $this->products()->detach();
+    }
+
     /**
      * Handler for the pages.menuitem.getTypeInfo event.
      * Returns a menu item type information. The type information is returned as array
@@ -85,8 +95,7 @@ class Category extends Model
      *   false if omitted.
      * - dynamicItems - Boolean value indicating whether the item type could generate new menu items.
      *   Optional, false if omitted.
-     * - cmsPages - a list of CMS pages (objects of the Cms\Classes\Page class),
-     *      if the item type requires a CMS page reference to
+     * - cmsPages - a list of CMS pages (objects of the Cms\Classes\Page class), if the item type requires a CMS page reference to
      *   resolve the item URL.
      * @param string $type Specifies the menu item type
      * @return array Returns an array
@@ -95,15 +104,16 @@ class Category extends Model
     {
         $result = [];
 
-        if ($type == 'all-catalog-categories') {
+        if ($type == 'product-category') {
             $result = [
-                'dynamicItems' => true,
+                'references'   => self::listSubCategoryOptions(),
+                'nesting'      => true,
+                'dynamicItems' => true
             ];
         }
 
-        if ($type == 'catalog-category') {
+        if ($type == 'all-product-categories') {
             $result = [
-                'references'   => self::listSubCategoryOptions(),
                 'dynamicItems' => true
             ];
         }
@@ -114,7 +124,7 @@ class Category extends Model
             $pages = CmsPage::listInTheme($theme, true);
             $cmsPages = [];
             foreach ($pages as $page) {
-                if (!$page->hasComponent('categories')) {
+                if (!$page->hasComponent('productList')) {
                     continue;
                 }
 
@@ -122,8 +132,8 @@ class Category extends Model
                  * Component must use a category filter with a routing parameter
                  * eg: categoryFilter = "{{ :somevalue }}"
                  */
-                $properties = $page->getComponentProperties('categories');
-                if (!isset($properties['slug']) || !preg_match('/{{\s*:/', $properties['slug'])) {
+                $properties = $page->getComponentProperties('productList');
+                if (!isset($properties['categoryFilter']) || !preg_match('/{{\s*:/', $properties['categoryFilter'])) {
                     continue;
                 }
 
@@ -138,15 +148,16 @@ class Category extends Model
 
     protected static function listSubCategoryOptions()
     {
-        $category = self::make()->getAllRoot();
+        $category = self::getNested();
 
-        $iterator = function ($categories) use (&$iterator) {
+        $iterator = function($categories) use (&$iterator) {
             $result = [];
 
             foreach ($categories as $category) {
                 if (!$category->children) {
                     $result[$category->id] = $category->name;
-                } else {
+                }
+                else {
                     $result[$category->id] = [
                         'title' => $category->name,
                         'items' => $iterator($category->children)
@@ -181,22 +192,19 @@ class Category extends Model
     {
         $result = null;
 
-        if ($item->type == 'catalog-category') {
-            if (!$item->reference || !$item->cmsPage) {
+        if ($item->type == 'product-category') {
+            if (!$item->reference || !$item->cmsPage)
                 return;
-            }
 
             $category = self::find($item->reference);
-            if (!$category) {
+            if (!$category)
                 return;
-            }
 
             $pageUrl = self::getCategoryPageUrl($item->cmsPage, $category, $theme);
-            if (!$pageUrl) {
+            if (!$pageUrl)
                 return;
-            }
 
-            $pageUrl = \URL::to($pageUrl);
+            $pageUrl = URL::to($pageUrl);
 
             $result = [];
             $result['url'] = $pageUrl;
@@ -204,8 +212,8 @@ class Category extends Model
             $result['mtime'] = $category->updated_at;
 
             if ($item->nesting) {
-                $categories = $category->getAllRoot();
-                $iterator = function ($categories) use (&$iterator, &$item, &$theme, $url) {
+                $categories = $category->children()->get();
+                $iterator = function($categories) use (&$iterator, &$item, &$theme, $url) {
                     $branch = [];
 
                     foreach ($categories as $category) {
@@ -228,7 +236,8 @@ class Category extends Model
 
                 $result['items'] = $iterator($categories);
             }
-        } elseif ($item->type == 'all-catalog-categories') {
+        }
+        elseif ($item->type == 'all-product-categories') {
             $result = [
                 'items' => []
             ];
@@ -256,12 +265,10 @@ class Category extends Model
     protected static function getCategoryPageUrl($pageCode, $category, $theme)
     {
         $page = CmsPage::loadCached($theme, $pageCode);
-        if (!$page) {
-            return;
-        }
+        if (!$page) return;
 
-        $properties = $page->getComponentProperties('categories');
-        if (!isset($properties['slug'])) {
+        $properties = $page->getComponentProperties('productList');
+        if (!isset($properties['categoryFilter'])) {
             return;
         }
 
@@ -269,7 +276,7 @@ class Category extends Model
          * Extract the routing parameter name from the category filter
          * eg: {{ :someRouteParam }}
          */
-        if (!preg_match('/^\{\{([^\}]+)\}\}$/', $properties['slug'], $matches)) {
+        if (!preg_match('/^\{\{([^\}]+)\}\}$/', $properties['categoryFilter'], $matches)) {
             return;
         }
 
