@@ -3,7 +3,6 @@
 use Model;
 use DB;
 use Carbon\Carbon;
-use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Classes\ProductManager;
 
 /**
@@ -74,7 +73,7 @@ class Product extends Model
     /**
      * @var array Guarded fields
      */
-    protected $guarded = ['*'];
+    protected $guarded = [];
 
     /**
      * @var array Fillable fields
@@ -239,11 +238,6 @@ class Product extends Model
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
     }
 
-    public function getBrandIdOptions($keyValue = null)
-    {
-        return Brand::lists('name', 'id');
-    }
-
     public function getRelatedProductsAttribute()
     {
 
@@ -263,7 +257,7 @@ class Product extends Model
                    ->orderBy(DB::raw('RAND()'))
                    ->take($limit)
                    ->get();
-        
+
         return array_merge($relatedCategories->toArray(), $related->toArray());
     }
 }
