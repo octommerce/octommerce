@@ -112,7 +112,7 @@ class Cart
 
         // Attach user_id when user is logged in
         if (Auth::check()) {
-            $cart->user_id = $user->id;
+            $cart->user_id = Auth::getUser()->id;
             $cart->save();
         }
 

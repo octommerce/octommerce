@@ -1,8 +1,12 @@
 <?php namespace Octommerce\Octommerce\Classes;
 
+use Db;
+use Auth;
 use Carbon\Carbon;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Cart;
+use Responsiv\Pay\Models\Invoice;
+use Responsiv\Pay\Models\InvoiceItem;
 
 class OrderManager
 {
@@ -10,34 +14,102 @@ class OrderManager
 
     public function create($data)
     {
-        $order = new Order;
+        try {
 
-				$orderDetail = $order->products;
+            Db::beginTransaction();
 
-				$cart = Cart::whereSessionId(Session::getId())->first();
+            $cart = \Cart::get();
 
-        $order->name = $data['name'];
+            if (!$cart) {
+                throw new Exception('You have no item in cart.');
+            }
 
-				$order->email = $data['email'];
+            $user = $this->getOrRegisterUser($data);
 
-				$order->phone = $data['phone'];
-
-				$order->subtotal = $cart->total_price;
-
-				foreach ($cart->products as $product) {
-            $order->products()->attach([
-                $product->id => [
-                    'qty' 			=> $product->pivot->qty,
-										'price' 		=> $product->pivot->price,
-										'discount'  => $product->pivot->discount,
-										'name'			=> $product->name
-                ]
+            $order = new Order([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'user_id' => $user->id,
+                'subtotal' => $cart->total_price,
             ]);
-				}
 
-        $order->save();
+            $order->save();
 
-        //TODO:
+            foreach($cart->products as $product) {
+                $order->products()->attach([
+                    $product->id => [
+                        'qty'      => $product->pivot->qty,
+                        'price'    => $product->pivot->price,
+                        'discount' => $product->pivot->discount,
+                        'name'     => $product->name
+                    ],
+                ]);
+            }
+
+            $invoice = Invoice::create([
+                'first_name' => $order->name,
+                'email' => $order->email,
+                'phone' => $order->phone,
+            ]);
+
+            foreach($cart->products as $product) {
+                $invoiceItem = new InvoiceItem([
+                    'description' => $product->name,
+                    'quantity' => $product->pivot->qty,
+                    'price' => $product->pivot->price,
+                    'discount' => $product->pivot->discount,
+                ]);
+
+                $invoice->items()->save($invoiceItem);
+            }
+
+            $order->invoices()->add($invoice);
+
+            $invoice->save();
+
+            \Cart::clear();
+
+            Db::commit();
+
+            return $order;
+        }
+        catch (Exception $e) {
+            Db::rollBack();
+
+            throw $e;
+        }
+    }
+
+    protected function getOrRegisterUser($data, $update = true)
+    {
+        if (! Auth::check()) {
+
+            $data['password_confirmation'] = $data['password'] = $this->generateUserPassword();
+
+            // Register, no need activation
+            $user = Auth::register($data, true);
+
+            // Logged in directly
+            Auth::login($user);
+
+            // $this->sendPasswordUser($user, $dataUser['password']);
+
+        } else {
+            $user = Auth::getUser();
+
+            // Update data phone if any
+            if($update && ($data['city_id'] || $data['state_id'] || $data['address'] || $data['postcode'])) {
+                // $user->telephone = $data['telephone'];
+                $user->city_id = $data['city_id'];
+                $user->state_id = $data['state_id'];
+                $user->postcode = $data['postcode'];
+                $user->address = $data['address'];
+                $user->save();
+            }
+        }
+
+        return $user;
     }
 
     public function checkExpiredOrders()
@@ -60,6 +132,19 @@ class OrderManager
                 // }
 
             });
+    }
+
+    protected function generateUserPassword($length = 8)
+    {
+        $characters = '123456789abcdefghijklmnpqrstuvwxyz';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+
+        for ($i = 0; $i < $length; ++$i) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 
 }
