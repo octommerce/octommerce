@@ -78,6 +78,11 @@ class Category extends Model
         'images' => ['System\Models\File'],
     ];
 
+    public function afterDelete()
+    {
+        $this->products()->detach();
+    }
+
     /**
      * Handler for the pages.menuitem.getTypeInfo event.
      * Returns a menu item type information. The type information is returned as array
@@ -207,7 +212,7 @@ class Category extends Model
             $result['mtime'] = $category->updated_at;
 
             if ($item->nesting) {
-                $categories = $category->getNested();
+                $categories = $category->children()->get();
                 $iterator = function($categories) use (&$iterator, &$item, &$theme, $url) {
                     $branch = [];
 
