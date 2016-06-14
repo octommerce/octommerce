@@ -5,6 +5,7 @@ use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
 use Octommerce\Octommerce\Models\Category;
+use Rainlab\User\Models\User;
 
 /**
  * Octommerce Plugin Information File
@@ -15,6 +16,20 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+
+        User::extend(function($model) {
+            $model->addFillable([
+                'phone',
+                'country_id',
+                'state_id',
+                'city_id',
+                'address',
+                'postcode',
+            ]);
+
+            $model->hasMany['orders'] = ['Octommerce\Octommerce\Models\Order'];
+        });
+
         $productManager = ProductManager::instance();
 
         //

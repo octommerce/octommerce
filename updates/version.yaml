@@ -24,3 +24,6 @@
     - Add cities
     - create_cities_table.php
     - seed_cities_table.php
+1.0.4:
+    - Add profile columns to users table
+    - add_profile_columns_to_users_table.php
