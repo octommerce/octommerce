@@ -1,7 +1,9 @@
 <?php namespace Octommerce\Octommerce\Models;
 
-use Model;
 use Mail;
+use Model;
+use BackendAuth;
+use Carbon\Carbon;
 use ApplicationException;
 use System\Models\MailTemplate;
 use Octommerce\Octommerce\Models\Order;
@@ -53,7 +55,7 @@ class OrderStatusLog extends Model
 
     public function afterSave()
     {
-        $this->checkOrderStatus(); 
+        $this->checkOrderStatus();
     }
 
     /**
@@ -81,7 +83,7 @@ class OrderStatusLog extends Model
     }
 
     /**
-     * Send an email to customer 
+     * Send an email to customer
      * @param $orderStatus
      * @param $order
      *
@@ -92,7 +94,7 @@ class OrderStatusLog extends Model
         $mailTemplate = MailTemplate::find($orderStatus->mail_template_id);
 
         if (! $mailTemplate) {
-            throw new ApplicationException('Mail template not found!'); 
+            throw new ApplicationException('Mail template not found!');
         }
 
         Mail::send($mailTemplate->code, compact('order'), function($message) use ($order, $orderStatus) {
@@ -104,4 +106,34 @@ class OrderStatusLog extends Model
         });
     }
 
+    public static function createRecord($statusCode, $order, $note = null)
+    {
+        if ($statusCode instanceof Model)
+            $statusCode = $statusCode->getKey();
+
+        if ($order->status_code == $statusCode)
+            return false;
+
+        $previousStatus = $order->status_code;
+
+        /*
+         * Create record
+         */
+        $record = new static;
+        $record->status_code = $statusCode;
+        $record->order_id = $order->id;
+        $record->admin_id = BackendAuth::getUser()->id;
+        $record->data = null;
+        $record->timestamp = Carbon::now();
+        $record->note = $note;
+
+        $record->save();
+
+        /*
+         * Update order status
+         */
+        $order->status_code = $statusCode;
+        $order->status_updated_at = Carbon::now();
+        $order->save();
+    }
 }

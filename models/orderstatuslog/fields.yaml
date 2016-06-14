@@ -3,6 +3,12 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
-        disabled: true
+    status:
+        label: New Status
+        type: relation
+        emptyOption: - select a status -
+
+    note:
+        label: Note
+        type: textarea
+        size: small

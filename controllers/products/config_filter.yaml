@@ -1,0 +1,28 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+
+    brand:
+        label: Brand
+        modelClass: Octommerce\Octommerce\Models\Brand
+        nameFrom: name
+        conditions: brand_id in (:filtered)
+
+    category:
+        label: Category
+        modelClass: Octommerce\Octommerce\Models\Category
+        nameFrom: name
+        scope: FilterCategories
+
+    list:
+        label: List
+        modelClass: Octommerce\Octommerce\Models\ProductList
+        nameFrom: name
+        scope: FilterLists
+
+    published:
+        label: Hide published
+        type: checkbox
+        conditions: is_published <> 1

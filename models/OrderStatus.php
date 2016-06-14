@@ -34,7 +34,12 @@ class OrderStatus extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'mail_template' => [
+            'System\Models\MailTemplate',
+            'key' => 'code',
+        ],
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
@@ -58,7 +63,7 @@ class OrderStatus extends Model
         $template = MailTemplate::find($this->mail_template_id);
 
         if ($template) {
-            return $template->code; 
+            return $template->code;
         }
     }
 }

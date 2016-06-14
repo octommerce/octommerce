@@ -29,7 +29,7 @@ class Order extends Model
      */
     protected $guarded = [];
 
-    protected $dates = ['expired_at', 'deleted_at'];
+    protected $dates = ['status_updated_at', 'expired_at', 'deleted_at'];
 
     /**
      * The attributes that should be appended to native types.
@@ -46,7 +46,11 @@ class Order extends Model
         'status_logs' => 'Octommerce\Octommerce\Models\OrderStatusLog',
     ];
     public $belongsTo = [
-        'user' => 'RainLab\User\Models\User'
+        'user' => 'RainLab\User\Models\User',
+        'status' => [
+            'Octommerce\Octommerce\Models\OrderStatus',
+            'key' => 'status_code',
+        ],
     ];
     public $belongsToMany = [
         'products' => [
@@ -65,6 +69,13 @@ class Order extends Model
     public function getTotalAttribute()
     {
         return $this->subtotal - $this->discount;
+    }
+
+    public function updateStatus($statusCode)
+    {
+        if ($status = OrderStatus::find($statusCode)) {
+            OrderStatusLog::createRecord($status, $this);
+        }
     }
 
     public function sendEmailToUser()
