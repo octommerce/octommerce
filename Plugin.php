@@ -6,6 +6,7 @@ use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
 use Octommerce\Octommerce\Models\Category;
 use Rainlab\User\Models\User;
+use Rainlab\Location\Models\State;
 
 /**
  * Octommerce Plugin Information File
@@ -28,7 +29,20 @@ class Plugin extends PluginBase
             ]);
 
             $model->hasMany['orders'] = ['Octommerce\Octommerce\Models\Order'];
+            $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
+            $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
         });
+
+        State::extend(function($model) {
+            $model->hasMany['users'] = [
+                'Rainlab\User\Models\User'
+            ];
+
+            $model->hasMany['cities'] = [
+                'Octommerce\Octommerce\Models\City'
+            ];
+        });
+
 
         $productManager = ProductManager::instance();
 
@@ -87,6 +101,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
+            'Octommerce\Octommerce\Components\Account'      => 'OctommerceAccount',
         ];
     }
 
