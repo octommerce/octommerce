@@ -1,6 +1,21 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 //use Cms\Classes\ComponentBase;
+use Lang;
+use Auth;
+use Mail;
+use URL;
+use Flash;
+use Input;
+use Request;
+use Redirect;
+use Validator;
+use Exception;
+use ValidationException;
+use ApplicationException;
+use Cms\Classes\Page;
+use Hash;
+use RainLab\User\Models\Settings as UserSettings;
 use Rainlab\User\Components\Account as AccountModel;
 use Rainlab\User\Models\User as UserModel;
 use Rainlab\Location\Models\State;
