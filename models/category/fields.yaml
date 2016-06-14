@@ -10,6 +10,7 @@ fields:
     description:
         label: Description
         type: textarea
+        size: tiny
         span: full
     keywords:
         label: Keywords
@@ -18,7 +19,12 @@ fields:
         label: Images
         type: fileupload
         mode: image
+        span: auto
     color:
         label: Color
         type: colorpicker
-
+        span: auto
+    products:
+        label: Products
+        type: partial
+        path: $/octommerce/octommerce/controllers/categories/_relation_products.htm

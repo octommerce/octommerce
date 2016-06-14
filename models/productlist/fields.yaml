@@ -13,4 +13,9 @@ fields:
         span: auto
     description:
         label: Description
-        type: richeditor
+        type: textarea
+        size: tiny
+    products:
+        label: Products
+        type: partial
+        path: $/octommerce/octommerce/controllers/productlists/_relation_products.htm
