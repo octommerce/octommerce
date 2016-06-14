@@ -190,6 +190,32 @@ class Product extends Model
         }
     }
 
+    /**
+     * Allows filtering for specifc categories
+     * @param  Illuminate\Query\Builder  $query      QueryBuilder
+     * @param  array                     $categories List of category ids
+     * @return Illuminate\Query\Builder              QueryBuilder
+     */
+    public function scopeFilterCategories($query, $categories)
+    {
+        return $query->whereHas('categories', function($q) use ($categories) {
+            $q->whereIn('id', $categories);
+        });
+    }
+
+    /**
+     * Allows filtering for specifc lists
+     * @param  Illuminate\Query\Builder  $query      QueryBuilder
+     * @param  array                     $categories List of list ids
+     * @return Illuminate\Query\Builder              QueryBuilder
+     */
+    public function scopeFilterLists($query, $lists)
+    {
+        return $query->whereHas('lists', function($q) use ($lists) {
+            $q->whereIn('id', $lists);
+        });
+    }
+
     public function getAttributeIdOptions()
     {
         return ProductAttribute::lists('name', 'id');

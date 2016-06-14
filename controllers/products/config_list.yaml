@@ -18,7 +18,7 @@ recordUrl: octommerce/octommerce/products/update/:id
 noRecordsMessage: backend::lang.list.no_records
 
 # Records to display per page
-recordsPerPage: 20
+recordsPerPage: 25
 
 # Displays the list column set up button
 showSetup: true
@@ -27,14 +27,14 @@ showSetup: true
 showSorting: true
 
 # Default sorting column
-# defaultSort:
-#     column: created_at
-#     direction: desc
+defaultSort:
+    column: created_at
+    direction: desc
 
 # Display checkboxes next to each record
 showCheckboxes: true
 
-showTree: true
+showTree: false
 
 # Toolbar widget configuration
 toolbar:
@@ -44,3 +44,5 @@ toolbar:
     # Search widget configuration
     search:
         prompt: backend::lang.list.search_prompt
+
+filter: config_filter.yaml
