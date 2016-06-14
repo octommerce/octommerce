@@ -5,6 +5,7 @@ use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
 use Octommerce\Octommerce\Models\Category;
+use Rainlab\Location\Models\State;
 use Rainlab\User\Models\User;
 
 /**
@@ -16,8 +17,20 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        //
+        // Extend RainLab.Location
+        //
+        State::extend(function($model) {
+            $model->hasMany['cities'] = [
+                'Octommerce\Octommerce\Models\City'
+            ];
+        });
 
+        //
+        // Extend RainLab.User
+        //
         User::extend(function($model) {
+
             $model->addFillable([
                 'phone',
                 'country_id',
@@ -27,14 +40,16 @@ class Plugin extends PluginBase
                 'postcode',
             ]);
 
-            $model->hasMany['orders'] = ['Octommerce\Octommerce\Models\Order'];
+            $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
+            $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
+            $model->hasMany['orders'] = 'Octommerce\Octommerce\Models\Order';
         });
 
-        $productManager = ProductManager::instance();
 
         //
         // Built in Types
         //
+        $productManager = ProductManager::instance();
 
         $productManager->registerTypes([
             'Octommerce\Octommerce\ProductTypes\Simple',
