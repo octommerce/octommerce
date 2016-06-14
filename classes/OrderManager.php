@@ -48,6 +48,7 @@ class OrderManager
             }
 
             $invoice = Invoice::create([
+                'user_id' => $user->id,
                 'first_name' => $order->name,
                 'email' => $order->email,
                 'phone' => $order->phone,
