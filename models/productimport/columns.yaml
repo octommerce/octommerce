@@ -27,9 +27,13 @@ columns:
         label: Qty
     is_virtual:
         label: 'Is Virtual?'
-    brand:
-        label: Brand
-    categories:
+    brand_name:
+        label: Brand Name
+    category_names:
         label: Categories
+    up_sells_skus:
+        label: Up Sells
+    cross_sell_skus:
+        label: Cross Sells
     is_published:
         label: 'Is Published?'

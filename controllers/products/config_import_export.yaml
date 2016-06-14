@@ -12,5 +12,5 @@ export:
     title: Export products
     modelClass: Octommerce\Octommerce\Models\ProductExport
     list: $/octommerce/octommerce/models/productexport/columns.yaml
-    form: $/octommerce/octommerce/models/productexport/fields.yaml
+    # form: $/octommerce/octommerce/models/productexport/fields.yaml
     fileName: products.csv

@@ -3,3 +3,7 @@
 # ===================================
 
 fields:
+    is_update:
+        label: Update existing data
+        type: checkbox
+        default: true
