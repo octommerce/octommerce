@@ -7,6 +7,88 @@
 
 <?php if (!$this->fatalError): ?>
 
+    <div class="scoreboard">
+        <div data-control="toolbar" data-disposable="">
+            <div class="scoreboard-item title-value">
+                <h4>Order #</h4>
+                <p><?= $order->order_no ?></p>
+                <p class="description"><?= $order->created_at ?></p>
+            </div>
+            <div class="scoreboard-item title-value">
+                <h4>User</h4>
+                <p class="oc-icon-user"><?= $order->name ?></p>
+                <p class="description"><a href="mailto: <?= $order->email ?>"><?= $order->email ?></a> | <?= $order->phone ?></p>
+            </div>
+            <div class="scoreboard-item title-value">
+                <h4>Total</h4>
+                <p><small>IDR</small> <?= number_format($order->total) ?></p>
+                <?php if($order->discount > 0): ?>
+                <p class="description">Disc: <?= number_format($order->discount) ?></p>
+                <?php endif ?>
+            </div>
+            <div class="scoreboard-item title-value">
+                <h4>Status</h4>
+                <?php
+                switch($order->status) {
+                    case 'quote':
+                        $status_icon = 'oc-icon-question';
+                        break;
+                    case 'pending':
+                        $status_icon = 'oc-icon-clock-o';
+                        break;
+                    case 'half-paid':
+                    case 'paid':
+                        $status_icon = 'oc-icon-check';
+                        break;
+                    case 'cancelled':
+                    case 'failed':
+                    case 'expired':
+                        $status_icon = 'oc-icon-times';
+                        break;
+                }
+                ?>
+                <p><?= $order->status ? $order->status->name : '' ?></p>
+                <p class="description"><?= $order->status_updated_at ?></p>
+            </div>
+        </div>
+    </div>
+
+	<div class="form-buttons buttons-offset">
+        <div class="loading-indicator-container">
+            <a
+                href="<?= Backend::url('octommerce/octommerce/orders/update/'.$formModel->id) ?>"
+                class="btn btn-primary">
+                Edit details
+            </a>
+            <a
+                href="javascript:;"
+                data-control="popup"
+                data-handler="onLoadChangeStatusForm"
+                class="btn btn-default">
+                Update status
+            </a>
+            <a
+                href="javascript:;"
+                onclick="$('#<?= $this->getId('invoiceIframe') ?>').trigger('print.invoice')"
+                class="btn btn-default">
+                Print invoice
+            </a>
+            <a
+                href="#"
+                class="btn btn-default">
+                Email to Customer
+            </a>
+            <a
+                href="javascript:;"
+                data-request="onDelete"
+                data-load-indicator="Deleting Order..."
+                data-request-confirm="Delete this order?"
+                class="btn btn-danger">
+                Delete
+            </a>
+        </div>
+    </div>
+
     <div class="form-preview">
         <?= $this->formRenderPreview() ?>
     </div>

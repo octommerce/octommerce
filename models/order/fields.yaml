@@ -3,6 +3,7 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
-        disabled: true
+    status:
+        label: Status
+        type: relation
+        span: auto

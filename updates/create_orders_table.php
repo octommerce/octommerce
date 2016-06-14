@@ -26,7 +26,8 @@ class CreateOrdersTable extends Migration
             $table->decimal('subtotal', 12, 2)->unsigned()->default(0);
             $table->decimal('discount', 12, 2)->unsigned()->default(0);
 
-            $table->string('status')->default('pending');
+            $table->string('status_code')->nullable();
+            $table->timestamp('status_updated_at')->nullable();
             $table->boolean('is_followed_up')->default(false);
             $table->text('notes')->nullable();
 

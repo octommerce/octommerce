@@ -12,7 +12,7 @@ modelClass: Octommerce\Octommerce\Models\Order
 title: Manage Orders
 
 # Link URL for each record
-recordUrl: octommerce/octommerce/orders/update/:id
+recordUrl: octommerce/octommerce/orders/preview/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records
