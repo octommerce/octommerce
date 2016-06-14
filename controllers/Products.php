@@ -21,8 +21,6 @@ class Products extends Controller
     public $relationConfig = 'config_relation.yaml';
     public $importExportConfig = 'config_import_export.yaml';
 
-    public $bodyClass = 'compact-container';
-
     public function __construct()
     {
         parent::__construct();
@@ -35,6 +33,18 @@ class Products extends Controller
         $this->vars['totalProducts'] = number_format(Product::count());
 
         return $this->asExtension('ListController')->index();
+    }
+
+    public function create($context = null)
+    {
+        $this->bodyClass = 'compact-container';
+        return $this->asExtension('FormController')->create($context);
+    }
+
+    public function update($recordId = null, $context = null)
+    {
+        $this->bodyClass = 'compact-container';
+        return $this->asExtension('FormController')->update($recordId, $context);
     }
 
 }
