@@ -1,0 +1,14 @@
+{
+    "name": "octommerce/octommerce",
+    "description": "Powerful e-commerce platform",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Trias Nur Rahman",
+            "email": "contact@triasrahman.com"
+        }
+    ],
+    "require": {
+        "nicolaslopezj/searchable": "1.*"
+    }
+}
