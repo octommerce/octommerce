@@ -70,11 +70,12 @@ class Product extends Model
         'columns' => [
             'octommerce_octommerce_products.name' => 10,
             'octommerce_octommerce_products.keywords' => 8,
+            'octommerce_octommerce_brands.name' => 5,
             'octommerce_octommerce_products.sku' => 5,
             'octommerce_octommerce_products.description' => 2,
         ],
         'joins' => [
-            // 'octommerce_octommerce_category_product' => ['octommerce_octommerce_products.id', 'octommerce_octommerce_categories.product_id'],
+            'octommerce_octommerce_brands' => ['octommerce_octommerce_products.brand_id', 'octommerce_octommerce_brands.id'],
         ],
     ];
 

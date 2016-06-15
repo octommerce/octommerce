@@ -10,7 +10,8 @@ class ProductSearch extends ComponentBase
 {
 
     public $query;
-    public $result;
+    public $products;
+    public $total;
 
     public function componentDetails()
     {
@@ -28,6 +29,12 @@ class ProductSearch extends ComponentBase
     public function onRun()
     {
         $query = $this->query = Input::get('q');
+
+        $this->products = $products = Product::search($query)->orderBy('relevance', 'desc')->limit(12)->get();
+
+        $this->total = $products->count();
+
+        // $this->products = $products->paginate(12);
     }
 
 }
