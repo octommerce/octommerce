@@ -15,6 +15,7 @@ class Product extends Model
     use \October\Rain\Database\Traits\SimpleTree;
     use \October\Rain\Database\Traits\Sluggable;
     use \October\Rain\Database\Traits\Sortable;
+    use \Nicolaslopezj\Searchable\SearchableTrait;
 
     protected $manager;
 
@@ -59,6 +60,23 @@ class Product extends Model
         'sort_order asc' => 'Reordered (ascending)',
         'sort_order desc' => 'Reordered (descending)'
     );
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'octommerce_octommerce_products.name' => 10,
+            'octommerce_octommerce_products.keywords' => 8,
+            'octommerce_octommerce_products.sku' => 5,
+            'octommerce_octommerce_products.description' => 2,
+        ],
+        'joins' => [
+            // 'octommerce_octommerce_category_product' => ['octommerce_octommerce_products.id', 'octommerce_octommerce_categories.product_id'],
+        ],
+    ];
 
     /**
      * @var array Generate slugs for these attributes.
