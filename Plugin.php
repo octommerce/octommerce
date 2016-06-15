@@ -5,6 +5,7 @@ use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
 use Octommerce\Octommerce\Models\Category;
+use Octommerce\Octommerce\Models\Brand;
 use Rainlab\Location\Models\State;
 use Rainlab\User\Models\User;
 
@@ -79,18 +80,25 @@ class Plugin extends PluginBase
         Event::listen('pages.menuitem.listTypes', function() {
             return [
                 'product-category' => 'Product Category',
-                'all-product-categories' => 'All Product Categories'
+                'all-product-categories' => 'All Product Categories',
+                'all-brands' => 'All Brands',
             ];
         });
 
         Event::listen('pages.menuitem.getTypeInfo', function($type) {
             if ($type == 'product-category' || $type == 'all-product-categories')
                 return Category::getMenuTypeInfo($type);
+
+            if ($type == 'all-brands')
+                return Brand::getMenuTypeInfo($type);
         });
 
         Event::listen('pages.menuitem.resolveItem', function($type, $item, $url, $theme) {
             if ($type == 'product-category' || $type == 'all-product-categories')
                 return Category::resolveMenuItem($item, $url, $theme);
+
+            if ($type == 'all-brands')
+                return Brand::resolveMenuItem($item, $url, $theme);
         });
     }
 
