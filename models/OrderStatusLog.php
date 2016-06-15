@@ -122,7 +122,7 @@ class OrderStatusLog extends Model
         $record = new static;
         $record->status_code = $statusCode;
         $record->order_id = $order->id;
-        $record->admin_id = BackendAuth::getUser()->id;
+        // $record->admin_id = BackendAuth::getUser()->id;
         $record->data = null;
         $record->timestamp = Carbon::now();
         $record->note = $note;
