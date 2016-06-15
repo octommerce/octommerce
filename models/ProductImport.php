@@ -45,9 +45,18 @@ class ProductImport extends ImportModel
                 // Prepare fillable data
                 $fillableData = $data;
 
-                // Filter extra columns
-                foreach($extraColumns as $key) {
-                    unset($fillableData[$key]);
+                // Filter every columns
+                foreach($fillableData as $key => $value) {
+
+                    // If empty, set to null
+                    if ($value == '') {
+                        $fillableData[$key] = null;
+                    }
+
+                    // If it's extra column, unset it
+                    if (in_array($key, $extraColumns)) {
+                        unset($fillableData[$key]);
+                    }
                 }
 
                 // Fill columns
