@@ -145,7 +145,7 @@ class ProductList extends ComponentBase
             $list = $this->list = ProductListModel::whereSlug($this->property('listFilter'))->first();
 
             if ($list) {
-                $query->whereHas('categories', function($q) use ($list) {
+                $query->whereHas('lists', function($q) use ($list) {
                     $q->whereId($list->id);
                 });
             }
