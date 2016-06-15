@@ -246,6 +246,14 @@ class Product extends Model
     //     }
     // }
 
+    public function beforeSave()
+    {
+        // Sale price must below the regular price
+        if (! is_null($this->sale_price)) {
+            $this->sale_price = $this->sale_price < $this->price ? $this->sale_price : null;
+        }
+    }
+
     public function scopeDisplayed($query)
     {
         // return $query->
