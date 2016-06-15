@@ -264,6 +264,19 @@ class Product extends Model
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
     }
 
+    public function getIsDiscountedAttribute()
+    {
+        if (!is_null($this->sale_price)) {
+            return $this->sale_price < $this->price;
+        }
+        return false;
+    }
+
+    public function getDiscountPercentageAttribute()
+    {
+        return round(( 1 - $this->sale_price/$this->price) * 100);
+    }
+
     public function getRelatedProductsAttribute()
     {
 
