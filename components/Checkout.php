@@ -1,6 +1,8 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use Db;
+use Cart as CartHelper;
+use Flash;
 use Exception;
 use Redirect;
 use Cms\Classes\Page;
@@ -41,6 +43,17 @@ class Checkout extends ComponentBase
         parent::__construct($cmsObject, $properties);
 
         $this->orderManager = OrderManager::instance();
+    }
+
+    public function onRun()
+    {
+        $cart = CartHelper::get();
+
+        if (! $cart->is_allowed_checkout) {
+            Flash::error('Your cart is not allowed for checkout.');
+            $this->setStatusCode(404);
+            return $this->controller->run('404');
+        }
     }
 
     public function onSubmit()
