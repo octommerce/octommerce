@@ -13,6 +13,16 @@ tabs:
             span: auto
             type: relation
             tab: General
+        low_stock_treshold:
+            label: 'Low Stock Treshold'
+            span: auto
+            type: number
+            tab: Products
+        display_out_of_stock:
+            label: 'Show Out of Stock Products'
+            span: auto
+            type: switch
+            tab: Products
         checkout_min_subtotal:
             label: 'Minimum Subtotal'
             span: auto
