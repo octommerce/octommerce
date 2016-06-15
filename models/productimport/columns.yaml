@@ -31,7 +31,7 @@ columns:
         label: Brand Name
     category_names:
         label: Categories
-    up_sells_skus:
+    up_sell_skus:
         label: Up Sells
     cross_sell_skus:
         label: Cross Sells

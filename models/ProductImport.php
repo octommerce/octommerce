@@ -18,7 +18,7 @@ class ProductImport extends ImportModel
             'parent_sku',
             'brand_name',
             'category_names',
-            'up_sells_skus',
+            'up_sell_skus',
             'cross_sell_skus',
         ];
 
@@ -50,7 +50,7 @@ class ProductImport extends ImportModel
 
                     // If empty, set to null
                     if ($value == '') {
-                        $fillableData[$key] = null;
+                        $fillableData[$key] = $data[$key] = null;
                     }
 
                     // If it's extra column, unset it
@@ -65,18 +65,68 @@ class ProductImport extends ImportModel
                 // Parent product
                 if (isset($data['parent_sku']) && $data['parent_sku']) {
                     $parent = Product::whereSku($data['parent_sku'])->first();
-                    $product->parent_id = $parent->id;
+
+                    if ($parent) {
+                        $product->parent_id = $parent->id;
+                    }
                 }
 
                 // Brand
                 if (isset($data['brand_name']) && $data['brand_name']) {
                     $brand = Brand::whereName($data['brand_name'])->first();
-                    $product->brand_id = $brand->id;
+
+                    if ($brand) {
+                        $product->brand_id = $brand->id;
+                    }
                 }
 
-                // TODO:
-                // - Categories
-                // - Linked products
+                // Categories
+                if (isset($data['category_names']) && $data['category_names']) {
+
+                    $categoryIds = [];
+                    foreach (explode(';', $data['category_names']) as $categoryName) {
+
+                        $category = Category::whereName($categoryName)->first();
+
+                        if ($category) {
+                            $categoryIds[] = $category->id;
+                        }
+                    }
+
+                    $product->categories()->sync($categoryIds);
+                }
+
+                // Up Sells
+                if (isset($data['up_sell_skus']) && $data['up_sell_skus']) {
+
+                    $productIds = [];
+                    foreach (explode(';', $data['up_sell_skus']) as $sku) {
+
+                        $upsellProduct = Product::whereSku($sku)->first();
+
+                        if ($upsellProduct) {
+                            $productIds[] = $upsellProduct->id;
+                        }
+                    }
+
+                    $product->up_sells()->sync($productIds);
+                }
+
+                // Cross Sells
+                if (isset($data['cross_sell_skus']) && $data['cross_sell_skus']) {
+
+                    $productIds = [];
+                    foreach (explode(';', $data['cross_sell_skus']) as $sku) {
+
+                        $crossSellProduct = Product::whereSku($sku)->first();
+
+                        if ($crossSellProduct) {
+                            $productIds[] = $crossSellProduct->id;
+                        }
+                    }
+
+                    $product->cross_sells()->sync($productIds);
+                }
 
                 $product->save();
 
