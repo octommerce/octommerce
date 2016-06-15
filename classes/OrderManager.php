@@ -100,12 +100,8 @@ class OrderManager
             $user = Auth::getUser();
 
             // Update data phone if any
-            if($update && ($data['city_id'] || $data['state_id'] || $data['address'] || $data['postcode'])) {
-                // $user->telephone = $data['telephone'];
-                $user->city_id = $data['city_id'];
-                $user->state_id = $data['state_id'];
-                $user->postcode = $data['postcode'];
-                $user->address = $data['address'];
+            if($update) {
+                $user->fill($data);
                 $user->save();
             }
         }
