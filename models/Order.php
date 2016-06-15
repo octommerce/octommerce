@@ -78,6 +78,11 @@ class Order extends Model
         }
     }
 
+    public function afterCreate()
+    {
+        OrderStatusLog::createRecord('waiting', $this);
+    }
+
     public function sendEmailToUser()
     {
         $order = $this;
