@@ -8,6 +8,8 @@ use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Brand;
 use Rainlab\Location\Models\State;
 use Rainlab\User\Models\User;
+use Octommerce\Octommerce\Models\OrderStatusLog;
+use Responsiv\Pay\Models\InvoiceStatus;
 
 /**
  * Octommerce Plugin Information File
@@ -99,6 +101,12 @@ class Plugin extends PluginBase
 
             if ($type == 'all-brands')
                 return Brand::resolveMenuItem($item, $url, $theme);
+        });
+
+        // Update order status
+        Event::listen('responsiv.pay.beforeUpdateInvoiceStatus', function($record, $invoice, $statusId, $previousStatus) {
+            $newStatus = InvoiceStatus::find($statusId);
+            OrderStatusLog::createRecord($newStatus->code, $invoice->related, $record->comment);
         });
     }
 
