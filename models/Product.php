@@ -240,12 +240,13 @@ class Product extends Model
         return ProductAttribute::lists('name', 'id');
     }
 
-    // public function getSalePriceAttribute($value)
-    // {
-    //     if (!$value) {
-    //         return $this->price;
-    //     }
-    // }
+    public function getPrice($userId = null)
+    {
+        // TODO:
+        // if price is attached to user
+
+        return is_null($this->sale_price) ? $this->price : $this->sale_price;
+    }
 
     public function beforeSave()
     {
