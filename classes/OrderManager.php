@@ -48,10 +48,12 @@ class OrderManager
             }
 
             $invoice = Invoice::create([
-                'user_id' => $user->id,
-                'first_name' => $order->name,
-                'email' => $order->email,
-                'phone' => $order->phone,
+                'user_id'      => $user->id,
+                'first_name'   => $order->name,
+                'email'        => $order->email,
+                'phone'        => $order->phone,
+                'related_id'   => $order->id,
+                'related_type' => get_class($order)
             ]);
 
             foreach($cart->products as $product) {
