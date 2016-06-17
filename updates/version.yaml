@@ -27,3 +27,6 @@
 1.0.4:
     - Add profile columns to users table
     - add_profile_columns_to_users_table.php
+1.0.5:
+    - Add shipping columns to orders table
+    - add_shipping_columns_to_orders_table.php

@@ -1,4 +1,4 @@
-<?php namespace Marthatilaar\User\Updates;
+<?php namespace Octommerce\Octommerce\Updates;
 
 use Schema;
 use October\Rain\Database\Updates\Migration;
