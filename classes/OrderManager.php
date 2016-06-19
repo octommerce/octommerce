@@ -2,6 +2,7 @@
 
 use Db;
 use Auth;
+use Mail;
 use Carbon\Carbon;
 use RainLab\User\Models\User;
 use Octommerce\Octommerce\Models\Order;

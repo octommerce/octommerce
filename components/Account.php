@@ -137,7 +137,7 @@ class Account extends AccountModel
                 'code' =>  $user->reset_password_code
             ];
 
-            Mail::send('vhiearch.user::mail.forgot_password', $data, function($message) use ($user) {
+            Mail::send('octommerce.octommerce::mail.forgot_password', $data, function($message) use ($user) {
                 $message->to($user->email, $user->name);
             });
 
