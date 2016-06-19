@@ -3,7 +3,12 @@
 # ===================================
 
 fields:
-    status:
-        label: Status
-        type: relation
-        span: auto
+#    status:
+#        label: Status
+#        type: relation
+#        span: auto
+
+    Detail:
+        label:
+        type: partial
+        path: $/octommerce/octommerce/controllers/orders/_order_detail.htm

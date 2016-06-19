@@ -1,0 +1,65 @@
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item title-value">
+            <h4>Shipping Name</h4>
+            <p class="text-left"><h5><?= $model->shipping_name ?></h5></p>
+            <p><h6><?= $model->shipping_phone ?></p></h6></p>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4>Shipping Address</h4>
+            <p><h5><?= $model->shipping_address?></h5></p>
+
+                <p class="text-center"><h6><?= $model->city->name ?></h6></p>
+                <p class="text-center"><h6><?= $model->state->name ?></h6></p>
+
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4>Shipping Postal Code </h4>
+            <p class="text-center"><?= $model->shipping_postcode ?></p>
+        </div>
+    </div>
+</div>
+<table class="table data">
+    <thead>
+        <tr>
+            <th><span>Product Name</span></th>
+            <th class="text-center"><span>Quantity</span></th>
+            <th class="text-center"><span>Discount</span></th>
+            <th class="text-center"><span>Price</span></th>
+            <th class="text-right"><span>Subtotal</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php  ?>
+        <?php foreach($model->products as $i => $product): ?>
+        <tr>
+            <td class="text-left"><?= $product->pivot->name ?></td>
+            <td class="text-center"><?= number_format($product->pivot->qty) ?></td>
+            <td class="text-center"><?= number_format($product->pivot->discount) ?></td>
+            <td class="text-right"><?= number_format($product->pivot->price) ?></td>
+            <td class="text-right"><?= number_format(($product->pivot->price - $product->pivot->discount) * $product->pivot->qty) ?></td>
+        </tr>
+
+        <?php endforeach ?>
+    </tbody>  <tfoot>
+        <!--<tr>-->
+            <!--<th colspan="4">Subtotal</th>-->
+            <!--<th class="text-right"><?= number_format($model->subtotal) ?></th>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<th colspan="4">Shipping Cost</th>-->
+            <!--<th class="text-right"><?= number_format($model->shipping_cost) ?></th>-->
+        <!--</tr>-->
+        <?php if($model->insurance_cost > 0): ?>
+        <tr>
+            <th colspan="4">Insurance Cost</th>
+            <th class="text-right"><?= number_format($model->insurance_cost) ?></th>
+        </tr>
+        <?php endif ?>
+        <tr>
+            <th colspan="4">Total</th>
+            <th class="text-right">Rp. <?= number_format($model->subtotal + $model->shipping_cost + $model->insurance_cost) ?></th>
+        </tr>
+    </tfoot>
+</table>
