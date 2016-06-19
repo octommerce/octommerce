@@ -3,6 +3,7 @@
 use Db;
 use Auth;
 use Carbon\Carbon;
+use RainLab\User\Models\User;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Cart;
 use Octommerce\Octommerce\Models\City;
@@ -108,6 +109,10 @@ class OrderManager
     protected function getOrRegisterUser($data, $update = true)
     {
         if (! Auth::check()) {
+
+            if (User::whereEmail($data['email'])->count()) {
+                throw new \ApplicationException('This email is already exist. Please login first.');
+            }
 
             $data['password_confirmation'] = $data['password'] = $this->generateUserPassword();
 
