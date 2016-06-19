@@ -37,6 +37,12 @@ class Account extends AccountModel
         return [];
     }
 
+
+    public function onRun()
+    {
+        $this->getProfileRegion();
+    }
+
     public function getAllStates() {
         // return CountryModel::with('states')->orderBy('name', 'ASC')->get();
         return State::whereHas('country', function($query) {
@@ -44,6 +50,8 @@ class Account extends AccountModel
         })->get();
 
     }
+
+
 
     /**
      * Retrieve all cities.
@@ -178,10 +186,14 @@ class Account extends AccountModel
         $this->page['cities'] = State::find(post('state_id'))->cities;
     }
 
+    function onSelectShippingState() {
+        $this->page['shippingCities'] = State::find(post('shipping_state_id'))->cities;
+    }
+
     function getProfileRegion() {
         if(Auth::check() == true && $this->page['states'] == null && $this->page['cities'] == null) {
-            $this->page['states'] = StateModel::all();
-            $this->page['cities'] = StateModel::find($this->user()->state_id)?StateModel::find($this->user()->state_id)->cities:null;
+            $this->page['states'] = State::all();
+            $this->page['cities'] = State::find($this->user()->state_id)?State::find($this->user()->state_id)->cities:null;
         }
     }
 

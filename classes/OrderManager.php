@@ -122,7 +122,7 @@ class OrderManager
             // Logged in directly
             Auth::login($user);
 
-            // $this->sendPasswordUser($user, $dataUser['password']);
+            $this->sendPasswordUser($user, $data['password']);
 
         } else {
             $user = Auth::getUser();
@@ -172,4 +172,15 @@ class OrderManager
         return $randomString;
     }
 
+    protected function sendPasswordUser($user, $password) {
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $password,
+        ];
+
+        Mail::send('octommerce.octommerce::mail.password_user', $data, function ($message) use ($user) {
+            $message->to($user->email, $user->name);
+        });
+    }
 }
