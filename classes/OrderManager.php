@@ -5,6 +5,7 @@ use Auth;
 use Carbon\Carbon;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Cart;
+use Octommerce\Octommerce\Models\City;
 use Responsiv\Pay\Models\Invoice;
 use Responsiv\Pay\Models\InvoiceItem;
 
@@ -26,13 +27,28 @@ class OrderManager
 
             $user = $this->getOrRegisterUser($data);
 
-            $order = new Order([
+            $order = new Order($data);
+
+            $order->fill([
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'user_id' => $user->id,
                 'subtotal' => $cart->total_price,
             ]);
+
+            if (isset($data['city_id']) && $cityId = $data['city_id']) {
+                $city = City::find($cityId);
+
+                if ($city) {
+                    $order->city()->add($city);
+                }
+
+                if ($city->state) {
+                    $order->state()->add($city->state);
+                }
+            }
+
+            $order->user()->add($user);
 
             $order->save();
 
@@ -52,6 +68,13 @@ class OrderManager
                 'first_name'   => $order->name,
                 'email'        => $order->email,
                 'phone'        => $order->phone,
+                'company'      => $order->company,
+                'street_addr'  => $order->address,
+                'city'         => $order->city ? $order->city->name : null,
+                'zip'          => $order->postcode,
+                'state_id'     => $order->state ? $order->state->id : null,
+                'country_id'   => $order->state ? $order->state->country->id : null,
+                'due_at'       => Carbon::now()->addDay(),
             ]);
 
             foreach($cart->products as $product) {
