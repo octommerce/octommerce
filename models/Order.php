@@ -72,8 +72,8 @@ class Order extends Model
         ],
         'city' => 'Octommerce\Octommerce\Models\City',
         'state' => 'RainLab\Location\Models\State',
-        'shpping_city' => 'Octommerce\Octommerce\Models\City',
-        'state_city' => 'RainLab\Location\Models\State',
+        'shipping_city' => 'Octommerce\Octommerce\Models\City',
+        'shipping_state' => 'RainLab\Location\Models\State',
     ];
     public $belongsToMany = [
         'products' => [
