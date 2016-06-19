@@ -30,3 +30,6 @@
 1.0.5:
     - Add shipping columns to orders table
     - add_shipping_columns_to_orders_table.php
+1.0.6:
+    - Change shipping name column type
+    - change_shipping_name_column_type.php
