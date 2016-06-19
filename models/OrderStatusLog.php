@@ -91,7 +91,7 @@ class OrderStatusLog extends Model
      */
     public function sendEmailToCustomer($orderStatus, $order)
     {
-        $mailTemplate = MailTemplate::find($orderStatus->mail_template_id);
+        $mailTemplate = $orderStatus->mail_template;
 
         if (! $mailTemplate) {
             throw new ApplicationException('Mail template not found!');
