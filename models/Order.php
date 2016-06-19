@@ -32,8 +32,8 @@ class Order extends Model
         'email',
         'phone',
         'postcode',
-        // 'city_id',
-        // 'state_id',
+        'city_id',
+        'state_id',
         'address',
         'company',
         'is_same_address',
@@ -41,10 +41,11 @@ class Order extends Model
         'shipping_phone',
         'shipping_company',
         'shipping_address',
-        // 'shipping_city_id',
-        // 'shipping_state_id',
+        'shipping_city_id',
+        'shipping_state_id',
         'shipping_postcode',
         'message',
+        'subtotal',
     ];
 
     protected $dates = ['status_updated_at', 'expired_at', 'deleted_at'];
@@ -78,6 +79,7 @@ class Order extends Model
         'products' => [
             'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_order_product',
+            'pivot' => ['qty', 'price', 'discount', 'name'],
         ],
     ];
     public $morphTo = [];
@@ -110,6 +112,7 @@ class Order extends Model
 
     public function beforeSave()
     {
+        $this->copyShippingAddress();
         $this->generatePDF();
     }
 
@@ -164,6 +167,21 @@ class Order extends Model
         // catch (\Exception $e) {
         //     throw new \ApplicationException($e->getMessage());
         // }
+    }
+
+    protected function copyShippingAddress()
+    {
+        if ($this->is_same_address) {
+            $this->fill([
+                'shipping_name'     => $this->name,
+                'shipping_phone'    => $this->phone,
+                'shipping_company'  => $this->company,
+                'shipping_address'  => $this->address,
+                'shipping_city_id'  => $this->city_id,
+                'shipping_state_id' => $this->state_id,
+                'shipping_postcode' => $this->postcode,
+            ]);
+        }
     }
 
     /**

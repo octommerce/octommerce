@@ -60,6 +60,8 @@ class Checkout extends ComponentBase
     {
         $data = post();
 
+        $data['is_same_address'] = $data['is_same_address'] ? true : false;
+
         try {
             $order = $this->orderManager->create($data);
         }
