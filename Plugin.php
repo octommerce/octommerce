@@ -162,4 +162,20 @@ class Plugin extends PluginBase
 
         ];
     }
+
+    public function registerMailTemplates()
+    {
+        return [
+            'octommerce.octommerce::mail.new_order'            => 'Confirmation email on new order.',
+            'octommerce.octommerce::mail.paid_order'           => 'Paid order notification to customer.',
+            'octommerce.octommerce::mail.shipped_order'        => 'Shipping status notification to customer.',
+            'octommerce.octommerce::mail.delivered_order'      => 'Delivery status notification to customer.',
+            'octommerce.octommerce::mail.cancelled_order'      => 'Cancelled order notification to customer.',
+            'octommerce.octommerce::mail.refunded_order'       => 'Refunded order notification to user.',
+            'octommerce.octommerce::mail.abandoned_cart'       => 'Abandoned cart reminder to customer.',
+            'octommerce.octommerce::mail.product_availibility' => 'Notification when a product is available.',
+            'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
+            'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
+        ];
+    }
 }

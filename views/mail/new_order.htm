@@ -1,0 +1,75 @@
+subject = "Your Order #{{ order.order_no }}"
+==
+
+==
+{% set invoice = order.invoices.first() %}
+
+<h2>
+    Your Order
+</h2>
+<p>
+    Hi, {{ order.name }}
+</p>
+<p>
+    Thank you for your purchase, here is your order details.
+</p>
+<table class="table-information-order">
+    <tr>
+        <td>
+            <div class="information-head">
+                Order No
+            </div>
+            <div class="information-body info-order">
+                {{ order.order_no }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                Total
+            </div>
+            <div class="information-body">
+                {{ order.total|currency }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                Status
+            </div>
+            <div class="information-body info-status">
+                <span class="text-success">
+                    {{ order.status.name }}
+                </span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+{{ invoice.template.renderInvoice(invoice)|raw }}
+
+<table class="table-information-shipping">
+    <tr>
+        <td>
+            <div class="muted">
+                {{ 'Shipping Address'|_ }}
+            </div>
+            <div class="shipping-content">
+                <b>
+                    {{ order.shipping_name }}
+                </b>
+                <br/>
+                {{ order.shipping_address }}<br>
+                {{ order.shipping_city.name }}, {{ order.shipping_state.name }} {{ order.shipping_postcode }}
+            </div>
+        </td>
+        <td>
+            <div class="muted">
+                PEMBAYARAN
+            </div>
+            <div class="shipping-content">
+            	{% if invoice %}
+                <b>{{ invoice.payment_method.name }}</b><br/>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+</table>
