@@ -105,8 +105,19 @@ class Plugin extends PluginBase
 
         // Update order status
         Event::listen('responsiv.pay.beforeUpdateInvoiceStatus', function($record, $invoice, $statusId, $previousStatus) {
-            $newStatus = InvoiceStatus::find($statusId);
-            OrderStatusLog::createRecord($newStatus->code, $invoice->related, $record->comment);
+
+            $newStatusCode = null;
+
+            // TODO: mapping status, dirapikan
+            switch($statusId) {
+                case 'paid':
+                    $newStatusCode = 'paid';
+                    break;
+            }
+
+            if ($newStatusCode) {
+                OrderStatusLog::createRecord($newStatusCode, $invoice->related, $record->comment);
+            }
         });
     }
 
