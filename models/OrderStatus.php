@@ -35,10 +35,7 @@ class OrderStatus extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [
-        'mail_template' => [
-            'System\Models\MailTemplate',
-            'key' => 'code',
-        ],
+        'mail_template' => 'System\Models\MailTemplate',
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -47,23 +44,4 @@ class OrderStatus extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    /**
-     * Returns an array of template codes and ids.
-     * @return array
-     */
-    public static function listAllTemplates()
-    {
-        $templates = (array) MailTemplate::lists('code', 'id');
-
-        return $templates;
-    }
-
-    public function getTemplateCodeAttribute()
-    {
-        $template = MailTemplate::find($this->mail_template_id);
-
-        if ($template) {
-            return $template->code;
-        }
-    }
 }

@@ -28,7 +28,9 @@ class City extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'state' => 'RainLab\Location\Models\State',
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];

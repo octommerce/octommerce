@@ -25,9 +25,28 @@ class Order extends Model
     ];
 
     /**
-     * @var array Guarded fields
+     * @var array The attributes that are mass assignable.
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'postcode',
+        'city_id',
+        'state_id',
+        'address',
+        'company',
+        'is_same_address',
+        'shipping_name',
+        'shipping_phone',
+        'shipping_company',
+        'shipping_address',
+        'shipping_city_id',
+        'shipping_state_id',
+        'shipping_postcode',
+        'message',
+        'subtotal',
+    ];
 
     protected $dates = ['status_updated_at', 'expired_at', 'deleted_at'];
 
@@ -51,17 +70,25 @@ class Order extends Model
             'Octommerce\Octommerce\Models\OrderStatus',
             'key' => 'status_code',
         ],
+        'city' => 'Octommerce\Octommerce\Models\City',
+        'state' => 'RainLab\Location\Models\State',
+        'shipping_city' => 'Octommerce\Octommerce\Models\City',
+        'shipping_state' => 'RainLab\Location\Models\State',
     ];
     public $belongsToMany = [
         'products' => [
             'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_order_product',
+            'pivot' => ['qty', 'price', 'discount', 'name'],
         ],
     ];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [
-        'invoices' => ['Responsiv\Pay\Models\Invoice', 'name' => 'related']
+        'invoices' => [
+            'Responsiv\Pay\Models\Invoice',
+            'name' => 'related'
+        ],
     ];
     public $attachOne = [];
     public $attachMany = [];
@@ -76,6 +103,17 @@ class Order extends Model
         if ($status = OrderStatus::find($statusCode)) {
             OrderStatusLog::createRecord($status, $this);
         }
+    }
+
+    public function beforeCreate()
+    {
+        $this->order_no = $this->generateOrderNo();
+    }
+
+    public function beforeSave()
+    {
+        $this->copyShippingAddress();
+        $this->generatePDF();
     }
 
     public function afterCreate()
@@ -103,5 +141,67 @@ class Order extends Model
         Mail::send('octommerce.octommerce::mail.admin_order_template', compact('order'), function($message) {
             $message->to('sales@turez.id')->cc('helpdesk@turez.id');
         });
+    }
+
+    public function generatePDF()
+    {
+        // try {
+        //     $templateCode = 'octommerce::order-detail';
+
+        //     $order = $this;
+
+        //     $pdf = PDFTemplate::render($templateCode, compact('order'));
+
+        //     $filePath = storage_path() . '/temp/order-' . $this->invoice_no . '.pdf';
+
+        //     file_put_contents($filePath, $pdf);
+
+        //     $file = new File;
+        //     $file->fromFile($filePath);
+        //     $file->save();
+
+        //     unlink($filePath);
+
+        //     $this->pdf = $file;
+        // }
+        // catch (\Exception $e) {
+        //     throw new \ApplicationException($e->getMessage());
+        // }
+    }
+
+    protected function copyShippingAddress()
+    {
+        if ($this->is_same_address) {
+            $this->fill([
+                'shipping_name'     => $this->name,
+                'shipping_phone'    => $this->phone,
+                'shipping_company'  => $this->company,
+                'shipping_address'  => $this->address,
+                'shipping_city_id'  => $this->city_id,
+                'shipping_state_id' => $this->state_id,
+                'shipping_postcode' => $this->postcode,
+            ]);
+        }
+    }
+
+    /**
+     *
+     */
+    protected function generateOrderNo($length = 9, $prefix = '')
+    {
+        $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ123456789';
+        $string = $prefix;
+
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        // Check on database
+        if(self::whereOrderNo($string)->count()) {
+            // Recursively create again
+            $string = $this->generateOrderNo($length, $prefix);
+        }
+
+        return $string;
     }
 }

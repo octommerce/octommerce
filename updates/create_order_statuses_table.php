@@ -22,7 +22,7 @@ class CreateOrderStatusesTable extends Migration
             $table->boolean('send_email')->default(0);
             $table->boolean('attach_pdf')->default(0);
 
-            $table->string('mail_template_code')->nullable();
+            $table->string('mail_template_id')->unsigned()->nullable();
 
             $table->integer('sort_order')->unsigned()->nullable();
         });

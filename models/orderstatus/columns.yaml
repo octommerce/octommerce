@@ -3,20 +3,22 @@
 # ===================================
 
 columns:
-    name: 
+    name:
         label: Name
 
-    is_active: 
+    is_active:
         label: Active
         type: switch
 
-    send_email: 
+    send_email:
         label: Email customer
         type: switch
 
-    attach_pdf: 
+    attach_pdf:
         label: Attach invoice pdf
         type: switch
 
-    template_code: 
+    mail_template:
         label: Mail template
+        relation: mail_template
+        select: code

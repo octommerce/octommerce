@@ -3,11 +3,11 @@
 # ===================================
 
 fields:
-    is_active: 
+    is_active:
         label: Active
         type: switch
 
-    name: 
+    name:
         label: Name
         span: auto
 
@@ -18,23 +18,24 @@ fields:
 
 secondaryTabs:
     fields:
-        send_email: 
+        send_email:
             label: Send an email to customer when his/her order has changed.
             type: switch
             span: auto
             tab: Mail template
 
-        attach_pdf: 
+        attach_pdf:
             label: Attach invoice PDF to email.
             type: switch
             span: auto
             tab: Mail template
 
-        mail_template_id: 
+        mail_template:
             label: Mail template
             tab: Mail template
-            type: dropdown
-            options: listAllTemplates
+            type: relation
+            select: code
+            # options: listAllTemplates
 
         description:
             label: Description
