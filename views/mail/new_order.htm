@@ -27,7 +27,7 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
                 {{ 'Total'|_ }}
             </div>
             <div class="information-body">
-                {{ order.total|currency }}
+                {{ order.total|currency({format: 'short'}) }}
             </div>
         </td>
         <td>
@@ -64,10 +64,10 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
                 {{ product.pivot.qty }} x {{ product.pivot.name }}
             </td>
             <td>
-                {{ product.pivot.price|currency }}
+                {{ product.pivot.price|currency({format: 'short'}) }}
             </td>
             <td>
-                {{ (product.pivot.qty * product.pivot.price)|currency }}
+                {{ (product.pivot.qty * product.pivot.price)|currency({format: 'short'}) }}
             </td>
         </tr>
         {% endfor %}
@@ -75,7 +75,7 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
     <tfoot>
         <tr>
             <td colspan="2">{{ 'Subtotal'|_ }}</td>
-            <td class="text-right"><b>{{ order.subtotal|currency }}</b></td>
+            <td class="text-right"><b>{{ order.subtotal|currency({format: 'short'}) }}</b></td>
         </tr>
         <tr>
             <td colspan="2">{{ 'Shipping Cost'|_ }}</td>
@@ -84,12 +84,12 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
         {% if order.discount > 0 %}
         <tr>
             <td colspan="2">{{ 'Discount'|_ }}</td>
-            <td class="text-right">-{{ order.discount|currency }}</td>
+            <td class="text-right">-{{ order.discount|currency({format: 'short'}) }}</td>
         </tr>
         {% endif %}
         <tr>
             <td colspan="2"><b>{{ 'Total'|_ }}</b></td>
-            <td class="text-right"><b>{{ order.total|currency }}</b></td>
+            <td class="text-right"><b>{{ order.total|currency({format: 'short'}) }}</b></td>
         </tr>
     </tfoot>
 </table>
