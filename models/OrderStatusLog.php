@@ -143,6 +143,8 @@ class OrderStatusLog extends Model
 
             $record->save();
 
+            $order->onChangeStatus($statusCode, $previousStatus);
+
             Db::commit();
         }
         catch (Exception $e) {

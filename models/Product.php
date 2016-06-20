@@ -284,12 +284,18 @@ class Product extends Model
 
     public function holdStock($qty)
     {
-        //
+        if ($this->manage_stock) {
+            $this->qty -= $qty;
+            $this->save();
+        }
     }
 
     public function releaseStock($qty)
     {
-        //
+        if ($this->manage_stock) {
+            $this->qty += $qty;
+            $this->save();
+        }
     }
 
     public function inList($listSlug)

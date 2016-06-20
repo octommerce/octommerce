@@ -161,6 +161,23 @@ class Order extends Model
         // }
     }
 
+    public function onChangeStatus($statusCode, $previousStatusCode = null)
+    {
+        if ($statusCode == 'paid') {
+
+            foreach($this->products as $product) {
+                $product->holdStock($product->pivot->qty);
+            }
+        }
+
+        if ($statusCode == 'void' || $statusCode == 'closed') {
+
+            foreach($this->products as $product) {
+                $product->releaseStock($product->pivot->qty);
+            }
+        }
+    }
+
     protected function copyShippingAddress()
     {
         if ($this->is_same_address) {
