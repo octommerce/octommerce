@@ -125,10 +125,15 @@ class Plugin extends PluginBase
 
             $newStatusCode = null;
 
-            // TODO: mapping status, dirapikan
-            switch($statusId) {
+            $oldStatusCode = InvoiceStatus::find($statusId)->code;
+
+            switch($oldStatusCode) {
                 case 'paid':
+                case 'approved':
                     $newStatusCode = 'paid';
+                    break;
+                case 'void':
+                    $newStatusCode = 'void';
                     break;
             }
 
