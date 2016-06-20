@@ -1,0 +1,26 @@
+phone:
+    label: Phone Number
+    span: auto
+    type: text
+address:
+    label: Primary Address
+    type: textarea
+    span: auto
+postcode:
+    label: Post Code
+    type: text
+    span: auto
+state:
+    label: State
+    type: relation
+    dependsOn: country
+    span: auto
+city:
+    label: City
+    type: relation
+    dependsOn: state
+    span: auto
+    
+    
+    
+  

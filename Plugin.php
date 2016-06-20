@@ -1,6 +1,8 @@
 <?php namespace Octommerce\Octommerce;
 
 use Event;
+use Yaml;
+use File;
 use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
@@ -8,6 +10,7 @@ use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Brand;
 use Rainlab\Location\Models\State;
 use Rainlab\User\Models\User;
+use Rainlab\User\Controllers\Users as UsersController;
 use Octommerce\Octommerce\Models\OrderStatusLog;
 use Responsiv\Pay\Models\InvoiceStatus;
 
@@ -48,6 +51,17 @@ class Plugin extends PluginBase
             $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
         });
 
+        /**
+         * Add profile fields to backend users
+         */
+        UsersController::extendFormFields(function($form, $model, $context) {
+            if(!$model instanceof User) return;
+            $configFile = __DIR__ .'/config/profile_fields.yaml';
+            $config = Yaml::parse(File::get($configFile));
+            $form->addFields($config);
+            $form->removeField('surname');
+        });
+
         State::extend(function($model) {
             $model->hasMany['users'] = [
                 'Rainlab\User\Models\User'
@@ -57,6 +71,9 @@ class Plugin extends PluginBase
                 'Octommerce\Octommerce\Models\City'
             ];
         });
+
+
+
 
         //
         // Built in Types
