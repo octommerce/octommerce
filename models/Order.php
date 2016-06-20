@@ -121,17 +121,9 @@ class Order extends Model
         OrderStatusLog::createRecord('waiting', $this);
     }
 
-    public function sendEmailToUser()
+    public function sendEmailToCustomer()
     {
-        $order = $this;
-
-        Mail::send('octommerce.octommerce::mail.user_order_template', compact('order'), function($message) use ($order) {
-            $message->to($order->email, $order->name);
-
-            // if($order->pdf) {
-            //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
-            // }
-        });
+        return $this->status_logs->last()->sendEmailToCustomer();
     }
 
     public function sendEmailToAdmin()

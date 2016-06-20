@@ -91,15 +91,16 @@ class OrderStatusLog extends Model
      *
      * @return void
      */
-    public function sendEmailToCustomer($orderStatus, $order)
+    public function sendEmailToCustomer()
     {
-        $mailTemplate = $orderStatus->mail_template;
+        $order = $this->order;
+        $orderStatus = $order->status;
 
-        if (! $mailTemplate) {
+        if (! $orderStatus->mail_template) {
             throw new ApplicationException('Mail template not found!');
         }
 
-        Mail::send($mailTemplate->code, compact('order'), function($message) use ($order, $orderStatus) {
+        Mail::send($orderStatus->mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
             $message->to($order->email, $order->name);
 
             if($orderStatus->attach_pdf) {
@@ -147,7 +148,7 @@ class OrderStatusLog extends Model
         catch (Exception $e) {
             Db::rollBack();
 
-            throw new $e;
+            throw $e;
         }
 
     }

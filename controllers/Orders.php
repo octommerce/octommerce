@@ -60,6 +60,15 @@ class Orders extends Controller
         return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $order->id));
     }
 
+    public function preview_onSendEmailToCustomer($recordId = null)
+    {
+        $order = $this->formFindModelObject($recordId);
+
+        $order->sendEmailToCustomer();
+
+        Flash::success('Email sent.');
+    }
+
     protected function makeStatusFormWidget()
     {
         $config = $this->makeConfig('~/plugins/octommerce/octommerce/models/orderstatuslog/fields.yaml');
