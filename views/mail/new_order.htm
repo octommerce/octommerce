@@ -111,17 +111,9 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
             </div>
         </td>
         <td>
-            <div class="muted">
-                {{ 'Payment'|_ }}
-            </div>
-            <div class="shipping-content">
-                {% if invoice %}
-                <b>
-                    {{ invoice.payment_method.name }}
-                </b>
-                <br/>
-                {% endif %}
-            </div>
+            <a href="{{ invoice.url }}" class="button button-primary">{{ 'Pay Now'|_ }}</a>
         </td>
     </tr>
 </table>
+
+
