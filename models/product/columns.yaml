@@ -12,6 +12,8 @@ columns:
         sortable: false
     sku:
         label: SKU
+        type: text
+        searchable: true
     name:
         label: Name
         type: text
