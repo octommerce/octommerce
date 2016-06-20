@@ -1,7 +1,9 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Db;
 use Mail;
 use Model;
+use Exception;
 use BackendAuth;
 use Carbon\Carbon;
 use ApplicationException;
@@ -116,24 +118,37 @@ class OrderStatusLog extends Model
 
         $previousStatus = $order->status_code;
 
-        /*
-         * Create record
-         */
-        $record = new static;
-        $record->status_code = $statusCode;
-        $record->order_id = $order->id;
-        // $record->admin_id = BackendAuth::getUser()->id;
-        $record->data = null;
-        $record->timestamp = Carbon::now();
-        $record->note = $note;
+        try {
 
-        $record->save();
+            Db::beginTransaction();
 
-        /*
-         * Update order status
-         */
-        $order->status_code = $statusCode;
-        $order->status_updated_at = Carbon::now();
-        $order->save();
+            /*
+             * Create record
+             */
+            $record = new static;
+            $record->status_code = $statusCode;
+            $record->order_id = $order->id;
+            // $record->admin_id = BackendAuth::getUser()->id;
+            $record->data = null;
+            $record->timestamp = Carbon::now();
+            $record->note = $note;
+
+            /*
+             * Update order status
+             */
+            $order->status_code = $statusCode;
+            $order->status_updated_at = Carbon::now();
+            $order->save();
+
+            $record->save();
+
+            Db::commit();
+        }
+        catch (Exception $e) {
+            Db::rollBack();
+
+            throw new $e;
+        }
+
     }
 }
