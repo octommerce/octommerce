@@ -28,8 +28,13 @@ class Cart
 
         if ($existingProduct) {
             $qty += $existingProduct->pivot->qty;
-            $cart->products()->detach($productId);
         }
+
+        if (!$product->isAvailable($qty)) {
+            throw new \ApplicationException('No more stock.');
+        }
+
+        $cart->products()->detach($productId);
 
         if ($qty > 0) {
             $cart->products()->attach([
@@ -57,8 +62,13 @@ class Cart
 
         if ($existingProduct) {
             $qty = $qty !== null ? $qty : $existingProduct->qty;
-            $cart->products()->detach($productId);
         }
+
+        if (!$product->isAvailable($qty)) {
+            throw new \ApplicationException('No more stock.');
+        }
+
+        $cart->products()->detach($productId);
 
         if ($qty > 0) {
             $cart->products()->attach([

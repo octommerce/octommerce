@@ -72,4 +72,16 @@ class Cart extends ComponentBase
         ];
     }
 
+    public function onRefresh()
+    {
+        $cart = $this->page['cart'] = CartHelper::get();
+
+        // TODO:
+        // Calculate stock availibity of every products.
+
+        return [
+            '.cart-counter' => $cart->products->count(),
+        ];
+    }
+
 }

@@ -4,6 +4,7 @@ use Model;
 use DB;
 use Carbon\Carbon;
 use Octommerce\Octommerce\Classes\ProductManager;
+use Octommerce\Octommerce\Models\Settings;
 
 /**
  * Product Model
@@ -268,9 +269,13 @@ class Product extends Model
             return true;
         }
 
+        if ($this->stock_status == 'out-of-stock') {
+            return false;
+        }
+
         if ($this->qty < $qty ||
-            $this->available_from > Carbon::now() ||
-            $this->available_to < Carbon::now()) {
+            ($this->available_from && $this->available_from > Carbon::now()) ||
+            ($this->available_to && $this->available_to < Carbon::now()) ) {
             return false;
         }
 
@@ -326,5 +331,21 @@ class Product extends Model
                    ->get();
 
         return array_merge($relatedCategories->toArray(), $related->toArray());
+    }
+
+    public function getIsLowStockAttribute()
+    {
+        if ($this->manage_stock && $this->stock_status == 'in-stock') {
+            return $this->qty <= Settings::get('low_stock_treshold');
+        }
+
+        return false;
+    }
+
+    public function isOutOfStockAttribute()
+    {
+        if ($this->stock_status == 'out-of-stock') {
+            return true;
+        }
     }
 }
