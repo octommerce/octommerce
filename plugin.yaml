@@ -11,6 +11,7 @@ navigation:
         icon: icon-tags
         permissions:
             - octommerce.octommerce.access_products
+        order: '300'
         sideMenu:
             products:
                 label: 'All Products'
@@ -42,6 +43,7 @@ navigation:
         icon: icon-shopping-cart
         permissions:
             - octommerce.octommerce.access_orders
+        order: '310'
         sideMenu:
             orders:
                 label: Orders
@@ -52,7 +54,7 @@ navigation:
                 url: octommerce/octommerce/payments
                 icon: icon-credit-card
             orderstatuses:
-                label: Order Statuses
+                label: 'Order Statuses'
                 url: octommerce/octommerce/orderstatuses
                 icon: icon-tasks
 permissions:
