@@ -1,23 +1,22 @@
-subject = "Your Order #{{ order.order_no }}"
+subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
 ==
 
 ==
 {% set invoice = order.invoices.first() %}
-
 <h2>
-    Your Order
+    {{ 'Your Order'|_ }}
 </h2>
 <p>
-    Hi, {{ order.name }}
+    {{ 'Hi, :name'|_({name: order.name}) }}
 </p>
 <p>
-    Thank you for your purchase, here is your order details.
+    {{ 'Thank you for your purchase, here is your order details.'|_ }}
 </p>
 <table class="table-information-order">
     <tr>
         <td>
             <div class="information-head">
-                Order No
+                {{ 'Order No'|_ }}
             </div>
             <div class="information-body info-order">
                 {{ order.order_no }}
@@ -25,7 +24,7 @@ subject = "Your Order #{{ order.order_no }}"
         </td>
         <td>
             <div class="information-head">
-                Total
+                {{ 'Total'|_ }}
             </div>
             <div class="information-body">
                 {{ order.total|currency }}
@@ -33,10 +32,10 @@ subject = "Your Order #{{ order.order_no }}"
         </td>
         <td>
             <div class="information-head">
-                Status
+                {{ 'Status'|_ }}
             </div>
             <div class="information-body info-status">
-                <span class="text-success">
+                <span class="text-warning">
                     {{ order.status.name }}
                 </span>
             </div>
@@ -44,6 +43,56 @@ subject = "Your Order #{{ order.order_no }}"
     </tr>
 </table>
 
+<table class="table-summary">
+    <thead>
+        <tr>
+            <th>
+                {{ 'Product'|_ }}
+            </th>
+            <th>
+                {{ 'Price'|_ }}
+            </th>
+            <th>
+                {{ 'Subtotal'|_ }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in order.products %}
+        <tr>
+            <td>
+                {{ product.pivot.qty }} x {{ product.pivot.name }}
+            </td>
+            <td>
+                {{ product.pivot.price|currency }}
+            </td>
+            <td>
+                {{ (product.pivot.qty * product.pivot.price)|currency }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">{{ 'Subtotal'|_ }}</td>
+            <td class="text-right"><b>{{ order.subtotal|currency }}</b></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ 'Shipping Cost'|_ }}</td>
+            <td class="text-right text-success">{{ 'FREE'|_ }}</td>
+        </tr>
+        {% if order.discount > 0 %}
+        <tr>
+            <td colspan="2">{{ 'Discount'|_ }}</td>
+            <td class="text-right">-{{ order.discount|currency }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td colspan="2"><b>{{ 'Total'|_ }}</b></td>
+            <td class="text-right"><b>{{ order.total|currency }}</b></td>
+        </tr>
+    </tfoot>
+</table>
 <table class="table-information-shipping">
     <tr>
         <td>
@@ -55,17 +104,22 @@ subject = "Your Order #{{ order.order_no }}"
                     {{ order.shipping_name }}
                 </b>
                 <br/>
-                {{ order.shipping_address }}<br>
-                {{ order.shipping_city.name }}, {{ order.shipping_state.name }} {{ order.shipping_postcode }}
+                {{ order.shipping_address }}
+                <br>
+                    {{ order.shipping_city.name }}, {{ order.shipping_state.name }} {{ order.shipping_postcode }}
+                </br>
             </div>
         </td>
         <td>
             <div class="muted">
-                PEMBAYARAN
+                {{ 'Payment'|_ }}
             </div>
             <div class="shipping-content">
-            	{% if invoice %}
-                <b>{{ invoice.payment_method.name }}</b><br/>
+                {% if invoice %}
+                <b>
+                    {{ invoice.payment_method.name }}
+                </b>
+                <br/>
                 {% endif %}
             </div>
         </td>
