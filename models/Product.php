@@ -320,7 +320,8 @@ class Product extends Model
     {
 
         $getCategories = $this->categories->lists('id');
-        $relatedCategories = self::whereHas('categories', function($query) use ($getCategories) {
+        $relatedCategories = self::whereIsPublished(1)
+                    ->whereHas('categories', function($query) use ($getCategories) {
                         $query->whereIn('id', $getCategories);
                     })
                     ->where('id','<>',$this->id)
@@ -331,12 +332,13 @@ class Product extends Model
         $productsCount = $relatedCategories->count();
         //Get limit based on how much related categories have. Is it less than 4 or not?
         $limit = $productsCount < 4 ? 4 - $productsCount : 0;
-        $related = self::where('id', '<>', $this->id)
+        $related = self::whereIsPublished(1)
+                   ->where('id', '<>', $this->id)
                    ->orderBy(DB::raw('RAND()'))
                    ->take($limit)
                    ->get();
 
-        return array_merge($relatedCategories->toArray(), $related->toArray());
+        return $relatedCategories->merge($related);//array_merge($relatedCategories->toArray(), $related->toArray());
     }
 
     public function getIsLowStockAttribute()
