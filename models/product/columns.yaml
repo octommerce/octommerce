@@ -29,6 +29,9 @@ columns:
     sale_price:
         label: 'Sale Price'
         type: number
+    is_published:
+        label: Is Published
+        type: boolean
     manage_Stock:
         label: 'Manage Stock'
         type: switch
