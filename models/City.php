@@ -13,6 +13,7 @@ class City extends Model
      */
     public $table = 'octommerce_octommerce_cities';
 
+    public $timestamps = false;
     /**
      * @var array Guarded fields
      */
