@@ -35,5 +35,7 @@ columns:
         label: Up Sells
     cross_sell_skus:
         label: Cross Sells
+    keywords:
+        label: Keywords
     is_published:
         label: 'Is Published?'
