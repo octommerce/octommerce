@@ -1,0 +1,6 @@
+scopes:
+    status:
+        label: Status
+        modelClass: Octommerce\Octommerce\Models\OrderStatus
+        nameFrom: name
+        conditions: status_code in (:filtered)
