@@ -1,9 +1,4 @@
 columns:
-    id:
-        label: ID
-        type: number
-        searchable: true
-        invisible: true
     images:
         label: ""
         type: partial

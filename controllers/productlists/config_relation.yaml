@@ -9,6 +9,7 @@ products:
     view:
         list: ~/plugins/octommerce/octommerce/models/product/columns.yaml
         toolbarButtons: add|remove
+        showSearch: true
         showCheckboxes: true
         recordsPerPage: 10
     manage:
