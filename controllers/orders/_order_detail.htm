@@ -1,28 +1,46 @@
 <div class="scoreboard">
     <div data-control="toolbar">
         <div class="scoreboard-item title-value">
-            <h4>Shipping Name</h4>
+            <h4><b>Shipping Name</b></h4>
             <p class="text-left"><h5><?= $model->shipping_name ?></h5></p>
-            <p><h6><?= $model->shipping_phone ?></p></h6></p>
+            <p> <h6><?= $model->shipping_phone ?></p></h6></p>
         </div>
         <div class="scoreboard-item title-value">
-            <h4>Shipping Address</h4>
+            <h4><b>Shipping Address</b></h4>
             <p><h5><?= $model->shipping_address?></h5></p>
 
-                <p class="text-center"><h6><?= $model->city->name ?></h6></p>
-                <p class="text-center"><h6><?= $model->state->name ?></h6></p>
+                <p class="text-center"><h6><?= $model->city->name ?>, <?= $model->state->name ?> </h6></p>
+                <p class="text-center"><h6></h6></p>
+                <p class="text-center"><h6><?= $model->shipping_postcode ?></h6></p>
+        </div>
 
+
+        <div class="scoreboard-item title-value">
+            <h4><b> Method </b></h4>
+            <p class="text-center"><h6>
+                <?php foreach($model->invoices as $invoice): ?>
+                    <?= $invoice->payment_method->name ?><br><br>
+                    <?php if($invoice->unique_number > 0): ?>
+                        Unique Number : <?= $invoice->unique_number ?><br>
+                    <?php endif ?>
+                <?php endforeach ?>
+             </h6></p>
         </div>
 
         <div class="scoreboard-item title-value">
-            <h4>Shipping Postal Code </h4>
-            <p class="text-center"><?= $model->shipping_postcode ?></p>
+            <h4><b>Due at</b></h4>
+            <p class="text-center"><h6>
+            <?php foreach($model->invoices as $invoice): ?>
+                <?= $invoice->due_at ?>
+            <?php endforeach ?>
+        </h6></p>
         </div>
     </div>
 </div>
 <table class="table data">
     <thead>
         <tr>
+            <th><span>SKU</span></th>
             <th><span>Product Name</span></th>
             <th class="text-center"><span>Quantity</span></th>
             <th class="text-center"><span>Discount</span></th>
@@ -34,6 +52,7 @@
         <?php  ?>
         <?php foreach($model->products as $i => $product): ?>
         <tr>
+            <td class="text-left"><?= $product->sku ?></td>
             <td class="text-left"><?= $product->pivot->name ?></td>
             <td class="text-center"><?= number_format($product->pivot->qty) ?></td>
             <td class="text-center"><?= number_format($product->pivot->discount) ?></td>
@@ -43,23 +62,21 @@
 
         <?php endforeach ?>
     </tbody>  <tfoot>
-        <!--<tr>-->
-            <!--<th colspan="4">Subtotal</th>-->
-            <!--<th class="text-right"><?= number_format($model->subtotal) ?></th>-->
-        <!--</tr>-->
+        <tr>
+            <th colspan="5">Subtotal</th>
+            <th class="text-right"><?= number_format($model->subtotal) ?></th>
+        </tr>
         <!--<tr>-->
             <!--<th colspan="4">Shipping Cost</th>-->
             <!--<th class="text-right"><?= number_format($model->shipping_cost) ?></th>-->
         <!--</tr>-->
-        <?php if($model->insurance_cost > 0): ?>
         <tr>
-            <th colspan="4">Insurance Cost</th>
-            <th class="text-right"><?= number_format($model->insurance_cost) ?></th>
+            <th colspan="5">Discount</th>
+            <th class="text-right"><?= number_format($model->discount) ?></th>
         </tr>
-        <?php endif ?>
         <tr>
-            <th colspan="4">Total</th>
-            <th class="text-right">Rp. <?= number_format($model->subtotal + $model->shipping_cost + $model->insurance_cost) ?></th>
+            <th colspan="5">Total</th>
+            <th class="text-right">Rp. <?= number_format($model->subtotal - $model->discount) ?></th>
         </tr>
     </tfoot>
 </table>
