@@ -4,9 +4,15 @@
 
 products:
     label: Product
-    list: ~/plugins/octommerce/octommerce/models/product/columns.yaml
     form: ~/plugins/octommerce/octommerce/models/product/fields.yaml
     deferredBinding: true
     view:
+        list: ~/plugins/octommerce/octommerce/models/product/columns.yaml
         toolbarButtons: add|remove
+        showSearch: true
         showCheckboxes: true
+        recordsPerPage: 10
+    manage:
+        list: ~/plugins/octommerce/octommerce/models/product/columns_relation_productlist.yaml
+        showSearch: true
+        recordsPerPage: 10
