@@ -27,22 +27,22 @@ columns:
         label: Discount
         searchable: true
         invisible: true
-    tax:
-        label: Tax
-        searchable: true
-        invisible: true
-        type: number
+#    tax:
+#        label: Tax
+#        searchable: true
+#        invisible: true
+#        type: number
     total:
         label: Total
 #        searchable: true
     paid_amount:
         label: Paid
-    status:
-        label: Status
-        searchable: true
-        type: partial
-        path: $/octommerce/octommerce/controllers/orders/_status_column.htm
-        width: 100px
+#    status:
+#        label: Status
+#        searchable: true
+#        type: partial
+#        path: $/octommerce/octommerce/controllers/orders/_status_column.htm
+#        width: 100px
     is_followed_up:
         label: Followed Up
         type: switch
