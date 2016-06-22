@@ -30,7 +30,12 @@ class ProductSearch extends ComponentBase
     {
         $query = $this->query = Input::get('q');
 
-        $this->products = $products = Product::search($query)->orderBy('relevance', 'desc')->limit(12)->get();
+        $this->products = $products = Product::search($query)
+            ->has('images', '>', 0)
+            ->where('is_published', '=', 1)
+            ->orderBy('relevance', 'desc')
+            ->limit(12)
+            ->get();
 
         $this->total = $products->count();
 
