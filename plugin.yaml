@@ -49,10 +49,10 @@ navigation:
                 label: Orders
                 url: octommerce/octommerce/orders
                 icon: icon-shopping-cart
-            payments:
-                label: Payments
-                url: octommerce/octommerce/payments
-                icon: icon-credit-card
+            # payments:
+            #     label: Payments
+            #     url: octommerce/octommerce/payments
+            #     icon: icon-credit-card
             orderstatuses:
                 label: 'Order Statuses'
                 url: octommerce/octommerce/orderstatuses
