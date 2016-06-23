@@ -85,5 +85,9 @@ class Orders extends Controller
         $order = Order::find($id);
 
         $order->delete();
+
+        Flash::success('This order has been deleted');
+
+        return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $id));
     }
 }

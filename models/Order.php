@@ -3,6 +3,7 @@
 use Model;
 use Octommerce\Octommerce\Models\City;
 use Rainlab\Location\Models\State;
+use Responsiv\Pay\Models\Invoice;
 
 /**
  * Order Model
@@ -140,6 +141,11 @@ class Order extends Model
     public function afterCreate()
     {
         OrderStatusLog::createRecord('waiting', $this);
+    }
+
+    public function afterDelete()
+    {
+        $this->invoices->first()->delete();
     }
 
     public function sendEmailToCustomer()
