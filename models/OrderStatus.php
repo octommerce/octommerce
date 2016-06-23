@@ -2,6 +2,7 @@
 
 use Model;
 use System\Models\MailTemplate;
+// use Octommerce\Octommerce\Models\Order;
 
 /**
  * OrderStatus Model
@@ -33,7 +34,13 @@ class OrderStatus extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+        'orders' => [
+            'Octommerce\Octommerce\Models\Order',
+            'key' => 'status_code',
+            'otherKey' => 'code'
+        ]
+    ];
     public $belongsTo = [
         'mail_template' => 'System\Models\MailTemplate',
     ];
