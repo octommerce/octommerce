@@ -2,6 +2,7 @@
 
 use Db;
 use Mail;
+use Event;
 use Model;
 use Exception;
 use BackendAuth;
@@ -133,6 +134,15 @@ class OrderStatusLog extends Model
             $record->data = null;
             $record->timestamp = Carbon::now();
             $record->note = $note;
+
+            /*
+             * Extensibility
+             */
+            if (Event::fire('octommerce.octommerce.beforeUpdateOrderStatus', [$record, $order, $statusCode, $previousStatus], true) === false)
+                return false;
+
+            if ($record->fireEvent('octommerce.beforeUpdateOrderStatus', [$record, $order, $statusCode, $previousStatus], true) === false)
+                return false;
 
             /*
              * Update order status

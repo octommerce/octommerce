@@ -5,8 +5,9 @@ use Backend;
 use Exception;
 use BackendMenu;
 use Backend\Classes\Controller;
-use Octommerce\Octommerce\Models\OrderStatusLog;
 use Octommerce\Octommerce\Models\Order;
+use Octommerce\Octommerce\Models\OrderStatus;
+use Octommerce\Octommerce\Models\OrderStatusLog;
 
 /**
  * Orders Back-end Controller
@@ -28,6 +29,21 @@ class Orders extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Octommerce.Octommerce', 'commerce', 'orders');
+    }
+
+    public function index()
+    {
+        $this->vars['orderStatuses'] = OrderStatus::with(['orders' => function($query) {
+                $query->whereRaw('DATEDIFF(CURDATE(), DATE(created_at)) <= 30');
+            }])
+            ->whereHas('orders', function($query) {
+                $query->whereRaw('DATEDIFF(CURDATE(), DATE(created_at)) <= 30');
+            })
+            ->get();
+
+        $this->vars['ordersToday'] = Order::whereRaw('DATE(created_at) = CURDATE()')->count();
+
+        return $this->asExtension('ListController')->index();
     }
 
     public function preview($recordId = null)
