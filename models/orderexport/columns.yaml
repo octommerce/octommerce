@@ -1,0 +1,45 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    order_no:
+        label: Order No
+    name:
+        label: Name
+    email:
+        label: Email
+    phone:
+        label: Phone
+    postcode:
+        label: Postal Code
+    address:
+        label: Address
+    usercity:
+        label: City
+    userstate:
+        label: State
+    shipping_name:
+        label: Shipping Name
+    shipping_phone:
+        label: Shipping Phone
+    shipping_address:
+        label: Shipping Address
+    shipping_postcode:
+        label: Shipping Postal Code
+    shipping_city:
+        label: Shipping City
+    shipping_state:
+        label: Shipping State
+    payment_method:
+        label: Payment Method
+    unique_code:
+        label: Unique Code
+    due_at:
+        label: Due At
+    message:
+        label: Message
+    notes:
+        label: Notes
+    created_at:
+        label: Created At

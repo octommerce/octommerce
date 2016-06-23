@@ -1,0 +1,16 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+#import:
+#    title: Import products
+#    modelClass: Octommerce\Octommerce\Models\ProductImport
+#    list: $/octommerce/octommerce/models/productimport/columns.yaml
+#    form: $/octommerce/octommerce/models/productimport/fields.yaml
+
+export:
+    title: Export Order
+    modelClass: Octommerce\Octommerce\Models\OrderExport
+    list: $/octommerce/octommerce/models/orderexport/columns.yaml
+    form: $/octommerce/octommerce/models/orderexport/fields.yaml
+    fileName: order.csv

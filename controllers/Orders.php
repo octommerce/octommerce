@@ -15,11 +15,13 @@ class Orders extends Controller
 {
     public $implement = [
         'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ListController'
+        'Backend.Behaviors.ListController',
+        'Backend.Behaviors.ImportExportController',
     ];
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
+    public $importExportConfig = 'config_import_export.yaml';
 
     public function __construct()
     {
@@ -76,5 +78,12 @@ class Orders extends Controller
         $config->arrayName = 'OrderStatusLog';
         $config->alias = 'statusLog';
         return $this->makeWidget('Backend\Widgets\Form', $config);
+    }
+
+    public function onDelete($id)
+    {
+        $order = Order::find($id);
+
+        $order->delete();
     }
 }

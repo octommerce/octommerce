@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Order Export
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/orderexport/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\OrderExport
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/orderexports
+
+# Create page
+create:
+    title: Create Order Export
+    redirect: octommerce/octommerce/orderexports/update/:id
+    redirectClose: octommerce/octommerce/orderexports
+
+# Update page
+update:
+    title: Edit Order Export
+    redirect: octommerce/octommerce/orderexports
+    redirectClose: octommerce/octommerce/orderexports
+
+# Preview page
+preview:
+    title: Preview Order Export
