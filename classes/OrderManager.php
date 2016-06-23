@@ -94,6 +94,8 @@ class OrderManager
 
             $invoice->save();
 
+            $order->save();
+
             \Cart::clear();
 
             Db::commit();
