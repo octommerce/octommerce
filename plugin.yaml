@@ -49,14 +49,14 @@ navigation:
                 label: Orders
                 url: octommerce/octommerce/orders
                 icon: icon-shopping-cart
-            # payments:
-            #     label: Payments
-            #     url: octommerce/octommerce/payments
-            #     icon: icon-credit-card
             orderstatuses:
                 label: 'Order Statuses'
                 url: octommerce/octommerce/orderstatuses
                 icon: icon-tasks
+            reports:
+                label: Reports
+                url: octommerce/octommerce/reports
+                icon: icon-bar-chart
 permissions:
     octommerce.octommerce.access_products:
         tab: Products
