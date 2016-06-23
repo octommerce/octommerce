@@ -10,7 +10,7 @@
             <h4><b>Shipping Address</b></h4>
             <p><h5><?= $model->shipping_address?></h5></p>
 
-                <p class="text-center"><h6><?= $model->city ? $model->city->name : '' ?>, <?= $model->state ? $model->state->name : ''?> </h6></p>
+                <p class="text-center"><h6><?= $model->city ? $model->shipping_city_name : '' ?>, <?= $model->state ? $model->shipping_state_name : ''?> </h6></p>
                 <p class="text-center"><h6></h6></p>
                 <p class="text-center"><h6><?= $model->shipping_postcode ? $model->shipping_postcode : '' ?></h6></p>
         </div>
