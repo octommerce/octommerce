@@ -4,3 +4,8 @@ scopes:
         modelClass: Octommerce\Octommerce\Models\OrderStatus
         nameFrom: name
         conditions: status_code in (:filtered)
+    paymentMethod:
+        label: Payment Method
+        modelClass: Responsiv\Pay\Models\PaymentMethod
+        nameFrom: name
+        scope: FilterPaymentMethods

@@ -162,6 +162,14 @@ class Order extends Model
         });
     }
 
+    public function scopeFilterPaymentMethods($query, $paymentMethods)
+    {
+        return $query->whereHas('invoices', function($q) use ($paymentMethods) {
+
+            $q->whereIn('payment_method_id', $paymentMethods);
+        });
+    }
+
     public function onChangeStatus($statusCode, $previousStatusCode = null)
     {
         if ($statusCode == 'paid') {
