@@ -11,7 +11,7 @@ class Settings extends Model
 
     public $implement = ['System.Behaviors.SettingsModel'];
 
-    public $settingsCode = 'rainlab_googleanalytics_settings';
+    public $settingsCode = 'octommerce_octommerce_settings';
 
     public $settingsFields = 'fields.yaml';
 
