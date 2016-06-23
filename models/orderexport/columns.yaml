@@ -27,12 +27,14 @@ columns:
         label: Shipping Address
     shipping_postcode:
         label: Shipping Postal Code
-    shipping_city:
+    user_shipping_city:
         label: Shipping City
-    shipping_state:
+    user_shipping_state:
         label: Shipping State
     payment_method:
         label: Payment Method
+    status_code:
+        label: Status
     unique_code:
         label: Unique Code
     due_at:

@@ -41,9 +41,9 @@ class OrderExport extends ExportModel
                 $order->userstate = $state->name;
             }
 
-            $order->shipping_city = $order->shipping_city_name;
+            $order->user_shipping_city = $order->shipping_city_name ? $order->shipping_city_name : 'sdfas';
 
-            $order->shipping_state = $order->shipping_state_name;
+            $order->user_shipping_state = $order->shipping_state_name ? $order->shipping_state_name : 'fasf';
 
             $invoices = $order->invoices;
 
@@ -51,6 +51,11 @@ class OrderExport extends ExportModel
                $order->payment_method = $invoice->payment_method->name;
                $order->unique_code = $invoice->unique_number > 0 ? $invoice->unique_number : null;
                $order->due_at = $invoice->due_at ? $invoice->due_at : null;
+            }
+
+            $status = $order->status;
+            if($status) {
+                $order->status = $status->name;
             }
         });
 
