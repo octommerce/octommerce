@@ -1,6 +1,8 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Octommerce\Octommerce\Models\City;
+use Rainlab\Location\Models\State;
 
 /**
  * Order Model
@@ -96,6 +98,26 @@ class Order extends Model
     public function getTotalAttribute()
     {
         return $this->subtotal - $this->discount;
+    }
+
+    public function getShippingCityNameAttribute()
+    {
+        if($this->shipping_city_id) {
+            $city = City::whereId($this->shipping_city_id)->first();
+            return $city->name;
+        }
+
+        return null;
+    }
+
+    public function getShippingStateNameAttribute()
+    {
+        if($this->shipping_state_id) {
+            $state = State::whereId($this->shipping_state_id)->first();
+            return $state->name;
+        }
+
+        return null;
     }
 
     public function updateStatus($statusCode)
