@@ -2,16 +2,17 @@
     <div data-control="toolbar">
         <div class="scoreboard-item title-value">
             <h4><b>Shipping Name</b></h4>
-            <p class="text-left"><h5><?= ($model->shipping_name != null ? $model->shipping_name : $model->name) ?></h5></p>
-            <p> <h6><?= ($model->shipping_phone != null ? $model->shipping_phone : $model->phone) ?></p></h6></p>
+
+            <p class="text-left"><h5><?= $model->shipping_name ? $model->shipping_name : '' ?></h5></p>
+            <p> <h6><?= $model->shipping_phone ? $model->shipping_phone : '' ?></p></h6></p>
         </div>
         <div class="scoreboard-item title-value">
             <h4><b>Shipping Address</b></h4>
             <p><h5><?= $model->shipping_address?></h5></p>
 
-                <p class="text-center"><h6><?= ($model->shipping_city_name != null ? $model->shipping_city_name : $model->city->name)  ?>, <?= ($model->shipping_state_name != null ? $model->shipping_state_name : $model->state->name) ?> </h6></p>
+                <p class="text-center"><h6><?= $model->city ? $model->city->name : '' ?>, <?= $model->state ? $model->state->name : ''?> </h6></p>
                 <p class="text-center"><h6></h6></p>
-                <p class="text-center"><h6><?= ($model->shipping_postcode != null ? $model->shipping_postcode : $model->postcode) ?></h6></p>
+                <p class="text-center"><h6><?= $model->shipping_postcode ? $model->shipping_postcode : '' ?></h6></p>
         </div>
 
 

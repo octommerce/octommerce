@@ -68,10 +68,10 @@
                 Update status
             </a>
             <a
-                href="javascript:;"
-                onclick="$('#<?= $this->getId('invoiceIframe') ?>').trigger('print.invoice')"
-                class="btn btn-default">
-                Print invoice
+                href="<?= $order->pdf ? $order->pdf->getPath() : '#' ?>"
+                class="btn btn-default"
+                target="_blank">
+                PDF
             </a>
             <a
                 href="#"
@@ -80,6 +80,11 @@
                 data-request-confirm="Send email to <?= $order->email ?>?"
                 class="btn btn-default">
                 Email to Customer
+            </a>
+            <a
+                href="<?= Backend::url('responsiv/pay/invoices/preview/' . $order->invoices->last()->id) ?>"
+                class="btn btn-default">
+                View Invoice
             </a>
             <a
                 href="javascript:;"

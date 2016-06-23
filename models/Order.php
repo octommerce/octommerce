@@ -135,7 +135,6 @@ class Order extends Model
     public function beforeSave()
     {
         $this->copyShippingAddress();
-        $this->generatePDF();
     }
 
     public function afterCreate()
@@ -155,32 +154,6 @@ class Order extends Model
         Mail::send('octommerce.octommerce::mail.admin_order_template', compact('order'), function($message) {
             $message->to('sales@turez.id')->cc('helpdesk@turez.id');
         });
-    }
-
-    public function generatePDF()
-    {
-        // try {
-        //     $templateCode = 'octommerce::order-detail';
-
-        //     $order = $this;
-
-        //     $pdf = PDFTemplate::render($templateCode, compact('order'));
-
-        //     $filePath = storage_path() . '/temp/order-' . $this->invoice_no . '.pdf';
-
-        //     file_put_contents($filePath, $pdf);
-
-        //     $file = new File;
-        //     $file->fromFile($filePath);
-        //     $file->save();
-
-        //     unlink($filePath);
-
-        //     $this->pdf = $file;
-        // }
-        // catch (\Exception $e) {
-        //     throw new \ApplicationException($e->getMessage());
-        // }
     }
 
     public function onChangeStatus($statusCode, $previousStatusCode = null)
