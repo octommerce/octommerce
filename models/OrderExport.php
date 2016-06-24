@@ -47,6 +47,17 @@ class OrderExport extends ExportModel
 
             $invoices = $order->invoices;
 
+            $detailOrder = "";
+            foreach ($order->products as $key => $product) {
+                $detailOrder .= $product->sku;
+                if($key+1 == $order->products()->count() && $order->products()->count() > 0) {
+                    $detailOrder .= ",";
+                }
+            }
+            $order->sku = $detailOrder;
+
+            $order->total_order = $order->products()->count();
+
             foreach($invoices as $invoice) {
                $order->payment_method = $invoice->payment_method->name;
                $order->unique_code = $invoice->unique_number > 0 ? $invoice->unique_number : null;

@@ -31,6 +31,14 @@ columns:
         label: Shipping City
     user_shipping_state:
         label: Shipping State
+    total_order:
+        label: Total Order
+    sku:
+        label: SKU
+    subtotal:
+        label: Subtotal
+    total:
+        label: Total
     payment_method:
         label: Payment Method
     status_code:
