@@ -106,4 +106,10 @@ class Orders extends Controller
 
         return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $id));
     }
+
+    public function listExtendQuery($query)
+    {
+        $query->with('status', 'invoices');
+    }
+
 }

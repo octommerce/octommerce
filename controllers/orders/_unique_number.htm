@@ -1,0 +1,6 @@
+<?php
+	$order = $record->invoices()->orderBy('created_at', 'DESC')->first();
+    $totalToPay = $order['total'] + $order['unique_number'];
+    $unique_number = ($order['unique_number']) ? ' ('.$order['unique_number'].')' : '';
+    echo $totalToPay . $unique_number;
+?>

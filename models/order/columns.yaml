@@ -20,6 +20,7 @@ columns:
         relation: products
         valueFrom: name
         searchable: true
+        sortable: false
     subtotal:
         label: Subtotal
         searchable: true
@@ -32,17 +33,20 @@ columns:
         searchable: false
         invisible: true
         type: number
+    unique_number:
+        label: Unique Number
+        type: partial
+        path: $/octommerce/octommerce/controllers/orders/_unique_number.htm
+        sortable: false
     total:
         label: Total
-#        searchable: true
-    paid_amount:
-        label: Paid
     status:
         label: Status
         searchable: false
         type: partial
         path: $/octommerce/octommerce/controllers/orders/_status_column.htm
         width: 100px
+        sortable: false
     is_followed_up:
         label: Followed Up
         type: switch

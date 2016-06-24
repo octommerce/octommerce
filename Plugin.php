@@ -4,16 +4,18 @@ use Event;
 use Yaml;
 use File;
 use System\Classes\PluginBase;
-use Octommerce\Octommerce\Classes\ProductManager;
-use Octommerce\Octommerce\Classes\OrderManager;
 use Illuminate\Foundation\AliasLoader;
-use Octommerce\Octommerce\Models\Category;
-use Octommerce\Octommerce\Models\Brand;
-use Rainlab\Location\Models\State;
+use Octommerce\Octommerce\Classes\OrderManager;
+use Octommerce\Octommerce\Classes\ProductManager;
+
 use Rainlab\User\Models\User;
-use Rainlab\User\Controllers\Users as UsersController;
-use Octommerce\Octommerce\Models\OrderStatusLog;
+use Rainlab\Location\Models\State;
+use Octommerce\Octommerce\Models\Brand;
 use Responsiv\Pay\Models\InvoiceStatus;
+use Octommerce\Octommerce\Models\Category;
+use Octommerce\Octommerce\Models\OrderStatusLog;
+
+use Rainlab\User\Controllers\Users as UsersController;
 
 /**
  * Octommerce Plugin Information File
@@ -72,8 +74,6 @@ class Plugin extends PluginBase
                 'Octommerce\Octommerce\Models\City'
             ];
         });
-
-
 
 
         //
