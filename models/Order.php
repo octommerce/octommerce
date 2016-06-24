@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Carbon\Carbon;
 use Octommerce\Octommerce\Models\City;
 use Rainlab\Location\Models\State;
 use Responsiv\Pay\Models\Invoice;
@@ -131,6 +132,7 @@ class Order extends Model
     public function beforeCreate()
     {
         $this->order_no = $this->generateOrderNo();
+        $this->expired_at = Carbon::now()->addMinutes(24 * 60);
     }
 
     public function beforeSave()

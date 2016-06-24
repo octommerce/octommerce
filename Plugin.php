@@ -5,6 +5,7 @@ use Yaml;
 use File;
 use System\Classes\PluginBase;
 use Octommerce\Octommerce\Classes\ProductManager;
+use Octommerce\Octommerce\Classes\OrderManager;
 use Illuminate\Foundation\AliasLoader;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Brand;
@@ -199,5 +200,15 @@ class Plugin extends PluginBase
             'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
             'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
         ];
+    }
+
+    public function registerSchedule($schedule)
+    {
+        $orderManager = OrderManager::instance();
+
+        // Check expired orders every minute
+        $schedule->call(function() use($orderManager) {
+            $orderManager->checkExpiredOrders();
+        })->everyMinute();
     }
 }

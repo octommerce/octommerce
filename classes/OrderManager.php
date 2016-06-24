@@ -76,7 +76,7 @@ class OrderManager
                 'zip'          => $order->postcode,
                 'state_id'     => $order->state ? $order->state->id : null,
                 'country_id'   => $order->state ? $order->state->country->id : null,
-                'due_at'       => Carbon::now()->addDay(),
+                'due_at'       => $order->expired_at,
             ]);
 
             foreach($cart->products as $product) {
@@ -142,23 +142,16 @@ class OrderManager
 
     public function checkExpiredOrders()
     {
-        Order::whereStatus('pending')
+        Order::whereStatusCode('waiting')
             ->where('expired_at', '<=', Carbon::now())
             ->get()
             ->each(function($order) {
 
                 // Set the order status to expired
-                $order->status = 'expired';
-                $order->save();
+                $order->updateStatus('expired');
 
-                // Get the redemption
-                // $redemption = $order->coupon_redemption;
-
-                // if($redemption) {
-                //     // Release the coupon
-                //     $redemption->release();
-                // }
-
+                // TODO:
+                // Extensibility
             });
     }
 
