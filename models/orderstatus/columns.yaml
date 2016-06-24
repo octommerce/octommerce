@@ -14,6 +14,10 @@ columns:
         label: Email customer
         type: switch
 
+    send_email_to_admin:
+        label: Email admin
+        type: switch
+
     attach_pdf:
         label: Attach invoice pdf
         type: switch
@@ -21,4 +25,9 @@ columns:
     mail_template:
         label: Mail template
         relation: mail_template
+        select: code
+
+    admin_mail_template:
+        label: Mail template (Admin)
+        relation: admin_mail_template
         select: code

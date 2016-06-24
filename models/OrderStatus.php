@@ -42,7 +42,8 @@ class OrderStatus extends Model
         ]
     ];
     public $belongsTo = [
-        'mail_template' => 'System\Models\MailTemplate',
+        'mail_template'       => 'System\Models\MailTemplate',
+        'admin_mail_template' => 'System\Models\MailTemplate',
     ];
     public $belongsToMany = [];
     public $morphTo = [];

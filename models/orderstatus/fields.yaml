@@ -22,22 +22,43 @@ secondaryTabs:
             label: Send an email to customer when his/her order has changed.
             type: switch
             span: auto
-            tab: Mail template
+            tab: Customer
 
         attach_pdf:
             label: Attach invoice PDF to email.
             type: switch
             span: auto
-            tab: Mail template
+            tab: Customer
 
         mail_template:
             label: Mail template
-            tab: Mail template
+            tab: Customer
             type: relation
             select: code
+            trigger:
+                action: enable
+                field: send_email
+                condition: checked
             # options: listAllTemplates
 
         description:
             label: Description
-            tab: Mail template
+            tab: Customer
             type: richeditor
+
+        send_email_to_admin:
+            label: Send an email to admin when customer's order has changed.
+            type: switch
+            span: auto
+            tab: Admin
+
+        admin_mail_template:
+            label: Mail template
+            tab: Admin
+            type: relation
+            select: code
+            trigger:
+                action: enable
+                field: send_email_to_admin
+                condition: checked
+

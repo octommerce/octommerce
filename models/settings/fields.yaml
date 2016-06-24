@@ -13,6 +13,11 @@ tabs:
             span: auto
             type: relation
             tab: General
+        admin_email:
+            label: 'Admin Email'
+            oc.commentPosition: ''
+            span: auto
+            tab: General
         low_stock_treshold:
             label: 'Low Stock Treshold'
             span: auto

@@ -11,6 +11,7 @@ use ApplicationException;
 use System\Models\MailTemplate;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\OrderStatus;
+use Octommerce\Octommerce\Models\Settings;
 
 /**
  * OrderStatusLog Model
@@ -82,6 +83,10 @@ class OrderStatusLog extends Model
             }
 
             $this->sendEmailToCustomer($orderStatus, $order);
+
+            if ($orderStatus->send_email_to_admin) {
+                $this->sendEmailToAdmin($orderStatus, $order);
+            }
         }
     }
 
@@ -98,11 +103,36 @@ class OrderStatusLog extends Model
         $orderStatus = $order->status;
 
         if (! $orderStatus->mail_template) {
-            throw new ApplicationException('Mail template not found!');
+            throw new ApplicationException('Mail template for customer not found!');
         }
 
         Mail::send($orderStatus->mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
             $message->to($order->email, $order->name);
+
+            if($orderStatus->attach_pdf) {
+            //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
+            }
+        });
+    }
+
+    /**
+     * Send an email to admin
+     * @param $orderStatus
+     * @param $order
+     *
+     * @return void
+     */
+    public function sendEmailToAdmin()
+    {
+        $order = $this->order;
+        $orderStatus = $order->status;
+
+        if (! $orderStatus->admin_mail_template) {
+            throw new ApplicationException('Mail template for admin not found!');
+        }
+
+        Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
+            $message->to(Settings::get('admin_email'), 'Admin');
 
             if($orderStatus->attach_pdf) {
             //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
