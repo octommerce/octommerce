@@ -33,3 +33,6 @@
 1.0.6:
     - Change shipping name column type
     - change_shipping_name_column_type.php
+1.0.7:
+    - Add send_email_to_admin and admin_mail_template_id columns to order statuses table
+    - add_send_email_to_admin_and_admin_mail_template_id_columns_to_order_statuses_table.php
