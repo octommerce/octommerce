@@ -164,7 +164,9 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
-            'Octommerce\Octommerce\Components\Account'      => 'OctommerceAccount',
+            'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
+            'Octommerce\Octommerce\Components\OrderDetail'   => 'orderDetail',
+            'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
         ];
     }
 
