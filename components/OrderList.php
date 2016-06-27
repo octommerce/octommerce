@@ -9,6 +9,10 @@ use ApplicationException;
 class OrderList extends ComponentBase
 {
 
+    public $orderPage;
+    public $orders;
+    public $ordersDetail;
+
     public function componentDetails()
     {
         return [
@@ -25,6 +29,13 @@ class OrderList extends ComponentBase
                 'description' => 'Name of the invoice page file for the invoice links. This property is used by the default component partial.',
                 'type'        => 'dropdown',
             ],
+
+            'orderNo' => [
+                'title'       => 'Order ID',
+                'description' => 'The ID of order',
+                'default'     => '{{ :orderno }}',
+                'type'        => 'text',
+            ],
         ];
     }
 
@@ -37,21 +48,46 @@ class OrderList extends ComponentBase
     {
         $this->orderPage = $this->page['orderPage'] = $this->property('orderPage');
         $this->orders = $this->page['orders'] = $this->loadOrders();
+        $this->order = $this->page['order'] = OrderModel::whereOrderNo($this->property('orderNo'))->first();
+        $this->ordersDetail = $this->page['ordersDetail'] = $this->loadOrdersDetail();
+    }
+
+    public function user()
+    {
+        if(!Auth::check()) {
+            return null;
+        }
+
+        return Auth::getUser();
     }
 
     protected function loadOrders()
     {
-        if (!$user = Auth::getUser()) {
+        if (!$user = $this->user()) {
             throw new ApplicationException('You must be logged in');
         }
 
-        $orders = OrderModel::whereUserId($user->id)->orderBy('created_at', 'desc')->get();
+        $orders = OrderModel::orderBy('created_at', 'desc')->get();
 
         // $orders->each(function($order) {
         //     $order->setUrlPageName($this->orderPage);
         // });
 
         return $orders;
+    }
+
+    protected function loadOrdersDetail()
+    {
+        if (!$user = $this->user()) {
+            throw new ApplicationException('You must be logged in');
+        } else {
+            if($order = OrderModel::whereOrderNo($this->property('orderno'))->first()) {
+                $ordersDetail = $order->products;
+                return $ordersDetail;
+            }
+        }
+
+        return null;
     }
 
 }
