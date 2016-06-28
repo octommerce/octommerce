@@ -1,0 +1,55 @@
+<div class="control-tabs content-tabs tabs-flush" data-control="tab">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#templates">Orders</a></li>
+        <li><a href="#layouts">Products</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="toolbar-widget list-header">
+            	<div class="control-toolbar">
+            		<div class="row">
+            			<div class="col-md-3">
+						    <div class="form-group dropdown-field span-full">
+						        <label>Type</label>
+						        <select class="form-control custom-select">
+						            <option selected="selected" value="2">Sales by date</option>
+						            <option value="3">Sales by product</option>
+						            <option value="3">Sales by category</option>
+						        </select>
+						    </div>
+            			</div>
+						<div class="col-md-3">
+						    <div class="form-group dropdown-field span-full">
+						        <label>Date Range</label>
+						        <select class="form-control custom-select">
+						            <option selected="selected" value="2">Last 7 days</option>
+						            <option value="3">This month</option>
+						            <option value="3">Last month</option>
+						            <option value="3">This year</option>
+						            <option value="3">Custom</option>
+						        </select>
+						    </div>
+            			</div>
+            		</div>
+            	</div>
+            </div>
+		    <div class="report-widget" style="background-color:transparent">
+		        <div
+		            data-control="chart-line"
+		            data-time-mode="weeks"
+		            data-chart-options="xaxis: {mode: 'time'}"
+		            class="height-200"
+		        >
+		            <span
+		                data-chart="dataset"
+		                data-set-color="#008dc9"
+		                data-set-data="[12,23,31,23,32]"
+		                data-set-name="Clicks"></span>
+		        </div>
+		    </div>
+        </div>
+        <div class="tab-pane">
+        	<?= $this->listRender() ?>
+        </div>
+    </div>
+</div>
