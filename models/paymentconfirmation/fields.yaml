@@ -3,6 +3,28 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
+    order_no:
+        label: Order No
+        disabled: true
+    email:
+        label: Email
+        disabled: true
+    transfer_date:
+        label: Transfer Date
+        disabled: true
+    account_owner:
+        label: Account Owner
+        disabled: true
+    bank_name:
+        label: Bank Name
+        disabled: true
+    transfer_amount:
+        label: Transfer Amount
+        disabled: true
+    destination_account:
+        label: Destination Account
+        disabled: true
+    notes:
+        label: Notes
+        type: textarea
         disabled: true
