@@ -33,20 +33,21 @@
             		</div>
             	</div>
             </div>
-		    <div class="report-widget" style="background-color:transparent">
-		        <div
-		            data-control="chart-line"
-		            data-time-mode="weeks"
-		            data-chart-options="xaxis: {mode: 'time'}"
-		            class="height-200"
-		        >
-		            <span
-		                data-chart="dataset"
-		                data-set-color="#008dc9"
-		                data-set-data="[12,23,31,23,32]"
-		                data-set-name="Clicks"></span>
-		        </div>
-		    </div>
+			<div class="report-widget">
+			    <div
+			        data-control="chart-line"
+			        data-time-mode="weeks"
+			        data-chart-options="xaxis: {mode: 'time'}"
+			        class="height-200"
+			    >
+			        <span
+			            data-chart="dataset"
+			            data-set-color="#008dc9"
+			            data-set-data="<?= $dataPaidOrders ?>"
+			            data-set-name="Sales"></span>
+			    </div>
+			</div>
+
         </div>
         <div class="tab-pane">
         	<?= $this->listRender() ?>
