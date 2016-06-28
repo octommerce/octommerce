@@ -44,7 +44,11 @@ class Reports extends Controller
                 Db::raw('DATE(`created_at`) as `date`'),
                 Db::raw('SUM(subtotal) as `amount`')
             ))
-            ->whereStatusCode($status)
+            ->where(function($q) {
+                $q->whereStatusCode('paid')
+                    ->orWhere('status_code', 'shipped')
+                    ->orWhere('status_code', 'delivered');
+            })
             ->where('created_at', '>', $date)
             ->groupBy('date')
             ->orderBy('date', 'ASC')
