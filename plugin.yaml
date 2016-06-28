@@ -57,10 +57,6 @@ navigation:
                 label: 'Order Statuses'
                 url: octommerce/octommerce/orderstatuses
                 icon: icon-tasks
-            paymentconfirmation:
-                label: 'Payment Confirmation'
-                url: octommerce/octommerce/paymentconfirmation
-                icon: icon-check
 permissions:
     octommerce.octommerce.access_products:
         tab: Products
