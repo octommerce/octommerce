@@ -62,21 +62,8 @@
                         data-control="popup"
                         data-handler="onLoadChangeStatusForm"
                         class="btn btn-primary oc-icon-check">
-                        Update Status...
+                        Update Status to...
                     </a>
-                    <div class="dropdown dropdown-fixed">
-                        <button
-                            type="button"
-                            class="btn btn-default oc-icon-users"
-                            data-toggle="dropdown">
-                            Update to...
-                        </button>
-                        <ul class="dropdown-menu" data-dropdown-title="Assign selected to...">
-                            <li><a href="#" tabindex="-1" class="oc-icon-user">Sally</a></li>
-                            <li><a href="#" tabindex="-1" class="oc-icon-user">Steve</a></li>
-                            <li><a href="#" tabindex="-1" class="oc-icon-user">Justin</a></li>
-                        </ul>
-                    </div>
                     <div class="btn-group">
                         <a
                             href="<?= $order->pdf ? $order->pdf->getPath() : '#' ?>"
