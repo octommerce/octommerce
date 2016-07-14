@@ -69,6 +69,12 @@
                 PDF
             </a>
             <a
+                href="<?= $order->order_label ? $order->order_label->getPath() : '#' ?>"
+                class="btn btn-default"
+                target="_blank">
+                Order Label
+            </a>
+            <a
                 href="#"
                 data-request="onSendEmailToCustomer"
                 data-load-indicator="Sending email to <?= $order->email ?>..."
