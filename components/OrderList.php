@@ -67,13 +67,8 @@ class OrderList extends ComponentBase
             throw new ApplicationException('You must be logged in');
         }
 
-        $orders = OrderModel::orderBy('created_at', 'desc')->get();
+        return $user->orders;
 
-        // $orders->each(function($order) {
-        //     $order->setUrlPageName($this->orderPage);
-        // });
-
-        return $orders;
     }
 
     protected function loadOrdersDetail()

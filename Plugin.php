@@ -49,7 +49,10 @@ class Plugin extends PluginBase
                 'postcode',
             ]);
 
-            $model->hasMany['orders'] = ['Octommerce\Octommerce\Models\Order'];
+            $model->hasMany['orders'] = [
+                'Octommerce\Octommerce\Models\Order',
+                'order' => 'created_at desc',
+            ];
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
             $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
         });
