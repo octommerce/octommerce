@@ -1,6 +1,8 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use Auth;
+use Redirect;
+use Flash;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
 use Octommerce\Octommerce\Models\Order as OrderModel;
@@ -49,7 +51,13 @@ class OrderList extends ComponentBase
         $this->orderPage = $this->page['orderPage'] = $this->property('orderPage');
         $this->orders = $this->page['orders'] = $this->loadOrders();
         $this->order = $this->page['order'] = OrderModel::whereOrderNo($this->property('orderNo'))->first();
-        $this->ordersDetail = $this->page['ordersDetail'] = $this->loadOrdersDetail();
+        if($order = OrderModel::whereOrderNo($this->property('orderno'))->first()) {
+            if($order->user_id !== $this->user()->id) {
+                Flash::error("Order No is not valid");
+                return Redirect::to('account/orders');
+            }
+            $this->ordersDetail = $this->page['ordersDetail'] = $this->loadOrdersDetail();
+        }
     }
 
     public function user()
@@ -64,7 +72,9 @@ class OrderList extends ComponentBase
     protected function loadOrders()
     {
         if (!$user = $this->user()) {
-            throw new ApplicationException('You must be logged in');
+            // throw new ApplicationException('You must be logged in');
+            Flash::get("You must be logging in");
+            return Redirect::to('/');
         }
 
         return $user->orders;
@@ -74,11 +84,16 @@ class OrderList extends ComponentBase
     protected function loadOrdersDetail()
     {
         if (!$user = $this->user()) {
-            throw new ApplicationException('You must be logged in');
+            Flash::error("You must be logging in");
+            return Redirect::to('login');
+            // throw new ApplicationException('You must be logged in');
         } else {
             if($order = OrderModel::whereOrderNo($this->property('orderno'))->first()) {
-                $ordersDetail = $order->products;
-                return $ordersDetail;
+                if($order->user_id == $this->user()->id) {
+                    // throw new ApplicationException('Order no is not valid');
+                    $ordersDetail = $order->products;
+                    return $ordersDetail;
+                }
             }
         }
 
