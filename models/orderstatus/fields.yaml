@@ -16,6 +16,12 @@ fields:
         type: colorpicker
         span: auto
 
+    parent:
+        label: Parent
+        type: relation
+        emptyOption: -- None --
+        span: auto
+
 secondaryTabs:
     fields:
         send_email:

@@ -31,3 +31,8 @@ columns:
         label: Mail template (Admin)
         relation: admin_mail_template
         select: code
+
+    parent:
+        label: Parent
+        relation: parent
+        select: name

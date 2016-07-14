@@ -18,6 +18,7 @@ use Octommerce\Octommerce\Models\Settings;
  */
 class OrderStatusLog extends Model
 {
+    protected $previousStatus;
 
     /**
      * @var string The database table used by the model.
@@ -60,6 +61,20 @@ class OrderStatusLog extends Model
     public function afterSave()
     {
         $this->checkOrderStatus();
+    }
+
+    public function setPreviousStatus($previousStatus)
+    {
+        $this->previousStatus = $previousStatus;
+    }
+
+    public function getStatusOptions()
+    {
+        if ($this->previousStatus) {
+            return OrderStatus::find($this->previousStatus)->children()->lists('name', 'code');
+        }
+
+        return OrderStatus::lists('name', 'code');
     }
 
     /**

@@ -9,7 +9,7 @@
             <p class="flash-message static error"><?= $fatalError ?></p>
         <?php endif ?>
 
-        <p><?= e(trans('responsiv.pay::lang.invoice.current_status_name', ['name'=> $currentStatus])) ?></p>
+        <p>Current Status: <?= $currentStatus ?></p>
 
         <div class="form-preview">
             <?= $widget->render() ?>
@@ -22,7 +22,6 @@
             type="submit"
             class="btn btn-primary"
             data-request="onChangeStatus"
-            data-request-confirm="Are you sure?"
             data-stripe-load-indicator>
             <?= e(trans('backend::lang.form.save')) ?>
         </button>

@@ -39,3 +39,6 @@
 1.0.8:
     - Add expired_at to orders table
     - add_expired_at_to_orders_table.php
+1.0.9:
+    - Add parent_id to order statuses table
+    - add_parent_id_to_order_statuses_table.php
