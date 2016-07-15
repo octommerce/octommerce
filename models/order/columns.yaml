@@ -15,12 +15,14 @@ columns:
     phone:
         label: Phone
         searchable: true
+        invisible: true
     products:
         label: Products
         relation: products
         valueFrom: name
         searchable: true
         sortable: false
+        invisible: true
     subtotal:
         label: Subtotal
         searchable: true

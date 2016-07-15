@@ -28,25 +28,6 @@
             </div>
             <div class="scoreboard-item title-value">
                 <h4>Status</h4>
-                <?php
-                switch($order->status) {
-                    case 'quote':
-                        $status_icon = 'oc-icon-question';
-                        break;
-                    case 'pending':
-                        $status_icon = 'oc-icon-clock-o';
-                        break;
-                    case 'half-paid':
-                    case 'paid':
-                        $status_icon = 'oc-icon-check';
-                        break;
-                    case 'cancelled':
-                    case 'failed':
-                    case 'expired':
-                        $status_icon = 'oc-icon-times';
-                        break;
-                }
-                ?>
                 <p><?= $order->status ? $order->status->name : '' ?></p>
                 <p class="description"><?= $order->status_updated_at ?></p>
             </div>
@@ -63,6 +44,11 @@
                         data-handler="onLoadChangeStatusForm"
                         class="btn btn-primary oc-icon-check">
                         Update Status to...
+                    </a>
+                    <a
+                        href="<?= Backend::url('octommerce/octommerce/orders/update/' . $order->id) ?>"
+                        class="btn btn-default oc-icon-pencil">
+                        Edit
                     </a>
                     <div class="btn-group">
                         <a

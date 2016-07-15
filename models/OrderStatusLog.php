@@ -48,7 +48,10 @@ class OrderStatusLog extends Model
     public $hasMany = [];
     public $belongsTo = [
         'order' => 'Octommerce\Octommerce\Models\Order',
-        'status' => 'Octommerce\Octommerce\Models\OrderStatus',
+        'status' => [
+            'Octommerce\Octommerce\Models\OrderStatus',
+            'key' => 'status_code',
+        ],
         'admin' => 'Backend\Models\User',
     ];
     public $belongsToMany = [];
@@ -118,7 +121,7 @@ class OrderStatusLog extends Model
         $orderStatus = $order->status;
 
         if (! $orderStatus->mail_template) {
-            throw new ApplicationException('Mail template for customer not found!');
+            return;
         }
 
         Mail::send($orderStatus->mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
@@ -143,7 +146,7 @@ class OrderStatusLog extends Model
         $orderStatus = $order->status;
 
         if (! $orderStatus->admin_mail_template) {
-            throw new ApplicationException('Mail template for admin not found!');
+            return;
         }
 
         Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
