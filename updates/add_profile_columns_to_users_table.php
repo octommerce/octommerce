@@ -8,6 +8,10 @@ class AddProfileColumnsToUsersTable extends Migration
 
     public function up()
     {
+        if (Schema::hasColumns('users', ['state_id', 'city_id'])) {
+            return;
+        }
+
         Schema::table('users', function($table)
         {
             $table->integer('state_id')->unsigned()->nullable();

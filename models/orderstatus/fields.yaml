@@ -50,7 +50,7 @@ secondaryTabs:
         description:
             label: Description
             tab: Customer
-            type: richeditor
+            type: textarea
 
         send_email_to_admin:
             label: Send an email to admin when customer's order has changed.

@@ -8,6 +8,10 @@ class AddParentIdToOrderStatusesTable extends Migration
 {
     public function up()
     {
+        if (Schema::hasColumns('octommerce_octommerce_order_statuses', ['parent_code'])) {
+            return;
+        }
+
         Schema::table('octommerce_octommerce_order_statuses', function(Blueprint $table) {
             $table->string('parent_code')->nullable();
         });
