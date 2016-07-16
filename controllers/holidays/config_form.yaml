@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Holiday
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/holiday/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\Holiday
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/holidays
+
+# Create page
+create:
+    title: Create Holiday
+    redirect: octommerce/octommerce/holidays/update/:id
+    redirectClose: octommerce/octommerce/holidays
+
+# Update page
+update:
+    title: Edit Holiday
+    redirect: octommerce/octommerce/holidays
+    redirectClose: octommerce/octommerce/holidays
+
+# Preview page
+preview:
+    title: Preview Holiday
