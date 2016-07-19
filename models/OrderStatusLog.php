@@ -124,11 +124,15 @@ class OrderStatusLog extends Model
             return;
         }
 
-        Mail::send($orderStatus->mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
+        // Get newest status log
+        $statusLog = $this->where('order_id', '=', $order->id)
+            ->orderBy('timestamp', 'DESC')->first();
+
+        Mail::send($orderStatus->mail_template->code, compact('order', 'statusLog'), function($message) use ($order, $orderStatus) {
             $message->to($order->email, $order->name);
 
             if($orderStatus->attach_pdf) {
-            //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
+                // $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
             }
         });
     }

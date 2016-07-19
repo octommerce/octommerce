@@ -15,3 +15,9 @@ subject = "{{ 'Your Order Has Been Shipped'|_ }} [#{{ order.order_no }}]"
 <p>
     {{ order.shipping_address }}
 </p>
+
+{% if statusLog.status_code == 'shipped' and (statusLog.note is not empty) %}
+<p>
+	Your shipping tracking code: {{ statusLog.note }}
+</p>
+{% endif %}
