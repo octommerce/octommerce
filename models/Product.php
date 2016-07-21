@@ -164,6 +164,7 @@ class Product extends Model
         'orders' => [
             'Octommerce\Octommerce\Models\Order',
             'table' => 'octommerce_octommerce_order_product',
+            'scope' => 'sales',
         ],
 
         'lists' => [

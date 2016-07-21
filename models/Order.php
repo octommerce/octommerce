@@ -127,6 +127,16 @@ class Order extends Model
         return null;
     }
 
+    public function scopeSales($query)
+    {
+        return $query->where(function($query) {
+            $query->whereStatusCode('paid')
+                ->orWhere('status_code', 'shipped')
+                ->orWhere('status_code', 'packing')
+                ->orWhere('status_code', 'delivered');
+        });
+    }
+
     public function updateStatus($statusCode)
     {
         if ($status = OrderStatus::find($statusCode)) {

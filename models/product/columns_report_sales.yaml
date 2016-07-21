@@ -1,0 +1,31 @@
+columns:
+    id:
+        label: ID
+        type: number
+        searchable: true
+        invisible: true
+    images:
+        label: ""
+        type: partial
+        path: $/octommerce/octommerce/controllers/products/_imagethumb.htm
+        width: 40px
+        sortable: false
+    sku:
+        label: SKU
+        type: text
+        searchable: true
+    name:
+        label: Name
+        type: text
+        searchable: true
+    brand_id:
+        label: Brand
+        relation: brand
+        select: name
+        searchable: true
+    orders_count:
+        label: Orders
+        type: number
+        relation: orders
+        valueFrom: count
+        default: 0
