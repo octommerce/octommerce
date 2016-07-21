@@ -273,6 +273,10 @@ class Product extends Model
             return false;
         }
 
+        if ($this->qty === null) {
+            return true;
+        }
+
         if ($this->qty < $qty ||
             ($this->available_from && $this->available_from > Carbon::now()) ||
             ($this->available_to && $this->available_to < Carbon::now()) ) {
