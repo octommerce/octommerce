@@ -347,7 +347,7 @@ class Product extends Model
 
     public function getIsLowStockAttribute()
     {
-        if ($this->manage_stock && $this->stock_status == 'in-stock') {
+        if ($this->manage_stock && $this->stock_status == 'in-stock' && $this->qty != null) {
             return $this->qty <= Settings::get('low_stock_treshold');
         }
 
