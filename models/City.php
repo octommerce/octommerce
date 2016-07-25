@@ -13,6 +13,11 @@ class City extends Model
      */
     public $table = 'octommerce_octommerce_cities';
 
+    /**
+     * Implement the CityModel behavior.
+     */
+    public $implement = ['Octommerce.Octommerce.Behaviors.CityModel'];
+
     public $timestamps = false;
     /**
      * @var array Guarded fields
