@@ -29,7 +29,7 @@ class ProductList extends ComponentBase
             'categorySlug' => [
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.category_param_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.category_param_desc',
-                'default'     => '{{ :slug }}',
+                'default'     => '',
                 'type'        => 'string'
             ],
             'categoryFilter' => [
@@ -79,7 +79,7 @@ class ProductList extends ComponentBase
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.page_param_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.page_param_desc',
                 'type'        => 'string',
-                'default'     => ':page',
+                'default'     => '',
                 'group'       => 'Pagination',
             ],
         ];
