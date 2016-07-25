@@ -49,7 +49,10 @@ class Summary extends ReportWidgetBase
 
         $this->vars['sales_amount'] = number_format($sales->sum('subtotal')); //TODO: change to total;
         $this->vars['sales_count'] = number_format($sales->count());
-        $this->vars['sale_last_date'] = $sales->orderBy('created_at', 'desc')->first()->created_at;
+
+        $last_sale = $sales->orderBy('created_at', 'desc')->first();
+
+        $this->vars['sale_last_date'] = $last_sale ? $last_sale->created_at : null;
 
         $products = Product::query();
 
