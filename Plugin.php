@@ -203,6 +203,16 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerReportWidgets()
+    {
+        return [
+            'Octommerce\Octommerce\ReportWidgets\Summary' => [
+                'label'   => 'E-commerce Summary',
+                'context' => 'aa'
+            ]
+        ];
+    }
+
     public function registerMailTemplates()
     {
         return [

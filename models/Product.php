@@ -258,6 +258,17 @@ class Product extends Model
         }
     }
 
+    public function scopeAvailable($query)
+    {
+        return $query->where('manage_stock', false) // Where stock is unmanaged
+            ->orWhere(function($query) {
+                $query->where('stock_status', '<>', 'out-of-stock') // Not ouf of stock
+                    ->where(function($query) {
+                        $query->where('qty', '>', 0);
+                    });
+            });
+    }
+
     public function scopeDisplayed($query)
     {
         // return $query->

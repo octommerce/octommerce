@@ -5,6 +5,8 @@ use BackendMenu;
 use Carbon\Carbon;
 use Backend\Classes\Controller;
 use Octommerce\Octommerce\Models\Order;
+use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\ReportWidgets\Summary as SummaryWidget;
 
 /**
  * Reports Back-end Controller
@@ -23,6 +25,10 @@ class Reports extends Controller
         parent::__construct();
 
         BackendMenu::setContext('Octommerce.Octommerce', 'commerce', 'reports');
+
+        $summaryWidget = new SummaryWidget($this);
+        $summaryWidget->alias = 'summary';
+        $summaryWidget->bindToController();
     }
 
     public function index()
