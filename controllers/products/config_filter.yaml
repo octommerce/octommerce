@@ -26,3 +26,8 @@ scopes:
         label: Hide published
         type: checkbox
         conditions: is_published <> 1
+
+    available:
+        label: Only available products
+        type: checkbox
+        scope: available
