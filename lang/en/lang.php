@@ -16,6 +16,8 @@
                 'listfilter_param_desc' => 'Select a lilst to filter the product list by. Leave empty to show all products.',
                 'brandfilter_param_title' => 'Brand filter',
                 'brandfilter_param_desc' => 'Select a brand to filter the product list by. Leave empty to show all products.',
+                'hide_out_of_stock_title' => 'Hide out of stock',
+                'hide_out_of_stock_desc' => 'Don\'t show products that out of stock.',
                 'no_product_title' => 'No products message',
                 'no_product_desc' => 'Message to display in the product list in case if there are no products. This property is used by the default component partial.',
                 'products_per_page_title' => 'Products per page',
