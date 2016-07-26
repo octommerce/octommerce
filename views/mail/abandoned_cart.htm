@@ -1,5 +1,13 @@
-subject = "Your Order #{{ order.order_no }}"
+subject = "Wait, We Saved Your Selected Items"
 ==
 
 ==
-{% set invoice = order.invoices.first() %}
+<p>
+	{{ 'Hi :name,'|_({name: order.name}) }}
+</p>
+<p>
+	{{ 'Forget something? You left some great items in your shopping bag. Don\'t miss out, complete your order now.'|_ }}
+</p>
+<p>
+	<a href="{{ link }}" class="button button-primary">Check Now</a>
+</p>

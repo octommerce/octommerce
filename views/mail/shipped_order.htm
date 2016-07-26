@@ -1,19 +1,19 @@
-subject = "{{ 'Your Order Has Been Shipped'|_ }} [#{{ order.order_no }}]"
+subject = "{{ 'Your Order has been Shipped'|_ }} [#{{ order.order_no }}]"
 ==
 
 ==
 {% set invoice = order.invoices.first() %}
-<h2>
-    {{ 'Your Order Has Been Shipped'|_ }}
-</h2>
 <p>
-    {{ 'Hi, :name'|_({name: order.name}) }}
+    {{ 'Hi :name,'|_({name: order.name}) }}
 </p>
 <p>
-    {{ 'We\'ve shipped your order #:order_no to your address:.'|_({order_no: order.order_no}) }}
+    {{ 'We\'ve shipped your order #:order_no to your address:'|_({order_no: order.order_no}) }}
 </p>
 <p>
-    {{ order.shipping_address }}
+    <strong>
+    	{{ order.shipping_address }}<br>
+        {{ order.shipping_city.name }}, {{ order.shipping_state.name }} {{ order.shipping_postcode }}
+	</strong>
 </p>
 
 {% if statusLog.status_code == 'shipped' and (statusLog.note is not empty) %}
@@ -21,3 +21,85 @@ subject = "{{ 'Your Order Has Been Shipped'|_ }} [#{{ order.order_no }}]"
 	Your shipping tracking code: {{ statusLog.note }}
 </p>
 {% endif %}
+
+<table class="table-information-order">
+    <tr>
+        <td>
+            <div class="information-head">
+                {{ 'Order No'|_ }}
+            </div>
+            <div class="information-body info-order">
+                {{ order.order_no }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                {{ 'Total'|_ }}
+            </div>
+            <div class="information-body">
+                {{ order.total|currency({format: 'short'}) }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                {{ 'Status'|_ }}
+            </div>
+            <div class="information-body info-status">
+                <span class="text-success">
+                    {{ order.status.name }}
+                </span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<table class="table-summary">
+    <thead>
+        <tr>
+            <th>
+                {{ 'Product'|_ }}
+            </th>
+            <th>
+                {{ 'Price'|_ }}
+            </th>
+            <th>
+                {{ 'Subtotal'|_ }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in order.products %}
+        <tr>
+            <td>
+                {{ product.pivot.qty }} x {{ product.pivot.name }}
+            </td>
+            <td>
+                {{ product.pivot.price|currency({format: 'short'}) }}
+            </td>
+            <td>
+                {{ (product.pivot.qty * product.pivot.price)|currency({format: 'short'}) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">{{ 'Subtotal'|_ }}</td>
+            <td class="text-right"><b>{{ order.subtotal|currency({format: 'short'}) }}</b></td>
+        </tr>
+        <tr>
+            <td colspan="2">{{ 'Shipping Cost'|_ }}</td>
+            <td class="text-right text-success">{{ 'FREE'|_ }}</td>
+        </tr>
+        {% if order.discount > 0 %}
+        <tr>
+            <td colspan="2">{{ 'Discount'|_ }}</td>
+            <td class="text-right">-{{ order.discount|currency({format: 'short'}) }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td colspan="2"><b>{{ 'Total'|_ }}</b></td>
+            <td class="text-right"><b>{{ order.total|currency({format: 'short'}) }}</b></td>
+        </tr>
+    </tfoot>
+</table>

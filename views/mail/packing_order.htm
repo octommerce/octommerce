@@ -1,0 +1,49 @@
+subject = "{{ 'We\'re Preparing Your Order'|_ }} [#{{ order.order_no }}]"
+==
+
+==
+{% set invoice = order.invoices.first() %}
+<p>
+    {{ 'Hi :name,'|_({name: order.name}) }}
+</p>
+<p>
+	{{ 'Your order #:order_no is being prepared. We\'ll notify you when your order is shipped by courier.'|_({order_no: order.order_no}) }}
+</p>
+
+<table class="table-information-order">
+    <tr>
+        <td>
+            <div class="information-head">
+                {{ 'Order No'|_ }}
+            </div>
+            <div class="information-body info-order">
+                {{ order.order_no }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                {{ 'Total'|_ }}
+            </div>
+            <div class="information-body">
+                {{ order.total|currency({format: 'short'}) }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                {{ 'Status'|_ }}
+            </div>
+            <div class="information-body info-status">
+                <span class="text-success">
+                    {{ order.status.name }}
+                </span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<p>
+    {{ 'You can track the order status by clicking link below.'|_ }}
+</p>
+<p>
+    <a href="#" class="button button-primary">{{ 'Track Now'|_ }}</a>
+</p>

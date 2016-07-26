@@ -7,10 +7,10 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
     {{ 'Your Order'|_ }}
 </h2>
 <p>
-    {{ 'Hi, :name'|_({name: order.name}) }}
+    {{ 'Hi :name,'|_({name: order.name}) }}
 </p>
 <p>
-    {{ 'Thank you for your purchase, here is your order details.'|_ }}
+    {{ 'Thank you for your purchase, here are your order details.'|_ }}
 </p>
 <table class="table-information-order">
     <tr>
@@ -115,5 +115,3 @@ subject = "{{ 'Your Order'|_ }} [#{{ order.order_no }}]"
         </td>
     </tr>
 </table>
-
-

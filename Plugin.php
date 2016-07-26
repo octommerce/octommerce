@@ -217,7 +217,10 @@ class Plugin extends PluginBase
     {
         return [
             'octommerce.octommerce::mail.new_order'            => 'Confirmation email on new order.',
+            'octommerce.octommerce::mail.payment_reminder'     => 'Reminder email for payment.',
             'octommerce.octommerce::mail.paid_order'           => 'Paid order notification to customer.',
+            'octommerce.octommerce::mail.expired_order'        => 'Expired order notification to customer.',
+            'octommerce.octommerce::mail.packing_order'        => 'Packing order notification to customer.',
             'octommerce.octommerce::mail.shipped_order'        => 'Shipping status notification to customer.',
             'octommerce.octommerce::mail.delivered_order'      => 'Delivery status notification to customer.',
             'octommerce.octommerce::mail.cancelled_order'      => 'Cancelled order notification to customer.',
@@ -226,7 +229,7 @@ class Plugin extends PluginBase
             'octommerce.octommerce::mail.product_availibility' => 'Notification when a product is available.',
             'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
             'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
-            'octommerce.octommerce::mail.forgot_password'    => 'Forgot password link',
+            'octommerce.octommerce::mail.forgot_password'      => 'Forgot password link',
         ];
     }
 
