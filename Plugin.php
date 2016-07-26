@@ -226,6 +226,7 @@ class Plugin extends PluginBase
             'octommerce.octommerce::mail.product_availibility' => 'Notification when a product is available.',
             'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
             'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
+            'octommerce.octommerce::mail.forgot_password'    => 'Forgot password link',
         ];
     }
 
