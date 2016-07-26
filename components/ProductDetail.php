@@ -57,9 +57,9 @@ class ProductDetail extends ComponentBase
             ->with('reviews')
             ->first();
 
-        if ($product->type == 'variable') {
-
-        }
+        // if ($product->type == 'variable') {
+        //
+        // }
 
         return $product;
     }
