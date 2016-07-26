@@ -41,6 +41,11 @@ class ProductDetail extends ComponentBase
         $this->page->description = $product->description;
     }
 
+    public function onChangeVariation()
+    {
+
+    }
+
     protected function loadProduct()
     {
         $slug = $this->property('slug');
@@ -51,6 +56,10 @@ class ProductDetail extends ComponentBase
             ->with('lists')
             ->with('reviews')
             ->first();
+
+        if ($product->type == 'variable') {
+
+        }
 
         return $product;
     }

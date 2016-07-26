@@ -5,8 +5,7 @@
 fields:
     status:
         label: New Status
-        type: relation
-        emptyOption: - select a status -
+        type: dropdown
 
     note:
         label: Note

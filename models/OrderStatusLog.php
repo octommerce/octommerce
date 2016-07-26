@@ -18,6 +18,7 @@ use Octommerce\Octommerce\Models\Settings;
  */
 class OrderStatusLog extends Model
 {
+    protected $previousStatus;
 
     /**
      * @var string The database table used by the model.
@@ -47,7 +48,10 @@ class OrderStatusLog extends Model
     public $hasMany = [];
     public $belongsTo = [
         'order' => 'Octommerce\Octommerce\Models\Order',
-        'status' => 'Octommerce\Octommerce\Models\OrderStatus',
+        'status' => [
+            'Octommerce\Octommerce\Models\OrderStatus',
+            'key' => 'status_code',
+        ],
         'admin' => 'Backend\Models\User',
     ];
     public $belongsToMany = [];
@@ -60,6 +64,20 @@ class OrderStatusLog extends Model
     public function afterSave()
     {
         $this->checkOrderStatus();
+    }
+
+    public function setPreviousStatus($previousStatus)
+    {
+        $this->previousStatus = $previousStatus;
+    }
+
+    public function getStatusOptions()
+    {
+        if ($this->previousStatus) {
+            return OrderStatus::find($this->previousStatus)->children()->lists('name', 'code');
+        }
+
+        return OrderStatus::lists('name', 'code');
     }
 
     /**
@@ -103,14 +121,18 @@ class OrderStatusLog extends Model
         $orderStatus = $order->status;
 
         if (! $orderStatus->mail_template) {
-            throw new ApplicationException('Mail template for customer not found!');
+            return;
         }
 
-        Mail::send($orderStatus->mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
+        // Get newest status log
+        $statusLog = $this->where('order_id', '=', $order->id)
+            ->orderBy('timestamp', 'DESC')->first();
+
+        Mail::send($orderStatus->mail_template->code, compact('order', 'statusLog'), function($message) use ($order, $orderStatus) {
             $message->to($order->email, $order->name);
 
             if($orderStatus->attach_pdf) {
-            //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
+                // $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
             }
         });
     }
@@ -128,7 +150,7 @@ class OrderStatusLog extends Model
         $orderStatus = $order->status;
 
         if (! $orderStatus->admin_mail_template) {
-            throw new ApplicationException('Mail template for admin not found!');
+            return;
         }
 
         Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {

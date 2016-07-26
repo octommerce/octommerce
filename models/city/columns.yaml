@@ -9,3 +9,8 @@ columns:
     name:
         label: Name
         searchable: true
+    state:
+        label: State
+        relation: state
+        select: name
+        searchable: true

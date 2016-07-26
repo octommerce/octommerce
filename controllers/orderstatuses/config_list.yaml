@@ -26,10 +26,12 @@ showSetup: true
 # Displays the sorting link on each column
 showSorting: true
 
+showTree: false
+
 # Default sorting column
-# defaultSort:
-#     column: created_at
-#     direction: desc
+defaultSort:
+    column: sort_order
+    direction: asc
 
 # Display checkboxes next to each record
 # showCheckboxes: true

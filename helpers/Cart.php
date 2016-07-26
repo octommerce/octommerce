@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Helpers;
 
 use Auth;
+use Event;
 use Session;
 use Octommerce\Octommerce\Models\Cart as CartModel;
 use Octommerce\Octommerce\Models\Product as ProductModel;
@@ -11,6 +12,7 @@ use RainLab\User\Models\User as UserModel;
  */
 class Cart
 {
+    use \October\Rain\Support\Traits\Emitter;
 
     public $cart;
 
@@ -23,6 +25,16 @@ class Cart
     {
         $product = $this->getItem($productId);
         $cart = $this->get();
+
+        /*
+         * Extensibility
+         */
+        if (
+            ($this->fireEvent('cart.beforeAddItem', [$product, $cart, $qty, $data], true) === false) ||
+            (Event::fire('cart.beforeAddItem', [$this, $product, $cart, $qty, $data], true) === false)
+        ) {
+            return;
+        }
 
         $existingProduct = $this->findExistingItem($productId);
 
@@ -50,6 +62,12 @@ class Cart
         // Get the latest update
         $cart = $this->get();
 
+        /*
+         * Extensibility
+         */
+        $this->fireEvent('cart.afterAddItem', [$product, $cart, $qty, $data]);
+        Event::fire('cart.afterAddItem', [$this, $product, $cart, $qty, $data]);
+
         return $cart;
     }
 
@@ -57,6 +75,16 @@ class Cart
     {
         $product = $this->getItem($productId);
         $cart = $this->get();
+
+        /*
+         * Extensibility
+         */
+        if (
+            ($this->fireEvent('cart.beforeUpdateItem', [$product, $cart, $qty, $data], true) === false) ||
+            (Event::fire('cart.beforeUpdateItem', [$this, $product, $cart, $qty, $data], true) === false)
+        ) {
+            return;
+        }
 
         $existingProduct = $this->findExistingItem($productId);
 
@@ -84,6 +112,12 @@ class Cart
         // Get the latest update
         $cart = $this->get();
 
+        /*
+         * Extensibility
+         */
+        $this->fireEvent('cart.afterUpdateItem', [$product, $cart, $qty, $data]);
+        Event::fire('cart.afterUpdateItem', [$this, $product, $cart, $qty, $data]);
+
         return $cart;
     }
 
@@ -92,9 +126,25 @@ class Cart
         $product = $this->getItem($productId);
         $cart = $this->get();
 
+        /*
+         * Extensibility
+         */
+        if (
+            ($this->fireEvent('cart.beforeRemoveItem', [$product, $cart, $qty], true) === false) ||
+            (Event::fire('cart.beforeRemoveItem', [$this, $product, $cart, $qty], true) === false)
+        ) {
+            return;
+        }
+
         $cart->products()->detach([$product->id]);
 
         $cart = $this->get();
+
+        /*
+         * Extensibility
+         */
+        $this->fireEvent('cart.afterRemoveItem', [$product, $cart, $qty, $data]);
+        Event::fire('cart.afterRemoveItem', [$this, $product, $cart, $qty, $data]);
 
         return $cart;
     }

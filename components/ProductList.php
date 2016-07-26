@@ -29,7 +29,7 @@ class ProductList extends ComponentBase
             'categorySlug' => [
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.category_param_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.category_param_desc',
-                'default'     => '{{ :slug }}',
+                'default'     => '',
                 'type'        => 'string'
             ],
             'categoryFilter' => [
@@ -53,6 +53,13 @@ class ProductList extends ComponentBase
                 'default'     => '',
                 'group'       => 'Filter',
             ],
+            'hideOutOfStock' => [
+                'title'        => 'octommerce.octommerce::lang.component.product_list.param.hide_out_of_stock_title',
+                'description'  => 'octommerce.octommerce::lang.component.product_list.param.hide_out_of_stock_desc',
+                'type'         => 'checkbox',
+                'default'      => false,
+                'group'        => 'Filter'
+            ],
             'noProductsMessage' => [
                 'title'        => 'octommerce.octommerce::lang.component.product_list.param.no_product_title',
                 'description'  => 'octommerce.octommerce::lang.component.product_list.param.no_product_desc',
@@ -72,7 +79,7 @@ class ProductList extends ComponentBase
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.page_param_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.page_param_desc',
                 'type'        => 'string',
-                'default'     => ':page',
+                'default'     => '',
                 'group'       => 'Pagination',
             ],
         ];
@@ -159,6 +166,10 @@ class ProductList extends ComponentBase
                     $q->whereId($brand->id);
                 });
             }
+        }
+
+        if ($this->property('hideOutOfStock')) {
+            $query->available();
         }
 
         $products = $query->paginate($this->property('productsPerPage'));

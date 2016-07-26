@@ -28,73 +28,65 @@
             </div>
             <div class="scoreboard-item title-value">
                 <h4>Status</h4>
-                <?php
-                switch($order->status) {
-                    case 'quote':
-                        $status_icon = 'oc-icon-question';
-                        break;
-                    case 'pending':
-                        $status_icon = 'oc-icon-clock-o';
-                        break;
-                    case 'half-paid':
-                    case 'paid':
-                        $status_icon = 'oc-icon-check';
-                        break;
-                    case 'cancelled':
-                    case 'failed':
-                    case 'expired':
-                        $status_icon = 'oc-icon-times';
-                        break;
-                }
-                ?>
                 <p><?= $order->status ? $order->status->name : '' ?></p>
                 <p class="description"><?= $order->status_updated_at ?></p>
             </div>
         </div>
     </div>
 
-	<div class="form-buttons buttons-offset">
-        <div class="loading-indicator-container">
-            <a
-                href="javascript:;"
-                data-control="popup"
-                data-handler="onLoadChangeStatusForm"
-                class="btn btn-default">
-                Update status
-            </a>
-            <a
-                href="<?= $order->pdf ? $order->pdf->getPath() : '#' ?>"
-                class="btn btn-default"
-                target="_blank">
-                PDF
-            </a>
-            <a
-                href="<?= $order->order_label ? $order->order_label->getPath() : '#' ?>"
-                class="btn btn-default"
-                target="_blank">
-                Order Label
-            </a>
-            <a
-                href="#"
-                data-request="onSendEmailToCustomer"
-                data-load-indicator="Sending email to <?= $order->email ?>..."
-                data-request-confirm="Send email to <?= $order->email ?>?"
-                class="btn btn-default">
-                Email to Customer
-            </a>
-            <a
-                href="<?= Backend::url('responsiv/pay/invoices/preview/' . $order->invoices->last()->id) ?>"
-                class="btn btn-default">
-                View Invoice
-            </a>
-            <a
-                href="javascript:;"
-                data-request="onDelete"
-                data-load-indicator="Deleting Order..."
-                data-request-confirm="Delete this order?"
-                class="btn btn-danger">
-                Delete
-            </a>
+	<div class="control-toolbar">
+        <div class="toolbar-item toolbar-primary">
+            <div data-control="toolbar">
+                <div class="loading-indicator-container">
+                    <a
+                        href="javascript:;"
+                        data-control="popup"
+                        data-handler="onLoadChangeStatusForm"
+                        class="btn btn-primary oc-icon-check">
+                        Update Status to...
+                    </a>
+                    <a
+                        href="<?= Backend::url('octommerce/octommerce/orders/update/' . $order->id) ?>"
+                        class="btn btn-default oc-icon-pencil">
+                        Edit
+                    </a>
+                    <div class="btn-group">
+                        <a
+                            href="<?= $order->pdf ? $order->pdf->getPath() : '#' ?>"
+                            class="btn btn-default oc-icon-file"
+                            target="_blank">
+                            Download PDF
+                        </a>
+                        <a
+                            href="<?= $order->order_label ? $order->order_label->getPath() : '#' ?>"
+                            class="btn btn-default"
+                            target="_blank">
+                            Print Shipping Label
+                        </a>
+                        <!-- <a
+                            href="<?= Backend::url('responsiv/pay/invoices/preview/' . $order->invoices->last()->id) ?>"
+                            class="btn btn-default">
+                            Invoice
+                        </a> -->
+                    </div>
+                    <a
+                        href="#"
+                        data-request="onSendEmailToCustomer"
+                        data-load-indicator="Sending email to <?= $order->email ?>..."
+                        data-request-confirm="Send email to <?= $order->email ?>?"
+                        class="btn btn-info oc-icon-envelope">
+                        Email to Customer
+                    </a>
+                    <a
+                        href="javascript:;"
+                        data-request="onDelete"
+                        data-load-indicator="Deleting Order..."
+                        data-request-confirm="Delete this order?"
+                        class="btn btn-danger oc-icon-trash">
+                        Delete
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 

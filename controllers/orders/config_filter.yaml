@@ -13,3 +13,7 @@ scopes:
         label: Date
         type: daterange
         conditions: created_at >= ':after' AND created_at <= ':before'
+    sales:
+        label: Only sales
+        type: checkbox
+        scope: sales

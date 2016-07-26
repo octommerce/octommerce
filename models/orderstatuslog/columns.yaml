@@ -3,6 +3,14 @@
 # ===================================
 
 columns:
-    id:
-        label: ID
+    timestamp:
+        label: Timestamp
+        type: datetime
+    status:
+        label: Status
+        relation: status
+        select: name
+        sortable: false
+    note:
+        label: Note
         searchable: true

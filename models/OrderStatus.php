@@ -9,7 +9,9 @@ use System\Models\MailTemplate;
  */
 class OrderStatus extends Model
 {
-    // use \October\Rain\Database\Traits\Sortable;
+    use \October\Rain\Database\Traits\SimpleTree;
+
+    const PARENT_ID = 'parent_code';
 
     /**
      * @var string The database table used by the model.

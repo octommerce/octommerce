@@ -17,11 +17,13 @@ class Orders extends Controller
     public $implement = [
         'Backend.Behaviors.FormController',
         'Backend.Behaviors.ListController',
+        'Backend.Behaviors.RelationController',
         'Backend.Behaviors.ImportExportController',
     ];
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
+    public $relationConfig = 'config_relation.yaml';
     public $importExportConfig = 'config_import_export.yaml';
 
     public function __construct()
@@ -58,8 +60,8 @@ class Orders extends Controller
     {
         try {
             $order = $this->formFindModelObject($recordId);
-            $this->vars['currentStatus'] = isset($order->status->name) ? $order->status->name : '???';
-            $this->vars['widget'] = $this->makeStatusFormWidget();
+            $this->vars['currentStatus'] = $order->status->name;
+            $this->vars['widget'] = $this->makeStatusFormWidget($order->status->code);
         }
         catch (Exception $ex) {
             $this->handleError($ex);
@@ -71,7 +73,7 @@ class Orders extends Controller
     public function preview_onChangeStatus($recordId = null)
     {
         $order = $this->formFindModelObject($recordId);
-        $widget = $this->makeStatusFormWidget();
+        $widget = $this->makeStatusFormWidget($order->status->code);
         $data = $widget->getSaveData();
         OrderStatusLog::createRecord($data['status'], $order, $data['note']);
         Flash::success('Order status updated successfully');
@@ -87,10 +89,11 @@ class Orders extends Controller
         Flash::success('Email sent.');
     }
 
-    protected function makeStatusFormWidget()
+    protected function makeStatusFormWidget($orderStatusCode)
     {
         $config = $this->makeConfig('~/plugins/octommerce/octommerce/models/orderstatuslog/fields.yaml');
         $config->model = new OrderStatusLog;
+        $config->model->setPreviousStatus($orderStatusCode);
         $config->arrayName = 'OrderStatusLog';
         $config->alias = 'statusLog';
         return $this->makeWidget('Backend\Widgets\Form', $config);

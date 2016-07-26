@@ -1,0 +1,17 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    date:
+        label: Date
+        type: datepicker
+        mode: date
+        span: auto
+    name:
+        label: Name
+        span: auto
+    description:
+        label: Description
+        type: textarea
+        size: tiny

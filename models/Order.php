@@ -127,6 +127,16 @@ class Order extends Model
         return null;
     }
 
+    public function scopeSales($query)
+    {
+        return $query->where(function($query) {
+            $query->whereStatusCode('paid')
+                ->orWhere('status_code', 'shipped')
+                ->orWhere('status_code', 'packing')
+                ->orWhere('status_code', 'delivered');
+        });
+    }
+
     public function updateStatus($statusCode)
     {
         if ($status = OrderStatus::find($statusCode)) {
@@ -137,7 +147,8 @@ class Order extends Model
     public function beforeCreate()
     {
         $this->order_no = $this->generateOrderNo();
-        $this->expired_at = Carbon::now()->addMinutes(24 * 60);
+        $this->expired_at = Carbon::now()->addWeekdays(2);
+        // TODO: Check holidays
     }
 
     public function beforeSave()

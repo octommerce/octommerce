@@ -1,0 +1,44 @@
+<div class="report-widget">
+    <h3><?= e(trans($this->property('title'))) ?></h3>
+
+<?php if (!isset($error)): ?>
+
+    <div class="scoreboard">
+
+        <div class="scoreboard-item title-value">
+            <h4>Sales Amount</h4>
+            <p class="positive"><?= $sales_amount ?></p>
+            <p class="description">This month</p>
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4>Sales</h4>
+            <p class="oc-icon-shopping-cart"><?= $sales_count ?></p>
+            <p class="description">Last transaction: <?= $sale_last_date ?></p>
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4>Total Products</h4>
+            <p><?= $products_count ?></p>
+        </div>
+
+        <!-- <div class="scoreboard-item title-value">
+            <h4>Low Stock</h4>
+            <p style="color: #e5a91a;">131</p>
+        </div> -->
+
+        <div class="scoreboard-item title-value">
+            <h4>Out of Stock</h4>
+            <p style="color: #cc3300;"><?= $products_out_of_stock ?></p>
+        </div>
+
+    </div>
+
+    <a
+    href="javascript:;"
+    data-request="<?= $this->getEventHandler('onRefresh') ?>"
+    title="Next page">Refresh</a>
+<?php else: ?>
+    <p class="flash-message static warning"><?= e($error) ?></p>
+<?php endif ?>
+</div>

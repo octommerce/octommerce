@@ -1,0 +1,12 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+status_logs:
+    label: Status Log
+    list: ~/plugins/octommerce/octommerce/models/orderstatuslog/columns.yaml
+    form: ~/plugins/octommerce/octommerce/models/orderstatuslog/fields.yaml
+    deferredBinding: true
+    view:
+        toolbarButtons: false
+        showCheckboxes: false

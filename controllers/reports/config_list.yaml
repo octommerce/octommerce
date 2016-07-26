@@ -3,7 +3,7 @@
 # ===================================
 
 # Model List Column configuration
-list: $/octommerce/octommerce/models/product/columns.yaml
+list: $/octommerce/octommerce/models/product/columns_report_sales.yaml
 
 # Model Class name
 modelClass: Octommerce\Octommerce\Models\Product

@@ -3,6 +3,7 @@
 use Event;
 use Yaml;
 use File;
+use Backend;
 use System\Classes\PluginBase;
 use Illuminate\Foundation\AliasLoader;
 use Octommerce\Octommerce\Classes\OrderManager;
@@ -183,6 +184,14 @@ class Plugin extends PluginBase
                 'class'       => 'Octommerce\Octommerce\Models\Settings',
                 'permissions' => ['octommerce.octommerce.manage_plugins'],
                 'order'       => 60
+            ],
+            'holidays' => [
+                'label'       => 'Holidays',
+                'icon'        => 'icon-calendar',
+                'description' => 'Configure holidays.',
+                'url'         => Backend::url('octommerce/octommerce/holidays'),
+                'permissions' => ['octommerce.octommerce.manage_plugins'],
+                'order'       => 60
             ]
         ];
     }
@@ -191,6 +200,16 @@ class Plugin extends PluginBase
     {
         return [
 
+        ];
+    }
+
+    public function registerReportWidgets()
+    {
+        return [
+            'Octommerce\Octommerce\ReportWidgets\Summary' => [
+                'label'   => 'E-commerce Summary',
+                'context' => 'aa'
+            ]
         ];
     }
 

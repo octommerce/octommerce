@@ -164,6 +164,7 @@ class Product extends Model
         'orders' => [
             'Octommerce\Octommerce\Models\Order',
             'table' => 'octommerce_octommerce_order_product',
+            'scope' => 'sales',
         ],
 
         'lists' => [
@@ -257,6 +258,17 @@ class Product extends Model
         }
     }
 
+    public function scopeAvailable($query)
+    {
+        return $query->where('manage_stock', false) // Where stock is unmanaged
+            ->orWhere(function($query) {
+                $query->where('stock_status', '<>', 'out-of-stock') // Not ouf of stock
+                    ->where(function($query) {
+                        $query->where('qty', '>', 0);
+                    });
+            });
+    }
+
     public function scopeDisplayed($query)
     {
         // return $query->
@@ -271,6 +283,10 @@ class Product extends Model
 
         if ($this->stock_status == 'out-of-stock') {
             return false;
+        }
+
+        if ($this->qty === null) {
+            return true;
         }
 
         if ($this->qty < $qty ||
@@ -343,7 +359,7 @@ class Product extends Model
 
     public function getIsLowStockAttribute()
     {
-        if ($this->manage_stock && $this->stock_status == 'in-stock') {
+        if ($this->manage_stock && $this->stock_status == 'in-stock' && $this->qty != null) {
             return $this->qty <= Settings::get('low_stock_treshold');
         }
 
