@@ -34,7 +34,14 @@ class Account extends AccountModel
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'forgotToken' => [
+                'title'       => 'Forgot Password Token',
+                'description' => 'The ID of order',
+                'default'     => '{{ :token }}',
+                'type'        => 'text',
+            ],
+        ];
     }
 
 
@@ -91,7 +98,7 @@ class Account extends AccountModel
 
     public function onUpdateForgotPassword() {
         $data = post();
-        $user = UserModel::whereResetPasswordCode($this->property('paramCode'))->first();
+        $user = UserModel::whereResetPasswordCode($this->property('forgotToken'))->first();
         $user->fill($data);
         $user->reset_password_code = "";
         $user->save();
