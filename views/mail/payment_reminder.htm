@@ -1,16 +1,17 @@
-subject = "New Order [#{{ order.order_no }}]"
+subject = "{{ 'We are Waiting for Your Payment'|_ }} [#{{ order.order_no }}]"
 ==
 
 ==
 {% set invoice = order.invoices.first() %}
-
 <p>
-    {{ 'Hi admin,'|_ }}
+    {{ 'Hi :name,'|_({name: order.name}) }}
 </p>
 <p>
-    {{ 'The order #:order_no is ready to be processed.'|_({order_no: order.order_no}) }}
+    {{ 'We want to inform you that we haven\'t receive your payment yet. If you don\'t make the payment, your order will be expired on :expired_at.'|_({expired_at: order.expired_at}) }}
 </p>
-
+<p>
+    {{ 'Please let us know if you have already paid the order or you have any difficulties.'|_ }}
+</p>
 <table class="table-information-order">
     <tr>
         <td>
@@ -110,21 +111,7 @@ subject = "New Order [#{{ order.order_no }}]"
             </div>
         </td>
         <td>
-            <div class="muted">
-                {{ 'Payment'|_ }}
-            </div>
-            <div class="shipping-content">
-                {% if invoice %}
-                <b>
-                    {{ invoice.payment_method.name }}
-                </b>
-                <br/>
-                {% endif %}
-            </div>
+            <a href="{{ invoice.url }}" class="button button-primary">{{ 'Pay Now'|_ }}</a>
         </td>
     </tr>
 </table>
-
-<p>
-	<a href="#" class="button button-primary">View Order</a>
-</p>

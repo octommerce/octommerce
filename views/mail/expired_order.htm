@@ -1,16 +1,14 @@
-subject = "New Order [#{{ order.order_no }}]"
+subject = "{{ 'Your Order has been Expired'|_ }} [#{{ order.order_no }}]"
 ==
 
 ==
 {% set invoice = order.invoices.first() %}
-
 <p>
-    {{ 'Hi admin,'|_ }}
+    {{ 'Hi :name,'|_({name: order.name}) }}
 </p>
 <p>
-    {{ 'The order #:order_no is ready to be processed.'|_({order_no: order.order_no}) }}
+    {{ 'Your order #:order_no is expired. If you want to buy again these items, please purchase again on our website.'|_({order_no: order.order_no}) }}
 </p>
-
 <table class="table-information-order">
     <tr>
         <td>
@@ -124,7 +122,3 @@ subject = "New Order [#{{ order.order_no }}]"
         </td>
     </tr>
 </table>
-
-<p>
-	<a href="#" class="button button-primary">View Order</a>
-</p>

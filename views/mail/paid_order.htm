@@ -1,16 +1,13 @@
-subject = "{{ 'Your Order Has Been Paid'|_ }} [#{{ order.order_no }}]"
+subject = "{{ 'Your Order has been Paid'|_ }} [#{{ order.order_no }}]"
 ==
 
 ==
 {% set invoice = order.invoices.first() %}
-<h2>
-    {{ 'Your Order Has Been Paid'|_ }}
-</h2>
 <p>
-    {{ 'Hi, :name'|_({name: order.name}) }}
+    {{ 'Hi :name,'|_({name: order.name}) }}
 </p>
 <p>
-    {{ 'Thank you for your payment, here is your order details.'|_ }}
+    {{ 'Thank you for your payment. You\'ll find all the details about your order below.'|_ }}
 </p>
 <table class="table-information-order">
     <tr>
