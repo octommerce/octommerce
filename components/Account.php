@@ -37,7 +37,7 @@ class Account extends AccountModel
         return [
             'forgotToken' => [
                 'title'       => 'Forgot Password Token',
-                'description' => 'The ID of order',
+                'description' => 'Forgot password code token of user',
                 'default'     => '{{ :token }}',
                 'type'        => 'text',
             ],
