@@ -147,7 +147,15 @@ class Order extends Model
     public function beforeCreate()
     {
         $this->order_no = $this->generateOrderNo();
-        $this->expired_at = Carbon::now()->addWeekdays(2);
+
+        $now = Carbon::parse($this->created_at);
+
+        $this->expired_at = Carbon::now()
+            ->addWeekdays(2)
+            ->addHours($now->format('H'))
+            ->addMinutes($now->format('i'))
+            ->addSeconds($now->format('s'));
+
         // TODO: Check holidays
     }
 
