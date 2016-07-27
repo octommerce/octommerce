@@ -167,6 +167,13 @@ class Product extends Model
             'scope' => 'sales',
         ],
 
+        'orders_count' => [
+            'Octommerce\Octommerce\Models\Order',
+            'table' => 'octommerce_octommerce_order_product',
+            'scope' => 'sales',
+            'count' => true
+        ],
+
         'lists' => [
             'Octommerce\Octommerce\Models\ProductList',
             'table' => 'octommerce_octommerce_product_product_list',

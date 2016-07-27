@@ -26,6 +26,6 @@ columns:
     orders_count:
         label: Orders
         type: number
-        relation: orders
+        relation: orders_count
         valueFrom: count
         default: 0
