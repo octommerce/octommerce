@@ -55,13 +55,23 @@
                             href="<?= $order->pdf ? $order->pdf->getPath() : '#' ?>"
                             class="btn btn-default oc-icon-file"
                             target="_blank">
-                            Download PDF
+                            Order PDF
                         </a>
                         <a
                             href="<?= $order->order_label ? $order->order_label->getPath() : '#' ?>"
-                            class="btn btn-default"
+                            class="btn btn-default oc-icon-truck"
                             target="_blank">
-                            Print Shipping Label
+                            Shipping Label
+                        </a>
+                        <a
+                            href="javascript:;"
+                            data-request="onRegenerate"
+                            data-load-indicator="Regenerating..."
+                            data-request-confirm="Do you want to regenerate PDFs?"
+                            data-placement="right"
+                            class="btn btn-default oc-icon-refresh"
+                            title="Regenerate..."
+                            target="_blank">
                         </a>
                         <!-- <a
                             href="<?= Backend::url('responsiv/pay/invoices/preview/' . $order->invoices->last()->id) ?>"

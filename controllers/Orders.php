@@ -89,6 +89,16 @@ class Orders extends Controller
         Flash::success('Email sent.');
     }
 
+    public function preview_onRegenerate($recordId = null)
+    {
+        $order = $this->formFindModelObject($recordId);
+
+        $order->save();
+
+        Flash::success('Successfully regenerated PDF.');
+        return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $order->id));
+    }
+
     protected function makeStatusFormWidget($orderStatusCode)
     {
         $config = $this->makeConfig('~/plugins/octommerce/octommerce/models/orderstatuslog/fields.yaml');
