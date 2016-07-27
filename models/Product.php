@@ -3,6 +3,8 @@
 use Model;
 use DB;
 use Carbon\Carbon;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\Theme;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Models\Settings;
 
@@ -276,9 +278,9 @@ class Product extends Model
             });
     }
 
-    public function scopeDisplayed($query)
+    public function scopePublished($query)
     {
-        // return $query->
+        return $query->whereIsPublished(1);
     }
 
     public function isAvailable($qty = 1)
@@ -343,7 +345,7 @@ class Product extends Model
     {
 
         $getCategories = $this->categories->lists('id');
-        $relatedCategories = self::whereIsPublished(1)
+        $relatedCategories = self::published()
                     ->whereHas('categories', function($query) use ($getCategories) {
                         $query->whereIn('id', $getCategories);
                     })
@@ -355,7 +357,7 @@ class Product extends Model
         $productsCount = $relatedCategories->count();
         //Get limit based on how much related categories have. Is it less than 4 or not?
         $limit = $productsCount < 4 ? 4 - $productsCount : 0;
-        $related = self::whereIsPublished(1)
+        $related = self::published()
                    ->where('id', '<>', $this->id)
                    ->orderBy(DB::raw('RAND()'))
                    ->take($limit)
@@ -378,5 +380,130 @@ class Product extends Model
         if ($this->stock_status == 'out-of-stock') {
             return true;
         }
+    }
+
+    /**
+     * Handler for the pages.menuitem.getTypeInfo event.
+     * Returns a menu item type information. The type information is returned as array
+     * with the following elements:
+     * - references - a list of the item type reference options. The options are returned in the
+     *   ["key"] => "title" format for options that don't have sub-options, and in the format
+     *   ["key"] => ["title"=>"Option title", "items"=>[...]] for options that have sub-options. Optional,
+     *   required only if the menu item type requires references.
+     * - nesting - Boolean value indicating whether the item type supports nested items. Optional,
+     *   false if omitted.
+     * - dynamicItems - Boolean value indicating whether the item type could generate new menu items.
+     *   Optional, false if omitted.
+     * - cmsPages - a list of CMS pages (objects of the Cms\Classes\Page class), if the item type requires a CMS page reference to
+     *   resolve the item URL.
+     * @param string $type Specifies the menu item type
+     * @return array Returns an array
+     */
+    public static function getMenuTypeInfo($type)
+    {
+        $result = [];
+
+        if ($type == 'all-products') {
+            $result = [
+                'dynamicItems' => true
+            ];
+        }
+
+        if ($result) {
+            $theme = Theme::getActiveTheme();
+
+            $pages = CmsPage::listInTheme($theme, true);
+            $cmsPages = [];
+            foreach ($pages as $page) {
+                if (!$page->hasComponent('productDetail')) {
+                    continue;
+                }
+
+                /*
+                 * Component must use a category filter with a routing parameter
+                 * eg: brandFilter = "{{ :somevalue }}"
+                 */
+                $properties = $page->getComponentProperties('productDetail');
+                if (!isset($properties['slug']) || !preg_match('/{{\s*:/', $properties['slug'])) {
+                    continue;
+                }
+
+                $cmsPages[] = $page;
+            }
+
+            $result['cmsPages'] = $cmsPages;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Handler for the pages.menuitem.resolveItem event.
+     * Returns information about a menu item. The result is an array
+     * with the following keys:
+     * - url - the menu item URL. Not required for menu item types that return all available records.
+     *   The URL should be returned relative to the website root and include the subdirectory, if any.
+     *   Use the URL::to() helper to generate the URLs.
+     * - isActive - determines whether the menu item is active. Not required for menu item types that
+     *   return all available records.
+     * - items - an array of arrays with the same keys (url, isActive, items) + the title key.
+     *   The items array should be added only if the $item's $nesting property value is TRUE.
+     * @param \RainLab\Pages\Classes\MenuItem $item Specifies the menu item.
+     * @param \Cms\Classes\Theme $theme Specifies the current theme.
+     * @param string $url Specifies the current page URL, normalized, in lower case
+     * The URL is specified relative to the website root, it includes the subdirectory name, if any.
+     * @return mixed Returns an array. Returns null if the item cannot be resolved.
+     */
+    public static function resolveMenuItem($item, $url, $theme)
+    {
+        $result = null;
+
+        if ($item->type == 'all-products') {
+            $result = [
+                'items' => []
+            ];
+
+            $products = self::published()->get();
+            foreach ($products as $product) {
+                $productItem = [
+                    'title' => $product->name,
+                    'url'   => self::getProductPageUrl($item->cmsPage, $product, $theme),
+                    'mtime' => $product->updated_at,
+                ];
+
+                $productItem['isActive'] = $productItem['url'] == $url;
+
+                $result['items'][] = $productItem;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns URL of a product page.
+     */
+    protected static function getProductPageUrl($pageCode, $product, $theme)
+    {
+        $page = CmsPage::loadCached($theme, $pageCode);
+        if (!$page) return;
+
+        $properties = $page->getComponentProperties('productDetail');
+        if (!isset($properties['slug'])) {
+            return;
+        }
+
+        /*
+         * Extract the routing parameter name from the product filter
+         * eg: {{ :someRouteParam }}
+         */
+        if (!preg_match('/^\{\{([^\}]+)\}\}$/', $properties['slug'], $matches)) {
+            return;
+        }
+
+        $paramName = substr(trim($matches[1]), 1);
+        $url = CmsPage::url($page->getBaseFileName(), [$paramName => $product->slug]);
+
+        return $url;
     }
 }

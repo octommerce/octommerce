@@ -6,17 +6,16 @@ use File;
 use Backend;
 use System\Classes\PluginBase;
 use Illuminate\Foundation\AliasLoader;
+use Rainlab\User\Models\User;
+use Rainlab\User\Controllers\Users as UsersController;
+use Rainlab\Location\Models\State;
+use Responsiv\Pay\Models\InvoiceStatus;
 use Octommerce\Octommerce\Classes\OrderManager;
 use Octommerce\Octommerce\Classes\ProductManager;
-
-use Rainlab\User\Models\User;
-use Rainlab\Location\Models\State;
 use Octommerce\Octommerce\Models\Brand;
-use Responsiv\Pay\Models\InvoiceStatus;
 use Octommerce\Octommerce\Models\Category;
+use Octommerce\Octommerce\Models\Product;
 use Octommerce\Octommerce\Models\OrderStatusLog;
-
-use Rainlab\User\Controllers\Users as UsersController;
 
 /**
  * Octommerce Plugin Information File
@@ -106,9 +105,10 @@ class Plugin extends PluginBase
          */
         Event::listen('pages.menuitem.listTypes', function() {
             return [
-                'product-category' => 'Product Category',
+                'product-category'       => 'Product Category',
                 'all-product-categories' => 'All Product Categories',
-                'all-brands' => 'All Brands',
+                'all-brands'             => 'All Brands',
+                'all-products'           => 'All Products',
             ];
         });
 
@@ -118,6 +118,9 @@ class Plugin extends PluginBase
 
             if ($type == 'all-brands')
                 return Brand::getMenuTypeInfo($type);
+
+            if ($type == 'all-products')
+                return Product::getMenuTypeInfo($type);
         });
 
         Event::listen('pages.menuitem.resolveItem', function($type, $item, $url, $theme) {
@@ -126,6 +129,9 @@ class Plugin extends PluginBase
 
             if ($type == 'all-brands')
                 return Brand::resolveMenuItem($item, $url, $theme);
+
+            if ($type == 'all-products')
+                return Product::resolveMenuItem($item, $url, $theme);
         });
 
         // Update order status
