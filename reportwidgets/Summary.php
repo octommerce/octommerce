@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\ReportWidgets;
 
 use Exception;
+use Carbon\Carbon;
 use Backend\Classes\ReportWidgetBase;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Product;
@@ -45,10 +46,16 @@ class Summary extends ReportWidgetBase
 
     protected function loadData()
     {
-        $sales = Order::sales();
+        $sales = Order::sales()->where('created_at', '>=', Carbon::now()->startOfMonth());
+
+        $sales_lm = Order::sales()->where('created_at', '>=', Carbon::now()->startOfMonth()->subMonth())
+            ->where('created_at', '<', Carbon::now()->startOfMonth());
 
         $this->vars['sales_amount'] = number_format($sales->sum('subtotal')); //TODO: change to total;
+        $this->vars['sales_lm_amount'] = number_format($sales_lm->sum('subtotal')); //TODO: change to total;
+
         $this->vars['sales_count'] = number_format($sales->count());
+        $this->vars['sales_lm_count'] = number_format($sales_lm->count());
 
         $last_sale = $sales->orderBy('created_at', 'desc')->first();
 
