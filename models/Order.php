@@ -225,6 +225,13 @@ class Order extends Model
                 'shipping_state_id' => $this->state_id,
                 'shipping_postcode' => $this->postcode,
             ]);
+        } else {
+            $this->rules['shipping_name']     = 'required';
+            $this->rules['shipping_phone']    = 'required';
+            $this->rules['shipping_company']  = 'required';
+            $this->rules['shipping_address']  = 'required';
+            $this->rules['shipping_city_id']  = 'required';
+            $this->rules['shipping_state_id'] = 'required';
         }
     }
 
