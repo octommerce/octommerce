@@ -143,8 +143,8 @@ class Cart
         /*
          * Extensibility
          */
-        $this->fireEvent('cart.afterRemoveItem', [$product, $cart, $qty, $data]);
-        Event::fire('cart.afterRemoveItem', [$this, $product, $cart, $qty, $data]);
+        $this->fireEvent('cart.afterRemoveItem', [$product, $cart, $qty]); //, $data
+        Event::fire('cart.afterRemoveItem', [$this, $product, $cart, $qty]); //, $data
 
         return $cart;
     }
