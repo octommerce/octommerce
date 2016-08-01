@@ -45,3 +45,6 @@
 1.0.10:
     - Add holidays feature
     - create_holidays_table.php
+1.0.11:
+    - Add new columns (content, excerpt, keywords) to product_lists table.
+    - add_new_columns_to_product_lists_table.php
