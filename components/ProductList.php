@@ -135,15 +135,16 @@ class ProductList extends ComponentBase
     public function listProducts()
     {
         $query = Product::whereIsPublished(1)
-            ->with('categories')
+            ->with('categories.parent')
             ->with('lists');
 
         if ($this->property('categoryFilter') != '') {
             $category = $this->category = Category::whereSlug($this->property('categoryFilter'))->first();
 
             if ($category) {
-                $query->whereHas('categories', function($q) use ($category) {
-                    $q->whereId($category->id);
+                $children = $this->collectChildren($category);
+                $query->whereHas('categories', function($q) use ($children) {
+                        $q->whereIn('id', $children);
                 });
             }
         }
@@ -177,4 +178,22 @@ class ProductList extends ComponentBase
         return $products;
     }
 
+    /**
+     * collect children ids recursively
+     * @return array collection of childrena and parent ids
+     */
+    public function collectChildren($category)
+    {
+        $children = [];
+        //push parent id
+        array_push($children, $category->id);
+        //push children id
+        foreach($category->children as $child) {
+            array_push($children, $child->id);
+            if($child->children()->count()) {
+                return array_merge($children, $this->collectChildren($child));
+            }
+        }
+        return $children;
+    }
 }

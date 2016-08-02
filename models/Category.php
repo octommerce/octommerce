@@ -54,8 +54,18 @@ class Category extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
-    public $belongsTo = [];
+    public $hasMany = [
+        'children' => [
+            'Octommerce\Octommerce\Models\Category',
+            'key' => 'parent_id'
+        ]
+    ];
+    public $belongsTo = [
+        'parent' => [
+            'Octommerce\Octommerce\Models\Category',
+            'key' => 'parent_id'
+        ],
+    ];
 
     public $belongsToMany = [
         'products' => [
