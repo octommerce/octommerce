@@ -102,11 +102,6 @@ class Order extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    public function getTotalAttribute()
-    {
-        return $this->subtotal - $this->discount;
-    }
-
     public function getShippingCityNameAttribute()
     {
         if($this->shipping_city_id) {
@@ -162,6 +157,7 @@ class Order extends Model
     public function beforeSave()
     {
         $this->copyShippingAddress();
+        $this->calculateTotal();
     }
 
     public function afterCreate()
@@ -233,6 +229,14 @@ class Order extends Model
             $this->rules['shipping_city_id']  = 'required';
             $this->rules['shipping_state_id'] = 'required';
         }
+    }
+
+    /**
+     * Calculate total
+     */
+    public function calculateTotal()
+    {
+        $this->total = $this->subtotal + $this->tax + $this->shipping_cost + $this->misc_fee - $this->discount;
     }
 
     /**

@@ -48,3 +48,6 @@
 1.0.11:
     - Add new columns (content, excerpt, keywords) to product_lists table.
     - add_new_columns_to_product_lists_table.php
+1.0.12:
+    - Add tax, shipping cost, misc fee, and total columns to orders table
+    - add_tax_shippingcost_miscfee_total_columns_to_orders_table.php
