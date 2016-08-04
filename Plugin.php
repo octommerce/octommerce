@@ -177,7 +177,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
             'Octommerce\Octommerce\Components\OrderDetail'   => 'orderDetail',
             'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
-            'Octommerce\Octommerce\Components\TrackingOrder' => 'trackingOrder',
+            'Octommerce\Octommerce\Components\OrderTracking' => 'orderTracking',
         ];
     }
 
