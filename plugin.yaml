@@ -53,10 +53,6 @@ navigation:
                 label: 'Order Statuses'
                 url: octommerce/octommerce/orderstatuses
                 icon: icon-tasks
-            reports:
-                label: Reports
-                url: octommerce/octommerce/reports
-                icon: icon-bar-chart
 permissions:
     octommerce.octommerce.access_products:
         tab: Products
