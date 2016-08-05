@@ -55,13 +55,6 @@ class Order extends Model
     protected $dates = ['status_updated_at', 'expired_at', 'deleted_at'];
 
     /**
-     * The attributes that should be appended to native types.
-     *
-     * @var array
-     */
-    protected $appends = ['total'];
-
-    /**
      * @var array Relations
      */
     public $hasOne = [];
