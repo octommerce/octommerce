@@ -15,9 +15,9 @@ columns:
         label: Postal Code
     address:
         label: Address
-    usercity:
+    city_name:
         label: City
-    userstate:
+    state_name:
         label: State
     shipping_name:
         label: Shipping Name
@@ -27,21 +27,29 @@ columns:
         label: Shipping Address
     shipping_postcode:
         label: Shipping Postal Code
-    user_shipping_city:
+    shipping_city_name:
         label: Shipping City
-    user_shipping_state:
+    shipping_state_name:
         label: Shipping State
-    total_order:
-        label: Total Order
-    sku:
-        label: SKU
+    product_skus:
+        label: Product SKUs
+    product_names:
+        label: Product Names
     subtotal:
         label: Subtotal
+    discount:
+        label: Discount
+    tax:
+        label: Tax
+    shipping_cost:
+        label: Shipping Cost
+    misc_fee:
+        label: Misc Fee
     total:
         label: Total
     payment_method:
         label: Payment Method
-    status_code:
+    status_name:
         label: Status
     unique_code:
         label: Unique Code

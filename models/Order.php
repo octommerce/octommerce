@@ -95,26 +95,6 @@ class Order extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    public function getShippingCityNameAttribute()
-    {
-        if($this->shipping_city_id) {
-            $city = City::whereId($this->shipping_city_id)->first();
-            return $city->name;
-        }
-
-        return null;
-    }
-
-    public function getShippingStateNameAttribute()
-    {
-        if($this->shipping_state_id) {
-            $state = State::whereId($this->shipping_state_id)->first();
-            return $state->name;
-        }
-
-        return null;
-    }
-
     public function scopeSales($query)
     {
         return $query->where(function($query) {

@@ -11,8 +11,11 @@ class OrderExport extends ExportModel
 
     public function exportData($columns, $sessionKey = null)
     {
-        $query = Order::query();
+        $query = Order::with('city', 'state', 'shipping_city', 'shipping_state', 'invoice', 'status');
 
+        //
+        // Filter
+        //
         if ($this->start_date) {
             $query->whereDate('created_at', '>=', $this->start_date);
         }
@@ -21,53 +24,50 @@ class OrderExport extends ExportModel
             $query->whereDate('created_at', '<=', $this->end_date);
         }
 
-        if($this->status) {
+        if ($this->status) {
             $query->whereStatusCode($this->status);
         }
-
 
         $orders = $query->get();
 
         $orders->each(function($order) use ($columns) {
             $order->addVisible($columns);
 
-            $city = $order->city;
-            if($city) {
-                $order->usercity = $city->name;
+            //
+            // Parsing Cities
+            //
+            $order->city_name           = $order->city ? $order->city->name : '';
+            $order->state_name          = $order->state ? $order->state->name : '';
+            $order->shipping_city_name  = $order->shipping_city ? $order->shipping_city->name : '';
+            $order->shipping_state_name = $order->shipping_state ? $order->shipping_state->name : '';
+
+            //
+            // Parsing products
+            //
+            $productSkusArray = [];
+            $productNamesArray = [];
+
+            foreach($order->products as $product) {
+                $productSkusArray[] = $product->pivot->qty . ' x ' . $product->sku;
+                $productNamesArray[] = $product->pivot->qty . ' x ' . $product->pivot->name . ' @ ' . $product->pivot->price;
             }
 
-            $state = $order->state;
-            if($state) {
-                $order->userstate = $state->name;
+            $order->product_skus = implode(';', $productSkusArray);
+            $order->product_names = implode(';', $productNamesArray);
+
+            //
+            // Parsing invoice
+            //
+            $invoice = $order->invoice;
+
+            if ($order->invoice) {
+                $order->payment_method = $invoice->payment_method ? $invoice->payment_method->name : '';
+                $order->unique_code    = $invoice->unique_number > 0 ? $invoice->unique_number : '';
+                $order->due_at         = $invoice->due_at ? $invoice->due_at : '';
             }
 
-            $order->user_shipping_city = $order->shipping_city_name ? $order->shipping_city_name : 'sdfas';
+            $order->status_name = $order->status ? $order->status->name : '';
 
-            $order->user_shipping_state = $order->shipping_state_name ? $order->shipping_state_name : 'fasf';
-
-            $invoices = $order->invoices;
-
-            $detailOrder = "";
-            foreach ($order->products as $key => $product) {
-                $detailOrder .= $product->sku;
-                if($key+1 == $order->products()->count() && $order->products()->count() > 0) {
-                    $detailOrder .= ",";
-                }
-            }
-            $order->sku = $detailOrder;
-
-            $order->total_order = $order->products()->count();
-
-            foreach($invoices as $invoice) {
-               $order->payment_method = $invoice->payment_method->name;
-               $order->unique_code = $invoice->unique_number > 0 ? $invoice->unique_number : null;
-               $order->due_at = $invoice->due_at ? $invoice->due_at : null;
-            }
-
-            $status = $order->status;
-            if($status) {
-                $order->status = $status->name;
-            }
         });
 
         return $orders;
