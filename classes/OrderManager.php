@@ -155,6 +155,35 @@ class OrderManager
             });
     }
 
+    public function remindWaitingPayments()
+    {
+        $hours = 24; // A day before expired
+
+        Order::whereStatusCode('waiting')
+            ->where('expired_at', '>=', Carbon::now()->add($hours))
+            ->where('expired_at', '<', Carbon::now()->add($hours + 1))
+            ->get()
+            ->each(function($order) {
+                // Set payment reminder
+                $order->sendPaymentReminder();
+            });
+    }
+
+    public function remindAbandonedCarts()
+    {
+        $hours = 3 * 24; // After 3 days no update
+
+        Cart::has('user')
+            ->has('products')
+            ->where('updated_at', '>=', Carbon::now()->subHours($hours))
+            ->where('updated_at', '<', Carbon::now()->subHours($hours - 1))
+            ->get()
+            ->each(function($cart) {
+                // Send reminder
+                $cart->sendReminder();
+            });
+    }
+
     protected function generateUserPassword($length = 8)
     {
         $characters = '123456789abcdefghijklmnpqrstuvwxyz';

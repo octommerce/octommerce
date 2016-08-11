@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Mail;
 use Model;
 use Octommerce\Octommerce\Models\Settings;
 
@@ -62,5 +63,18 @@ class Cart extends Model
     public function getIsAllowedCheckoutAttribute()
     {
         return $this->total_price >= Settings::get('checkout_min_subtotal', 0);
+    }
+
+    public function sendReminder()
+    {
+        if (!$this->user) {
+            return;
+        }
+
+        $cart = $this;
+
+        Mail::send('octommerce.octommerce::mail.abandoned_cart', compact('cart'), function($message) use ($cart) {
+            $message->to($cart->user->email);
+        });
     }
 }

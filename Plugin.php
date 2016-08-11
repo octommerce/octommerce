@@ -244,6 +244,14 @@ class Plugin extends PluginBase
     {
         $orderManager = OrderManager::instance();
 
+        // Check abandoned carts, waiting payments every hour
+        $schedule->call(function() use($orderManager) {
+            // Abandoned carts
+            $orderManager->remindAbandonedCarts();
+            // Waiting for payments
+            $orderManager->remindWaitingPayments();
+        })->hourly();
+
         // Check expired orders every minute
         $schedule->call(function() use($orderManager) {
             $orderManager->checkExpiredOrders();

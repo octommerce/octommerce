@@ -148,12 +148,12 @@ class Order extends Model
         return $this->status_logs->last()->sendEmailToCustomer();
     }
 
-    public function sendEmailToAdmin()
+    public function sendPaymentReminder()
     {
         $order = $this;
 
-        Mail::send('octommerce.octommerce::mail.admin_order_template', compact('order'), function($message) {
-            $message->to('sales@turez.id')->cc('helpdesk@turez.id');
+        Mail::send('octommerce.octommerce::mail.payment_reminder', compact('order'), function($message) use($order) {
+            $message->to($order->email);
         });
     }
 
