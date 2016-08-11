@@ -47,6 +47,19 @@ class SeedOrderStatuses extends Seeder
         ]);
 
         OrderStatus::create([
+            'code' => 'canceled',
+            'name' => 'Canceled',
+            'description' => 'Order is canceled.',
+            'color' => '#34495e',
+            'is_active' => true,
+            'send_email' => true,
+            'attach_pdf' => false,
+            // 'mail_template_id' => '',
+            'sort_order' => 4,
+            'parent_code' => 'waiting',
+        ]);
+
+        OrderStatus::create([
             'code' => 'packing',
             'name' => 'Packing',
             'description' => 'Order is being packed.',
@@ -55,7 +68,7 @@ class SeedOrderStatuses extends Seeder
             'send_email' => true,
             'attach_pdf' => false,
             // 'mail_template_id' => '',
-            'sort_order' => 4,
+            'sort_order' => 5,
             'parent_code' => 'paid',
         ]);
 
@@ -68,7 +81,7 @@ class SeedOrderStatuses extends Seeder
             'send_email' => true,
             'attach_pdf' => false,
             // 'mail_template_id' => '',
-            'sort_order' => 5,
+            'sort_order' => 6,
             'parent_code' => 'paid',
         ]);
 
@@ -81,7 +94,7 @@ class SeedOrderStatuses extends Seeder
             'send_email' => true,
             'attach_pdf' => false,
             // 'mail_template_id' => '',
-            'sort_order' => 6,
+            'sort_order' => 7,
             'parent_code' => 'packing',
         ]);
 
@@ -94,7 +107,7 @@ class SeedOrderStatuses extends Seeder
             'send_email' => true,
             'attach_pdf' => false,
             // 'mail_template_id' => '',
-            'sort_order' => 7,
+            'sort_order' => 8,
             'parent_code' => 'shipped',
         ]);
 
@@ -107,7 +120,7 @@ class SeedOrderStatuses extends Seeder
             'send_email' => false,
             'attach_pdf' => false,
             // 'mail_template_id' => '',
-            'sort_order' => 8,
+            'sort_order' => 9,
             'parent_code' => 'delivered',
         ]);
 
