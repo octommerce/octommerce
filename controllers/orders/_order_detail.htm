@@ -20,7 +20,7 @@
             <h4><b>Payment Method </b></h4>
             <p class="text-center"><h6>
                 <?php foreach($model->invoices as $invoice): ?>
-                    <?= $invoice->payment_method->name ?><br><br>
+                    <?= $invoice->payment_method ? $invoice->payment_method->name : '' ?><br><br>
                     <?php if($invoice->unique_number > 0): ?>
                         Unique Number : <?= $invoice->unique_number ?><br>
                     <?php endif ?>
