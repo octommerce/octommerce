@@ -68,6 +68,9 @@ class Cart
         $this->fireEvent('cart.afterAddItem', [$product, $cart, $qty, $data]);
         Event::fire('cart.afterAddItem', [$this, $product, $cart, $qty, $data]);
 
+        // Get the latest update
+        $cart = $this->get();
+
         return $cart;
     }
 
@@ -118,6 +121,9 @@ class Cart
         $this->fireEvent('cart.afterUpdateItem', [$product, $cart, $qty, $data]);
         Event::fire('cart.afterUpdateItem', [$this, $product, $cart, $qty, $data]);
 
+        // Get the latest update
+        $cart = $this->get();
+
         return $cart;
     }
 
@@ -145,6 +151,8 @@ class Cart
          */
         $this->fireEvent('cart.afterRemoveItem', [$product, $cart, $qty]); //, $data
         Event::fire('cart.afterRemoveItem', [$this, $product, $cart, $qty]); //, $data
+
+        $cart = $this->get();
 
         return $cart;
     }
