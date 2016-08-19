@@ -160,8 +160,8 @@ class OrderManager
         $hours = 24; // A day before expired
 
         Order::whereStatusCode('waiting')
-            ->where('expired_at', '>=', Carbon::now()->add($hours))
-            ->where('expired_at', '<', Carbon::now()->add($hours + 1))
+            ->where('expired_at', '>=', Carbon::now()->addHours($hours))
+            ->where('expired_at', '<', Carbon::now()->addHours($hours + 1))
             ->get()
             ->each(function($order) {
                 // Set payment reminder
