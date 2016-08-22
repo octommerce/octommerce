@@ -11,6 +11,7 @@ use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 class ProductList extends ComponentBase
 {
     public $category;
+    public $categories;
     public $list;
     public $brand;
     public $products;
@@ -109,6 +110,7 @@ class ProductList extends ComponentBase
     {
 
         $currentPage = post('page');
+        $this->page['categories'] = $this->categories = $this->listCategories();
         $products = $this->products = $this->listProducts();
 
         /*
@@ -176,6 +178,33 @@ class ProductList extends ComponentBase
         $products = $query->paginate($this->property('productsPerPage'));
 
         return $products;
+    }
+
+    /**
+     * List all categories of products
+     * @return Collection 
+     */
+    public function listCategories()
+    {
+        $categories = Category::all();
+
+        return $categories;
+    }
+
+    /**
+     * Ajax Framework to handle on checked categories
+     * @return Collection
+     */
+    public function onCheckedCategories()
+    {
+        $checkedCategories = post('categories');
+
+        $getProductsByCategories = Product::whereHas('categories', function($category) use ($checkedCategories) {
+            $category->whereIn('slug', $checkedCategories);
+        })->get();
+
+        return $this->page['products'] = $getProductsByCategories;
+
     }
 
     /**
