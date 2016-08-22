@@ -199,12 +199,16 @@ class ProductList extends ComponentBase
     {
         $checkedCategories = post('categories');
 
-        $getProductsByCategories = Product::whereHas('categories', function($category) use ($checkedCategories) {
-            $category->whereIn('slug', $checkedCategories);
-        })->get();
+        if(empty($checkedCategories)) {
+            $getAllProducts = Product::all();
+            $this->page['products'] = $getAllProducts;
+        } else {
+            $getProductsByCategories = Product::whereHas('categories', function($category) use ($checkedCategories) {
+                $category->whereIn('slug', $checkedCategories);
+            })->get();
 
-        return $this->page['products'] = $getProductsByCategories;
-
+            $this->page['products'] = $getProductsByCategories;
+        }
     }
 
     /**
