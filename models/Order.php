@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Mail;
 use Model;
 use Carbon\Carbon;
 use Octommerce\Octommerce\Models\City;
