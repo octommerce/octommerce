@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce\Components;
 
+use DB;
 use Request;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
@@ -67,6 +68,12 @@ class ProductList extends ComponentBase
                 'type'         => 'string',
                 'default'      => 'No product found',
                 'group'        => 'Filter'
+            ],
+            'sortOrder' => [
+                'title'       => 'octommerce.octommerce::lang.component.product_list.param.sort_order_title',
+                'description' => 'octommerce.octommerce::lang.component.product_list.param.sort_order_desc',
+                'type'        => 'dropdown',
+                'default'     => 'published_at desc'
             ],
             'productsPerPage' => [
                 'title'             => 'octommerce.octommerce::lang.component.product_list.param.products_per_page_title',
@@ -175,6 +182,23 @@ class ProductList extends ComponentBase
             $query->available();
         }
 
+        /*
+         * Sorting
+         */
+        $sortOrder = $this->property('sortOrder');
+
+        if (in_array($sortOrder, array_keys(Product::$allowedSortingOptions))) {
+            $parts = explode(' ', $sortOrder);
+            if (count($parts) < 2) {
+                array_push($parts, 'desc');
+            }
+            list($sortField, $sortDirection) = $parts;
+            if ($sortField == 'random') {
+                $sortField = DB::raw('RAND()');
+            }
+            $query->orderBy($sortField, $sortDirection);
+        }
+
         $products = $query->paginate($this->property('productsPerPage'));
 
         return $products;
@@ -182,7 +206,7 @@ class ProductList extends ComponentBase
 
     /**
      * List all categories of products
-     * @return Collection 
+     * @return Collection
      */
     public function listCategories()
     {

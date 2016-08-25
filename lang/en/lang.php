@@ -20,6 +20,8 @@
                 'hide_out_of_stock_desc' => 'Don\'t show products that out of stock.',
                 'no_product_title' => 'No products message',
                 'no_product_desc' => 'Message to display in the product list in case if there are no products. This property is used by the default component partial.',
+                'sort_order_title' => 'Sort order',
+                'sort_order_desc' => 'Which the order method.',
                 'products_per_page_title' => 'Products per page',
                 'products_per_page_validation_message' => 'Invalid format of the products per page value',
                 'page_param_title' => 'Pagination parameter name',
