@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce\Components;
 
+use DB;
 use Request;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
@@ -11,6 +12,7 @@ use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 class ProductList extends ComponentBase
 {
     public $category;
+    public $categories;
     public $list;
     public $brand;
     public $products;
@@ -67,6 +69,12 @@ class ProductList extends ComponentBase
                 'default'      => 'No product found',
                 'group'        => 'Filter'
             ],
+            'sortOrder' => [
+                'title'       => 'octommerce.octommerce::lang.component.product_list.param.sort_order_title',
+                'description' => 'octommerce.octommerce::lang.component.product_list.param.sort_order_desc',
+                'type'        => 'dropdown',
+                'default'     => 'published_at desc'
+            ],
             'productsPerPage' => [
                 'title'             => 'octommerce.octommerce::lang.component.product_list.param.products_per_page_title',
                 'type'              => 'string',
@@ -109,6 +117,7 @@ class ProductList extends ComponentBase
     {
 
         $currentPage = post('page');
+        $this->page['categories'] = $this->categories = $this->listCategories();
         $products = $this->products = $this->listProducts();
 
         /*
@@ -173,9 +182,57 @@ class ProductList extends ComponentBase
             $query->available();
         }
 
+        /*
+         * Sorting
+         */
+        $sortOrder = $this->property('sortOrder');
+
+        if (in_array($sortOrder, array_keys(Product::$allowedSortingOptions))) {
+            $parts = explode(' ', $sortOrder);
+            if (count($parts) < 2) {
+                array_push($parts, 'desc');
+            }
+            list($sortField, $sortDirection) = $parts;
+            if ($sortField == 'random') {
+                $sortField = DB::raw('RAND()');
+            }
+            $query->orderBy($sortField, $sortDirection);
+        }
+
         $products = $query->paginate($this->property('productsPerPage'));
 
         return $products;
+    }
+
+    /**
+     * List all categories of products
+     * @return Collection
+     */
+    public function listCategories()
+    {
+        $categories = Category::all();
+
+        return $categories;
+    }
+
+    /**
+     * Ajax Framework to handle on checked categories
+     * @return Collection
+     */
+    public function onCheckedCategories()
+    {
+        $checkedCategories = post('categories');
+
+        if(empty($checkedCategories)) {
+            $getAllProducts = Product::all();
+            $this->page['products'] = $getAllProducts;
+        } else {
+            $getProductsByCategories = Product::whereHas('categories', function($category) use ($checkedCategories) {
+                $category->whereIn('slug', $checkedCategories);
+            })->get();
+
+            $this->page['products'] = $getProductsByCategories;
+        }
     }
 
     /**
