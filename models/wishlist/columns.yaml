@@ -1,0 +1,18 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    product:
+        label: Product
+        relation: product
+        select: name
+        searchable: true
+    user:
+        label: User
+        relation: user
+        select: name
+        searchable: true

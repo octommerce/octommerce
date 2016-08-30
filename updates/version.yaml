@@ -51,3 +51,6 @@
 1.0.12:
     - Add tax, shipping cost, misc fee, and total columns to orders table
     - add_tax_shippingcost_miscfee_total_columns_to_orders_table.php
+1.0.13:
+    - Create wishlist table
+    - create_wish_lists_table.php

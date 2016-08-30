@@ -37,6 +37,10 @@ navigation:
                 label: Reviews
                 url: octommerce/octommerce/reviews
                 icon: icon-comments
+            wishlists:
+                label: Wishlist
+                url: octommerce/octommerce/wishlists
+                icon: icon-heart
     commerce:
         label: Commerce
         url: octommerce/octommerce/orders

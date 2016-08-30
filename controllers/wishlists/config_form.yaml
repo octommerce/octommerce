@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Wish List
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/wishlist/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\WishList
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/wishlists
+
+# Create page
+create:
+    title: Create Wish List
+    redirect: octommerce/octommerce/wishlists/update/:id
+    redirectClose: octommerce/octommerce/wishlists
+
+# Update page
+update:
+    title: Edit Wish List
+    redirect: octommerce/octommerce/wishlists
+    redirectClose: octommerce/octommerce/wishlists
+
+# Preview page
+preview:
+    title: Preview Wish List
