@@ -51,8 +51,8 @@ class OrderList extends ComponentBase
         $this->orderPage = $this->page['orderPage'] = $this->property('orderPage');
         $this->orders = $this->page['orders'] = $this->loadOrders();
         $this->order = $this->page['order'] = OrderModel::whereOrderNo($this->property('orderNo'))->first();
-        if($order = OrderModel::whereOrderNo($this->property('orderno'))->first()) {
-            if($order->user_id !== $this->user()->id) {
+        if($this->order) {
+            if($this->order->user_id !== $this->user()->id) {
                 Flash::error("Order No is not valid");
                 return Redirect::to('account/orders');
             }
