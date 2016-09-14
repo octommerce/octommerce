@@ -35,6 +35,10 @@ columns:
         label: Product SKUs
     product_names:
         label: Product Names
+    product_qty:
+        label: Product Quantity
+    product_price:
+        label: Product Price
     subtotal:
         label: Subtotal
     discount:
