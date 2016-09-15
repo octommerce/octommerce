@@ -5,18 +5,6 @@
 columns:
     order_no:
         label: Order No
-    product_name:
-        label: Product Name
-    product_sku:
-        label: Product SKU
-    product_price:
-        label: Product Price
-    product_qty:
-        label: Product QTY
-    product_discount:
-        label: Product Discount
-    subtotal:
-        label: Subtotal
     name:
         label: Name
     email:
@@ -47,6 +35,16 @@ columns:
         label: Shipping State
     shipping_cost:
         label: Shipping Cost
+    product_skus:
+        label: Product SKUs
+    product_names:
+        label: Product Names
+    product_qty:
+        label: Product Quantity
+    product_price:
+        label: Product Price
+    subtotal:
+        label: Subtotal
     tax:
         label: Tax
     discount:

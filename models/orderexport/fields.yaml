@@ -25,5 +25,8 @@ fields:
             shipped: Shipped
             void: Void
             waiting: Waiting
-
-
+    is_expand_product:
+        label: Expand Products ?
+        type: checkbox
+        comment: Expand Product Like Old MTOS report?
+        default: 0
