@@ -88,7 +88,7 @@ class OrderList extends ComponentBase
             return Redirect::to('login');
             // throw new ApplicationException('You must be logged in');
         } else {
-            if($order = OrderModel::whereOrderNo($this->property('orderno'))->first()) {
+            if($order = OrderModel::whereOrderNo($this->property('orderNo'))->first()) {
                 if($order->user_id == $this->user()->id) {
                     // throw new ApplicationException('Order no is not valid');
                     $ordersDetail = $order->products;
