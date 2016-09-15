@@ -3,6 +3,7 @@
 use Db;
 use Auth;
 use Mail;
+use Event;
 use Carbon\Carbon;
 use RainLab\User\Models\User;
 use Octommerce\Octommerce\Models\Order;
@@ -14,6 +15,7 @@ use Responsiv\Pay\Models\InvoiceItem;
 class OrderManager
 {
 	use \October\Rain\Support\Traits\Singleton;
+    use \October\Rain\Support\Traits\Emitter;
 
     public function create($data)
     {
@@ -65,6 +67,16 @@ class OrderManager
                 ]);
             }
 
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.afterCreate', [$order, $data]);
+            Event::fire('order.afterCreate', [$order, $data]);
+
+            Db::commit();
+
+            $order = Order::find($order->id);
+
             $invoice = Invoice::create([
                 'user_id'      => $user->id,
                 'first_name'   => $order->name,
@@ -90,6 +102,18 @@ class OrderManager
                 $invoice->items()->save($invoiceItem);
             }
 
+            // If have a discount, put to invoice items
+            if ($order->discount) {
+                $discountItem = new InvoiceItem([
+                    'description' => 'Discount',
+                    'quantity' => 1,
+                    'price' => 0,
+                    'discount' => $order->discount,
+                ]);
+
+                $invoice->items()->save($discountItem);
+            }
+
             $order->invoices()->add($invoice);
 
             $invoice->save();
@@ -97,8 +121,6 @@ class OrderManager
             $order->save();
 
             \Cart::clear();
-
-            Db::commit();
 
             return $order;
         }
