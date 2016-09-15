@@ -5,13 +5,27 @@
 columns:
     order_no:
         label: Order No
+    product_name:
+        label: Product Name
+    product_sku:
+        label: Product SKU
+    product_price:
+        label: Product Price
+    product_qty:
+        label: Product QTY
+    product_discount:
+        label: Product Discount
+    subtotal:
+        label: Subtotal
     name:
         label: Name
     email:
         label: Email
+    subtotal:
+        label: Subtotal
     phone:
         label: Phone
-    postcode:
+    postal_code:
         label: Postal Code
     address:
         label: Address
@@ -25,28 +39,22 @@ columns:
         label: Shipping Phone
     shipping_address:
         label: Shipping Address
-    shipping_postcode:
+    shipping_postal_code:
         label: Shipping Postal Code
     shipping_city_name:
         label: Shipping City
     shipping_state_name:
         label: Shipping State
-    product_skus:
-        label: Product SKUs
-    product_names:
-        label: Product Names
-    subtotal:
-        label: Subtotal
-    discount:
-        label: Discount
-    tax:
-        label: Tax
     shipping_cost:
         label: Shipping Cost
-    misc_fee:
-        label: Misc Fee
+    tax:
+        label: Tax
+    discount:
+        label: Discount
     total:
         label: Total
+    misc_fee:
+        label: Misc Fee
     payment_method:
         label: Payment Method
     status_name:
