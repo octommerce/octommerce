@@ -103,7 +103,13 @@ class Plugin extends PluginBase
 			$widget->addColumns([
                 'spend' => [
                     'label'  => 'Spend',
-                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`)'
+                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id` 
+                    and (
+                        `octommerce_octommerce_orders`.`status_code` = "paid"
+                        or `octommerce_octommerce_orders`.`status_code` = "shipped"
+                        or `octommerce_octommerce_orders`.`status_code` = "packing"
+                        or `octommerce_octommerce_orders`.`status_code` = "delivered"
+                    ))'
                 ]
 			]);
         });
