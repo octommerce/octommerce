@@ -4,6 +4,7 @@ use Event;
 use Yaml;
 use File;
 use Backend;
+use Currency;
 use System\Classes\PluginBase;
 use Illuminate\Foundation\AliasLoader;
 use Rainlab\User\Models\User;
@@ -55,6 +56,11 @@ class Plugin extends PluginBase
             ];
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
             $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
+
+            $model->addDynamicMethod('getSpendAttribute', function($value) {
+                return Currency::format($value);
+            });
+
         });
 
         /**
@@ -79,6 +85,27 @@ class Plugin extends PluginBase
             $model->hasMany['cities'] = [
                 'Octommerce\Octommerce\Models\City'
             ];
+        });
+
+        Event::listen('backend.list.extendColumns', function($widget) {
+
+			// Only for the User controller
+			if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
+				return;
+			}
+
+			// Only for the User model
+			if (!$widget->model instanceof \RainLab\User\Models\User) {
+				return;
+			}
+
+			// Add an extra birthday column
+			$widget->addColumns([
+                'spend' => [
+                    'label'  => 'Spend',
+                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`)'
+                ]
+			]);
         });
 
 
