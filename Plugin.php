@@ -143,4 +143,54 @@ class Plugin extends PluginBase
 
         ];
     }
+
+    public function registerReportWidgets()
+    {
+        return [
+            'Octommerce\Octommerce\ReportWidgets\Summary' => [
+                'label'   => 'E-commerce Summary',
+                'context' => 'aa'
+            ]
+        ];
+    }
+
+    public function registerMailTemplates()
+    {
+        return [
+            'octommerce.octommerce::mail.new_order'            => 'Confirmation email on new order.',
+            'octommerce.octommerce::mail.payment_reminder'     => 'Reminder email for payment.',
+            'octommerce.octommerce::mail.paid_order'           => 'Paid order notification to customer.',
+            'octommerce.octommerce::mail.expired_order'        => 'Expired order notification to customer.',
+            'octommerce.octommerce::mail.packing_order'        => 'Packing order notification to customer.',
+            'octommerce.octommerce::mail.shipped_order'        => 'Shipping status notification to customer.',
+            'octommerce.octommerce::mail.delivered_order'      => 'Delivery status notification to customer.',
+            'octommerce.octommerce::mail.cancelled_order'      => 'Cancelled order notification to customer.',
+            'octommerce.octommerce::mail.refunded_order'       => 'Refunded order notification to user.',
+            'octommerce.octommerce::mail.abandoned_cart'       => 'Abandoned cart reminder to customer.',
+            'octommerce.octommerce::mail.product_availibility' => 'Notification when a product is available.',
+            'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
+            'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
+            'octommerce.octommerce::mail.forgot_password'      => 'Forgot password link',
+        ];
+    }
+
+    public function registerSchedule($schedule)
+    {
+        $orderManager = OrderManager::instance();
+
+        // Check abandoned carts, waiting payments every hour
+        $schedule->call(function() use($orderManager) {
+            // Abandoned carts
+            $orderManager->remindAbandonedCarts();
+            // Waiting for payments
+            $orderManager->remindWaitingPayments();
+        })->hourly();
+
+        // Check expired orders every minute
+	/*
+	$schedule->call(function() use($orderManager) {
+            $orderManager->checkExpiredOrders();
+        })->everyMinute();
+	*/
+   }
 }
