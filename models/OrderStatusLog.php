@@ -164,6 +164,9 @@ class OrderStatusLog extends Model
 
     public static function createRecord($statusCode, $order, $note = null)
     {
+        if (! $order instanceof \Octommerce\Octommerce\Models\Order)
+            return;
+
         if ($statusCode instanceof Model)
             $statusCode = $statusCode->getKey();
 
