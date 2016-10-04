@@ -9,8 +9,6 @@ columns:
         label: Name
     email:
         label: Email
-    subtotal:
-        label: Subtotal
     phone:
         label: Phone
     postal_code:

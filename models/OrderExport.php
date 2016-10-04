@@ -15,7 +15,7 @@ class OrderExport extends ExportModel
 
     public function exportData($columns, $sessionKey = null)
     {
-        $query = OrderDetail::with('product', 'order');
+        $query = OrderDetail::with('product', 'order')->has('order');
 
         //
         // Filter
