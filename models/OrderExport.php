@@ -9,8 +9,6 @@ class OrderExport extends ExportModel
 {
     private $tempOrder;
 
-    private $tempPrice = 0;
-
     protected $fillable = ['start_date', 'end_date', 'status', 'is_expand_product'];
 
     public function exportData($columns, $sessionKey = null)
@@ -174,10 +172,5 @@ class OrderExport extends ExportModel
         }
 
         return $orders;
-    }
-
-    public function previousModel($value='')
-    {
-
     }
 }
