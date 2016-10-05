@@ -24,7 +24,7 @@ class OrderExport extends ExportModel
 
         if ($this->end_date) {
             $query->whereHas('order', function($query) {
-                $query->whereDate('created_at', '>=', $this->start_date);
+                $query->whereDate('created_at', '<=', $this->end_date);
             });
         }
 
