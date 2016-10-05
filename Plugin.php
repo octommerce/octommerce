@@ -211,6 +211,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\OrderDetail'   => 'orderDetail',
             'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
             'Octommerce\Octommerce\Components\OrderTracking' => 'orderTracking',
+            'Octommerce\Octommerce\Components\Wishlist'      => 'wishlist',
         ];
     }
 

@@ -4,13 +4,11 @@
 
 columns:
     order_no:
-        label: Order No
+        label: Order No*
     name:
-        label: Name
+        label: Name*
     email:
         label: Email
-    subtotal:
-        label: Subtotal
     phone:
         label: Phone
     postal_code:
@@ -36,21 +34,21 @@ columns:
     shipping_cost:
         label: Shipping Cost
     product_skus:
-        label: Product SKUs
+        label: Product SKUs*
     product_names:
-        label: Product Names
+        label: Product Names*
     product_qty:
-        label: Product Quantity
+        label: Product Quantity*
     product_price:
-        label: Product Price
+        label: Product Price*
     subtotal:
-        label: Subtotal
+        label: Subtotal*
     tax:
         label: Tax
     discount:
         label: Discount
     total:
-        label: Total
+        label: Total*
     misc_fee:
         label: Misc Fee
     payment_method:
@@ -66,4 +64,4 @@ columns:
     notes:
         label: Notes
     created_at:
-        label: Created At
+        label: Created At*
