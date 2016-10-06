@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Carbon\Carbon;
 use Backend\Models\ExportModel;
 
 /**
@@ -13,33 +14,33 @@ class OrderExport extends ExportModel
 
     public function exportData($columns, $sessionKey = null)
     {
-        $query = OrderDetail::with('product', 'order')->has('order');
-
-        //
-        // Filter
-        //
-        if ($this->start_date) {
-            $query->whereHas('order', function($query) {
-                $query->whereDate('created_at', '>=', $this->start_date);
-            });
-        }
-
-        if ($this->end_date) {
-            $query->whereHas('order', function($query) {
-                $query->whereDate('created_at', '<=', $this->end_date);
-            });
-        }
-
-        if ($this->status) {
-            $query->whereHas('order', function($query) {
-                $query->whereStatusCode($this->status);
-            });
-        }
-
-        $orders = $query->get();
-
 
         if ($this->is_expand_product) {
+
+            $query = OrderDetail::with('product', 'order')->has('order');
+
+            //
+            // Filter
+            //
+            if ($this->start_date) {
+                $query->whereHas('order', function($query) {
+                    $query->whereDate('created_at', '>=', Carbon::parse($this->start_date)->format('Y-m-d'));
+                });
+            }
+
+            if ($this->end_date) {
+                $query->whereHas('order', function($query) {
+                    $query->whereDate('created_at', '<', Carbon::parse($this->end_date)->addDay()->format('Y-m-d'));
+                });
+            }
+
+            if ($this->status) {
+                $query->whereHas('order', function($query) {
+                    $query->whereStatusCode($this->status);
+                });
+            }
+
+            $orders = $query->get();
 
             $orders->each(function($order, $key) use ($columns) {
 
@@ -47,8 +48,8 @@ class OrderExport extends ExportModel
                  @and temporary order has not empty
                 **/
                 if($this->tempOrder != null && $this->tempOrder->order_id == $order->order_id) {
-                   //Calculate current order subtotal and add up with previous subtotal of temporary order 
-                   $subtotal = $order->product ? ($order->price * $order->qty) + $this->tempOrder->subtotal : ''; 
+                   //Calculate current order subtotal and add up with previous subtotal of temporary order
+                   $subtotal = $order->product ? ($order->price * $order->qty) + $this->tempOrder->subtotal : '';
                 } else {
                     //otherwise(current order_id is not same with previous order_id)
                     $this->tempOrder = null;
@@ -117,11 +118,11 @@ class OrderExport extends ExportModel
             $query = Order::with('city', 'state', 'shipping_city', 'shipping_state', 'invoice', 'status');
 
             if ($this->start_date) {
-                $query->whereDate('created_at', '>=', $this->start_date);
+                $query->whereDate('created_at', '>=', Carbon::parse($this->start_date)->format('Y-m-d'));
             }
 
             if ($this->end_date) {
-                $query->whereDate('created_at', '<=', $this->end_date);
+                $query->whereDate('created_at', '<', Carbon::parse($this->end_date)->addDay()->format('Y-m-d'));
             }
 
             if($this->status) {
