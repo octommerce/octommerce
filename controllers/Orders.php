@@ -115,9 +115,9 @@ class Orders extends Controller
 
         $order->delete();
 
-        Flash::success('This order has been deleted');
+        Flash::success('That order has been deleted');
 
-        return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $id));
+        return Backend::redirect('octommerce/octommerce/orders');
     }
 
     public function listExtendQuery($query)
