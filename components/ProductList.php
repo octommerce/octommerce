@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use DB;
+use Input;
 use Request;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
@@ -11,11 +12,13 @@ use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
 {
+    public $searchQuery;
     public $category;
     public $categories;
     public $list;
     public $brand;
     public $products;
+    public $filterList;
 
     public function componentDetails()
     {
@@ -144,64 +147,168 @@ class ProductList extends ComponentBase
     public function listProducts()
     {
         $query = Product::whereIsPublished(1)
-            ->with('categories.parent')
+            ->with('categories')
+            ->with('brand')
             ->with('lists');
 
-        if ($this->property('categoryFilter') != '') {
-            $category = $this->category = Category::whereSlug($this->property('categoryFilter'))->first();
+        //
+        // Filtering
+        //
+        $this->search($query, Input::get('q'));
 
-            if ($category) {
-                $children = $this->collectChildren($category);
-                $query->whereHas('categories', function($q) use ($children) {
-                        $q->whereIn('id', $children);
-                });
-            }
+        if ($this->property('categoryFilter') != '') {
+            $this->filterByCategory($query, $this->property('categoryFilter'));
         }
 
         if ($this->property('listFilter') != '') {
-            $list = $this->list = ProductListModel::whereSlug($this->property('listFilter'))->first();
-
-            if ($list) {
-                $query->whereHas('lists', function($q) use ($list) {
-                    $q->whereId($list->id);
-                });
-            }
+            $this->filterByList($query, $this->property('listFilter'));
         }
 
         if ($this->property('brandFilter') != '') {
-            $brand = $this->brand = Brand::whereSlug($this->property('brandFilter'))->first();
-
-            if ($brand) {
-                $query->whereHas('brand', function($q) use ($brand) {
-                    $q->whereId($brand->id);
-                });
-            }
+            $this->filterByBrand($query, $this->property('brandFilter'));
         }
 
         if ($this->property('hideOutOfStock')) {
             $query->available();
         }
 
+        $this->filterList = $this->getFilterList($query);
+
+        return $query->paginate($this->property('productsPerPage'));
+    }
+
+    protected function getFilterList($originalQuery)
+    {
+        $items = [];
+
+        // Category
+        $query = clone $originalQuery;
+        $query->join('octommerce_octommerce_category_product', 'product_id', '=', 'octommerce_octommerce_products.id')
+            ->join('octommerce_octommerce_categories', 'category_id', '=', 'octommerce_octommerce_categories.id')
+            ->select(DB::raw('octommerce_octommerce_categories.name, octommerce_octommerce_categories.slug, octommerce_octommerce_categories.parent_id, octommerce_octommerce_categories.nest_depth, category_id, count(*) as total'))
+            ->orderBy('octommerce_octommerce_categories.nest_depth', 'asc')
+            ->groupBy('category_id');
+        // dd($query->get());
+
+            // ->addSelect(DB::raw('*, count(*) as total'))
+            // ->with('categories')
+            // ->groupBy('category_id');
+
+        $parents = [];
+
+        foreach($query->get() as $row) {
+
+            if ($row->category_id) {
+
+                if (is_null($row->parent_id)) {
+                    $parents[$row->id] = [
+                        'name' => $row->name,
+                        'count' => $row->total,
+                    ];
+                } else {
+                    $parents[$row->parent_id]['children'][] = [
+                        'name' => $row->name,
+                        'count' => $row->total,
+                    ];
+                }
+
+                // $items['categories'][] = [
+                //     'name' => $row->name,
+                //     'count' => $row->total,
+                // ];
+            }
+        }
+
+        $c = Category::with('children')->get();
+        // dd($c);
+        // dd($parents);
+
+
+        // Brand
+        $query = clone $originalQuery;
+        $query->select(DB::raw('*, count(*) as total'))
+            ->with('brand')
+            ->groupBy('brand_id');
+
+        foreach($query->get() as $product) {
+            if ($product->brand) {
+                $items['brands'][] = [
+                    'name' => $product->brand->name,
+                    'count' => $product->total,
+                ];
+            }
+        }
+
+        $items = collect($items)->sortByDesc('count');
+
+        return $items;
+    }
+
+    protected function search(&$query, $searchQuery)
+    {
+        $this->searchQuery = $searchQuery = trim($searchQuery);
+
+        if ($searchQuery) {
+
+            // Fulltext Search
+            $query->whereRaw('MATCH (octommerce_octommerce_products.name) AGAINST (? IN NATURAL LANGUAGE MODE)', [$searchQuery]);
+
+            // $query->where(function($q) use ($searchQuery) {
+            //     $q->where('octommerce_octommerce_products.name', 'like', '%' . $searchQuery . '%');
+            // });
+        }
+    }
+
         /*
          * Sorting
          */
-        $sortOrder = $this->property('sortOrder');
+        // $sortOrder = $this->property('sortOrder');
 
-        if (in_array($sortOrder, array_keys(Product::$allowedSortingOptions))) {
-            $parts = explode(' ', $sortOrder);
-            if (count($parts) < 2) {
-                array_push($parts, 'desc');
-            }
-            list($sortField, $sortDirection) = $parts;
-            if ($sortField == 'random') {
-                $sortField = DB::raw('RAND()');
-            }
-            $query->orderBy($sortField, $sortDirection);
+        // if (in_array($sortOrder, array_keys(Product::$allowedSortingOptions))) {
+        //     $parts = explode(' ', $sortOrder);
+        //     if (count($parts) < 2) {
+        //         array_push($parts, 'desc');
+        //     }
+        //     list($sortField, $sortDirection) = $parts;
+        //     if ($sortField == 'random') {
+        //         $sortField = DB::raw('RAND()');
+        //     }
+        //     $query->orderBy($sortField, $sortDirection);
+        // }
+
+        // $products = $query->paginate($this->property('productsPerPage'));
+
+    protected function filterByCategory(&$query, $slug)
+    {
+        $category = $this->category = Category::whereSlug($slug)->first();
+
+        if ($category) {
+            $query->whereHas('categories', function($q) use ($category) {
+                $q->whereId($category->id);
+            });
         }
+    }
 
-        $products = $query->paginate($this->property('productsPerPage'));
+    public function filterByList(&$query, $slug)
+    {
+        $list = $this->list = ProductListModel::whereSlug($slug)->first();
 
-        return $products;
+        if ($list) {
+            $query->whereHas('lists', function($q) use ($list) {
+                $q->whereId($list->id);
+            });
+        }
+    }
+
+    protected function filterByBrand(&$query, $slug)
+    {
+        $brand = $this->brand = Brand::whereSlug($slug)->first();
+
+        if ($brand) {
+            $query->whereHas('brand', function($q) use ($brand) {
+                $q->whereId($brand->id);
+            });
+        }
     }
 
     /**

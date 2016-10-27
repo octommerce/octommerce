@@ -54,3 +54,6 @@
 1.0.13:
     - Create wishlist table
     - create_wish_lists_table.php
+1.0.14:
+    - Add Fulltext Index to Products Table
+    - add_fulltext_index_to_products_table.php
