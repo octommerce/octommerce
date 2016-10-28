@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Mail;
+use Event;
 use Model;
 use Carbon\Carbon;
 use Octommerce\Octommerce\Models\City;
@@ -115,6 +116,11 @@ class Order extends Model
         if ($status = OrderStatus::find($statusCode)) {
             OrderStatusLog::createRecord($status, $this);
         }
+
+        /*
+         * Extensibility
+         */
+        Event::fire('order.afterUpdateStatus', [$this, $statusCode]);
     }
 
     public function beforeCreate()
