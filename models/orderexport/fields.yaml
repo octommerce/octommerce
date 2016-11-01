@@ -24,6 +24,7 @@ fields:
             refunded: Refunded
             shipped: Shipped
             void: Void
+            packing: Packing
             waiting: Waiting
     is_expand_product:
         label: Expand Products ?
