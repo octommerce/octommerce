@@ -75,7 +75,9 @@ class Orders extends Controller
         $order = $this->formFindModelObject($recordId);
         $widget = $this->makeStatusFormWidget($order->status->code);
         $data = $widget->getSaveData();
-        OrderStatusLog::createRecord($data['status'], $order, $data['note']);
+
+        $order->updateStatus($data['status'], $data['note']);
+
         Flash::success('Order status updated successfully');
         return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $order->id));
     }

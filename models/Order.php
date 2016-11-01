@@ -111,10 +111,10 @@ class Order extends Model
         });
     }
 
-    public function updateStatus($statusCode)
+    public function updateStatus($statusCode, $note = '')
     {
         if ($status = OrderStatus::find($statusCode)) {
-            OrderStatusLog::createRecord($status, $this);
+            OrderStatusLog::createRecord($status, $this, $note);
         }
 
         /*

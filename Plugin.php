@@ -185,7 +185,9 @@ class Plugin extends PluginBase
             }
 
             if ($newStatusCode) {
-                OrderStatusLog::createRecord($newStatusCode, $invoice->related, $record->comment);
+                //TODO: Check is $invoice->related Order model.
+
+                $invoice->related->updateStatus($newStatusCode, $record->comment);
             }
         });
     }
