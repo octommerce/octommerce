@@ -36,7 +36,7 @@ class OrderExport extends ExportModel
 
             if ($this->status) {
                 $query->whereHas('order', function($query) {
-                    $query->whereStatusCode($this->status);
+                    $query->whereIn('status_code', $this->status);
                 });
             }
 
@@ -126,7 +126,7 @@ class OrderExport extends ExportModel
             }
 
             if($this->status) {
-                $query->whereStatusCode($this->status);
+                $query->whereIn('status_code', $this->status);
             }
 
             $orders = $query->get();
