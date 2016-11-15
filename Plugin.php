@@ -61,6 +61,14 @@ class Plugin extends PluginBase
                 return Currency::format($value);
             });
 
+            $model->addDynamicMethod('getTransactionsAttribute', function($value) {
+                return $value;
+            });
+
+            $model->addDynamicMethod('getLastTransactionAttribute', function($value) {
+                return \Carbon\Carbon::parse($value)->diffForHumans();
+            });
+
         });
 
         /**
@@ -110,6 +118,22 @@ class Plugin extends PluginBase
                         or `octommerce_octommerce_orders`.`status_code` = "packing"
                         or `octommerce_octommerce_orders`.`status_code` = "delivered"
                     ))'
+                ],
+                'transactions' => [
+                    'label'  => 'Transactions',
+                    'select' => '(select count(*) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    and (
+                        `octommerce_octommerce_orders`.`status_code` = "paid"
+                        or `octommerce_octommerce_orders`.`status_code` = "shipped"
+                        or `octommerce_octommerce_orders`.`status_code` = "packing"
+                        or `octommerce_octommerce_orders`.`status_code` = "delivered"
+                    ))'
+                ],
+                'last_transaction' => [
+                    'label'  => 'Last Transaction',
+                    'select' => '(select created_at from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    order by created_at desc limit 1
+                    )'
                 ]
 			]);
         });
