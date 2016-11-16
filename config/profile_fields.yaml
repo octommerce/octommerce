@@ -21,6 +21,10 @@ city:
     dependsOn: state
     span: auto
     
-    
-    
-  
+order_history_section:
+    label: Order History
+    type: section
+
+orders:
+    type: partial
+    path: $/octommerce/octommerce/controllers/users/_order_history.htm

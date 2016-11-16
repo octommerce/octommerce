@@ -82,6 +82,11 @@ class Plugin extends PluginBase
             $form->removeField('surname');
         });
 
+        UsersController::extend(function($users) {
+            $users->implement[] = 'Backend.Behaviors.RelationController';
+            $users->relationConfig = '$/octommerce/octommerce/controllers/users/relationConfig.yaml';
+        });
+
         State::extend(function($model) {
             $model->hasMany['users'] = [
                 'Rainlab\User\Models\User'
