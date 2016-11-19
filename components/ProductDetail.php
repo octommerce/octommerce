@@ -5,6 +5,7 @@ use Octommerce\Octommerce\Models\Product as ProductModel;
 
 class ProductDetail extends ComponentBase
 {
+    public $product;
 
     public function componentDetails()
     {

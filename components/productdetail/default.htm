@@ -1,3 +1,102 @@
-<p>This is the default markup for component ProductDetail</p>
+{% set product = __SELF__.product %}
 
-<small>You can delete this file if you want</small>
+<div class="row">
+	<div class="col-md-5 col-sm-6">
+
+		{% if product.images.count > 0 %}
+		<div>
+			<figure>
+              	<a href="{{ product.images.first.getThumb(500, 500) }}" itemprop="contentUrl" data-size="500x500">
+					<img src="{{ product.images.first.getThumb(500, 500) }}" alt="" class="img-responsive" itemprop="thumbnail">
+				</a>
+			</figure>
+		</div>
+		{% else %}
+		<div>
+			<figure>
+              	<a href="{{ 'assets/images/placeholder-default.png'|theme }}" itemprop="contentUrl" data-size="500x500">
+					<img src="{{ 'assets/images/placeholder-default.png'|theme }}" alt="" class="img-responsive" itemprop="thumbnail">
+				</a>
+			</figure>
+		</div>
+		{% endif %}
+	</div>
+
+	<div class="col-md-7 col-sm-6">
+		<h1>{{ product.name }}</h1>
+
+		<form
+			data-request="cart::onAdd"
+			data-request-data="product_id: {{ product.id }}"
+			data-request-update="'cart': 'header .dropdown-cart'">
+
+			<table class="table table-striped">
+				<tr>
+					<th>SKU</th>
+					<td>{{ product.sku }}</td>
+				</tr>
+				{% if product.brand %}
+				<tr>
+					<th>Brand</th>
+					<td>{{ product.brand.name }}</td>
+				</tr>
+				{% endif %}
+				{% if product.categories|length %}
+				<tr>
+					<th>Categories</th>
+					<td>
+						{% for key,category in product.categories %}
+							{% set key = key+1 %}
+									<a href="{{ 'products/category'|page({slug: category.slug }) }}">{{ category.name }}</a>
+							{% if product.categories|length > 1 and key != product.categories|length %}
+									,
+							{% endif %}
+						{% endfor %}
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+
+			<div>
+				{{ product.description|md }}
+			</div>
+
+
+			<div>
+				<div class="h2 text-danger">
+                    {% if product.sale_price %}
+                    <small class="text-muted"><del>{{ product.price|currency({format: 'short'}) }}</del></small>
+                    {% endif %}
+
+					{{ (product.sale_price ?: product.price)|currency({format: 'short'}) }}
+				</div>
+			</div>
+
+            <div class="mg-t-20">
+
+                {% if product.isAvailable() %}
+
+            	<input type="number" name="qty" class="form-control" value="1" min="1" max="999" pattern="\d+">
+
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+
+                {% if product.is_low_stock %}
+                <p class="text-danger"><em>Hanya tersisa {{ product.qty }}</em></p>
+                {% endif %}
+
+                {% else %}
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="alert alert-danger">Out of Stock</div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <button type="submit" class="btn btn-default">Remind Me</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+		</form>
+	</div>
+</div>
