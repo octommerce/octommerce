@@ -330,6 +330,11 @@ class Product extends Model
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
     }
 
+    public function getPageUrlAttribute()
+    {
+        return CmsPage::url(Settings::get('product_detail_page'), ['slug' => $this->slug]);
+    }
+
     public function getIsDiscountedAttribute()
     {
         if (!is_null($this->sale_price)) {

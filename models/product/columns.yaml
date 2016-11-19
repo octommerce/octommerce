@@ -37,7 +37,7 @@ columns:
         type: number
     is_published:
         label: Is Published
-        type: boolean
+        type: switch
     categories:
         label: Categories
         relation: categories
