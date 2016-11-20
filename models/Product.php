@@ -134,7 +134,7 @@ class Product extends Model
     ];
 
     public $belongsToMany = [
-        'attributes' => [
+        'product_attributes' => [
             'Octommerce\Octommerce\Models\ProductAttribute',
             'table'    => 'octommerce_octommerce_product_product_attribute',
             'otherKey' => 'attribute_id',

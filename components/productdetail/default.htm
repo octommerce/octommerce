@@ -27,8 +27,7 @@
 
 		<form
 			data-request="cart::onAdd"
-			data-request-data="product_id: {{ product.id }}"
-			data-request-update="'cart': 'header .dropdown-cart'">
+			data-request-data="product_id: {{ product.id }}">
 
 			<table class="table table-striped">
 				<tr>
@@ -54,6 +53,14 @@
 						{% endfor %}
 					</td>
 				</tr>
+				{% endif %}
+				{% if product.product_attributes|length %}
+				{% for attribute in product.product_attributes %}
+				<tr>
+					<th>{{ attribute.name }}</th>
+					<td>{{ attribute.pivot.value }}</td>
+				</tr>
+				{% endfor %}
 				{% endif %}
 			</table>
 
