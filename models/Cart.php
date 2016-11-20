@@ -49,6 +49,17 @@ class Cart extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function getCountQtyAttribute()
+    {
+        $count = 0;
+
+        foreach($this->products as $product) {
+            $count += $product->pivot->qty;
+        }
+
+        return $count;
+    }
+
     public function getTotalPriceAttribute()
     {
         $total = 0;

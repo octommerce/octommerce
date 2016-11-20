@@ -1,9 +1,10 @@
 <?php namespace Octommerce\Octommerce\Components;
 
-use Cart as CartHelper;
-use Session;
-use Exception;
 use Auth;
+use Session;
+use Currency;
+use Exception;
+use Cart as CartHelper;
 use Cms\Classes\ComponentBase;
 use Octommerce\Octommerce\Models\Cart as CartModel;
 use Octommerce\Octommerce\Models\Product;
@@ -38,7 +39,8 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Product successfully added to cart.',
-            '.cart-counter' => $cart->products->count(),
+            '.cart-counter' => $cart->count_qty,
+            '.cart-subtotal' => Currency::format($cart->total_price, ['format' => 'short']),
         ];
     }
 
@@ -48,7 +50,8 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Cart is successfully updated.',
-            '.cart-counter' => $cart->products->count(),
+            '.cart-counter' => $cart->count_qty,
+            '.cart-subtotal' => Currency::format($cart->total_price, ['format' => 'short']),
         ];
     }
 
@@ -58,7 +61,8 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Product successfully removed from cart.',
-            '.cart-counter' => $cart->products->count(),
+            '.cart-counter' => $cart->count_qty,
+            '.cart-subtotal' => Currency::format($cart->total_price, ['format' => 'short']),
         ];
     }
 
@@ -68,7 +72,8 @@ class Cart extends ComponentBase
 
         return [
             'result' => 'Cart is successfully cleared.',
-            '.cart-counter' => $cart->products->count(),
+            '.cart-counter' => $cart->count_qty,
+            '.cart-subtotal' => Currency::format($cart->total_price, ['format' => 'short']),
         ];
     }
 
@@ -80,7 +85,8 @@ class Cart extends ComponentBase
         // Calculate stock availibity of every products.
 
         return [
-            '.cart-counter' => $cart->products->count(),
+            '.cart-counter' => $cart->count_qty,
+            '.cart-subtotal' => Currency::format($cart->total_price, ['format' => 'short']),
         ];
     }
 
