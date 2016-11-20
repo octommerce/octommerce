@@ -28,7 +28,7 @@
 		    </div>
 		    <div class="panel-footer">
 	            {% if product.isAvailable() %}
-	            <button data-request="cart::onAdd" data-request-data="product_id: {{ product.id }}" data-request-update="'cart': 'header .dropdown-cart'" class="btn btn-primary btn-block">Add to Cart</button>
+	            <button data-request="cart::onAdd" data-request-data="product_id: {{ product.id }}" class="btn btn-primary btn-block">Add to Cart</button>
 	            {% else %}
 	            <button class="btn btn-danger btn-block" disabled>Out of Stock</button>
 	            {% endif %}

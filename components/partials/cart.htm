@@ -1,0 +1,79 @@
+<div id="cart">
+	{% if cart.products|length %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th colspan="2">Item</th>
+				<th class="text-right">Price</th>
+				<th>Qty</th>
+				<th class="text-right">Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for product in cart.products %}
+			<tr>
+				<td style="width: 40px" class="text-center">
+					<a data-request="cart::onRemove"
+						data-request-data="product_id: {{ product.id }}"
+						data-request-confirm="Are you sure?"
+						data-request-update="'cart::cart': '#cart'"
+						title="Remove"
+						href="#">
+						&times;
+					</a>
+				</td>
+				<td width="60">
+					<img src="{{ product.images.first.getThumb(60, 60, 'crop') }}" alt="" class="img-responsive pull-left">
+				</td>
+				<td>{{ product.name }}</td>
+				<td class="text-right">
+					{{ product.pivot.price|currency({format: 'short'}) }}
+				</td>
+				<td>
+	                <input data-request="cart::onUpdate"
+						data-request-data="product_id: {{ product.id }}"
+						data-request-update="'cart::cart': '#cart'"
+						data-track-input="1000"
+						style="width: 50px"
+						name="qty" type="text" class="form-control" value="{{ product.pivot.qty }}" min="1" max="999" pattern="\d+">
+				</td>
+				<td class="text-right">
+					{{ (product.pivot.price * product.pivot.qty)|currency({format: 'short'}) }}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+		<tfoot>
+			<tr>
+				<th colspan="5">Subtotal</th>
+				<th class="text-right">{{ cart.total_price|currency({format: 'short'}) }}</th>
+			</tr>
+		</tfoot>
+	</table>
+
+	<div class="cart-footer">
+		<table class="table table-cart mg-0">
+			<tbody>
+			</tbody>
+		</table>
+
+		{% if cart.is_allowed_checkout %}
+		<div class="form-group text-right">
+			<a href="{{ settings.checkout_page|page }}" class="btn btn-primary btn-lg">Continue Checkout</a>
+		</div>
+		{% else %}
+		<div class="alert alert-info">
+			You can\'t continue checkout
+		</div>
+		{% endif %}
+
+	</div>
+
+	{% else %}
+	<div>
+		<p class="lead text-muted">Seems you haven't pick any product yet.</p>
+		<a href="{{ settings.products_page|page }}" class="btn btn-default">Browse products</a>
+	</div>
+	{% endif %}
+</div>
