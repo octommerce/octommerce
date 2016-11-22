@@ -1,3 +1,197 @@
-<p>This is the default markup for component Checkout</p>
+<form data-request="{{ __SELF__ ~ '::onSubmit' }}">
+	<div class="row">
+		<div class="col-md-8 col-sm-6">
+			<div class="page-header">
+				<div class="h3">Your Information</div>
+			</div>
 
-<small>You can delete this file if you want</small>
+			{% if user %}
+
+    		<div class="row">
+				<div class="col-md-6">
+					<div class="well">
+						<!-- <div class="panel-body"> -->
+							<h4>
+								{{ user.name }}<br>
+								<small><i class="fa fa-envelope fa-fw"></i> {{ user.email }}</small><br>
+							</h4>
+						<!-- </div> -->
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group is-required">
+						<label for="phone">Phone</label>
+						<input type="tel" id="phone" name="phone" value="{{ user.phone ?: null }}" class="form-control" required>
+					</div>
+				</div>
+			</div>
+			{% else %}
+
+			<div class="row">
+				<div class="col-sm-12 col-md-6 col-md-push-6">
+				</div>
+
+				<div class="col-sm-12 col-md-6 col-md-pull-6">
+					<div class="form-group is-required">
+						<label for="name">Name</label>
+						<input type="text" id="name" name="name" class="form-control" required>
+					</div>
+
+					<div class="form-group is-required">
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" class="form-control" required>
+					</div>
+
+					<div class="form-group is-required">
+						<label for="phone">Phone</label>
+						<input type="tel" id="phone" name="phone" value="{{ user.phone }}" class="form-control" required>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group is-required">
+						<label for="address">Address</label>
+						<textarea cols="30" id="address" name="address" class="form-control" required> {{ user.address }} </textarea>
+					</div>
+
+					<div class="row">
+						<div class="col-md-4 col-sm-12">
+							<div class="form-group is-required">
+								<label for="">State</label>
+                                <select data-request-data="getIdState:''" data-request="onSelectState" data-request-update="citySelect:'#city'" name="state_id" class="form-control select2" id="state" required>
+                                    {% for state in OctommerceAccount.getAllStates %}
+                                    <option {% if(state.id == user.state_id) %}selected{% endif %}
+                                    value="{{ state.id }}">{{ state.name }}</option>
+                                    {% endfor %}
+								</select>
+							</div>
+						</div>
+
+						<div class="col-md-4 col-sm-12">
+							<div class="form-group is-required">
+								<label for="">City</label>
+                                <select name="city_id" class="form-control select2" id="city" required>
+                                    {% for city in cities %}
+                                    <option {% if(city.id == user.city_id) %}selected{% endif %}
+                                    value="{{ city.id }}">{{ city.name }}</option>
+                                    {% endfor %}
+								</select>
+							</div>
+						</div>
+
+						<div class="col-md-4 col-sm-12">
+							<div class="form-group">
+								<label for="">Postal Code</label>
+								<input type="text" name="postcode" value="{{ user.postcode ?: null }}" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-12">
+					<div class="form-group">
+						<div class="checkbox checkbox-primary">
+							<input name="is_same_address" class="styled is-shipping-different" type="checkbox" checked onChange="checkShipping()" id="isSameAddress">
+							<label for="isSameAddress">Send to same address above.</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+<!-- If Shipping Different Address -->
+			<div class="is-shipping-different-form" style="display: none">
+				<div class="page-header">
+					<div class="h3">Shipping Address</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="">Receiver Name</label>
+							<input type="text" name="shipping_name" class="form-control">
+						</div>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="">Phone</label>
+							<input type="tel" name="shipping_phone" class="form-control">
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="">Address</label>
+					<textarea cols="30" name="shipping_address" class="form-control"></textarea>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4 col-sm-12">
+						<div class="form-group">
+                            <label for="state">State</label>
+                            <select data-request-data="getIdState:''" data-request="onSelectShippingState" data-request-update="shippingCitySelect:'#shippingCity'" name="shipping_state_id" class="form-control select2" id="state">
+                                <option value="">- Select State -</option>
+                                {% for state in OctommerceAccount.getAllStates %}
+                                <option
+                                value="{{ state.id }}">{{ state.name }}</option>
+                                {% endfor %}
+                            </select>
+						</div>
+					</div>
+
+					<div class="col-md-4 col-sm-12">
+						<div class="form-group">
+							<label for="">City</label>
+                            <select name="shipping_city_id" class="form-control select2" id="shippingCity">
+                                <option value="">- Select City -</option>
+                                {% for city in shippingCities %}
+                                <option {% if(city.id == user.city_id) %}selected{% endif %}
+                                value="{{ city.id }}">{{ city.name }}</option>
+                                {% endfor %}
+                            </select>
+						</div>
+					</div>
+
+					<div class="col-md-4 col-sm-12">
+						<div class="form-group">
+							<label for="">Postal Code</label>
+							<input type="text" name="shipping_postcode" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 col-sm-6">
+			<div class="panel panel-summary panel-default">
+				<div class="panel-heading">
+					<div class="h4">Summary</div>
+				</div>
+
+				<div class="panel-body">
+
+				</div>
+
+				<div class="panel-footer">
+
+                	<div class="form-group">
+						<label for="">Have coupon code?</label>
+                        <div class="input-group">
+                            <input type="text" name="code" placeholder="Kode promo" class="form-control">
+                            <span class="input-group-btn">
+                                <button data-request="couponValidator::onCheck" data-request-update="'checkout/sidebar': '.panel-summary .panel-body'" class="btn btn-default" type="submit">Check</button>
+                            </span>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+						<button class="btn btn-block btn-lg btn-primary">Continue to Payment</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
