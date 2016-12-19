@@ -1,4 +1,7 @@
 fields:
+    page_url@update:
+        type: partial
+        path: $/octommerce/octommerce/controllers/products/_preview_link.htm
     name:
         label: Name
         span: auto
