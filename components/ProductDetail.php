@@ -55,6 +55,7 @@ class ProductDetail extends ComponentBase
             ->whereIsPublished(1)
             ->with('categories')
             ->with('lists')
+            ->with('cross_sells')
             ->with('reviews')
             ->first();
 
