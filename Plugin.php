@@ -116,7 +116,7 @@ class Plugin extends PluginBase
 			$widget->addColumns([
                 'spend' => [
                     'label'  => 'Spend',
-                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id` 
+                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
                     and (
                         `octommerce_octommerce_orders`.`status_code` = "paid"
                         or `octommerce_octommerce_orders`.`status_code` = "shipped"
@@ -236,6 +236,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
             'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
+            'Octommerce\Octommerce\Components\CategoryList'  => 'categoryList',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
             'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
