@@ -172,21 +172,28 @@
 				</div>
 
 				<div class="panel-body">
-
+					<table class="table">
+						<tbody>
+							{% for product in cart.cart.products %}
+							<tr>
+								<td>
+									<strong>{{ product.name }}</strong><br>
+									<small>{{ product.pivot.qty }} x {{ product.pivot.price }}</small>
+								</td>
+								<td align="right" class="text-right">{{ (product.pivot.qty * product.pivot.price)|currency({format: 'short'}) }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th>Total</th>
+								<th align="right" class="text-right">{{ cart.cart.total_price|currency({format: 'short'}) }}</th>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
 
 				<div class="panel-footer">
-
-                	<div class="form-group">
-						<label for="">Have coupon code?</label>
-                        <div class="input-group">
-                            <input type="text" name="code" placeholder="Kode promo" class="form-control">
-                            <span class="input-group-btn">
-                                <button data-request="couponValidator::onCheck" data-request-update="'checkout/sidebar': '.panel-summary .panel-body'" class="btn btn-default" type="submit">Check</button>
-                            </span>
-                        </div>
-                    </div>
-
 					<div class="form-group">
 						<button class="btn btn-block btn-lg btn-primary">Continue to Payment</button>
 					</div>
