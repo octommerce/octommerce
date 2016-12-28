@@ -21,6 +21,10 @@ fields:
         span: auto
         type: relation
         emptyOption: -- None --
+    tags:
+        label: Tags
+        type: taglist
+        mode: relation
 tabs:
     fields:
         price:
