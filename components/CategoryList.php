@@ -1,5 +1,7 @@
 <?php namespace Octommerce\Octommerce\Components;
 
+use Db;
+use Cms\Classes\Page;
 use Octommerce\Octommerce\Models\Category;
 use Cms\Classes\ComponentBase;
 
@@ -10,50 +12,82 @@ class CategoryList extends ComponentBase
      */
     public $categories;
 
+    /**
+     * @var string Reference to the page name for linking to categories.
+     */
+    public $categoryPage;
+
+    /**
+     * @var string Reference to the current category slug.
+     */
+    public $currentCategorySlug;
+
     public function componentDetails()
     {
         return [
-            'name'        => 'categoryList Component',
-            'description' => 'No description provided yet...'
+            'name'        => 'octommerce.octommerce::lang.component.category_list.name',
+            'description' => 'octommerce.octommerce::lang.component.category_list.description'
         ];
     }
 
-    // public function defineProperties()
-    // {
-    //     return [
-    //         'slug' => [
-    //             'title'       => 'Slug',
-    //             'default'     => '{{ :slug }}',
-    //             'type'        => 'string'
-    //         ],
-    //         'displayEmpty' => [
-    //             'title'       => 'rainlab.blog::lang.settings.category_display_empty',
-    //             'description' => 'rainlab.blog::lang.settings.category_display_empty_description',
-    //             'type'        => 'checkbox',
-    //             'default'     => 0
-    //         ],
-    //         'categoryPage' => [
-    //             'title'       => 'rainlab.blog::lang.settings.category_page',
-    //             'description' => 'rainlab.blog::lang.settings.category_page_description',
-    //             'type'        => 'dropdown',
-    //             'default'     => 'blog/category',
-    //             'group'       => 'Links',
-    //         ],
-    //     ];
-    // }
+    public function defineProperties()
+    {
+        return [
+            /* 'slug' => [ */
+            /*     'title'       => 'octommerce.octommerce::lang.component.category_list.param.slug', */
+            /*     'description' => 'octommerce.octommerce::lang.component.category_list.param.slug_description', */
+            /*     'default'     => '{{ :slug }}', */
+            /*     'type'        => 'string' */
+            /* ], */
+            'displayEmpty' => [
+                'title'       => 'octommerce.octommerce::lang.component.category_list.param.display_empty',
+                'description' => 'octommerce.octommerce::lang.component.category_list.param.display_empty_description',
+                'type'        => 'checkbox',
+                'default'     => 0
+            ],
+            'categoryPage' => [
+                'title'       => 'octommerce.octommerce::lang.component.category_list.param.category_page',
+                'description' => 'octommerce.octommerce::lang.component.category_list.param.category_page_description',
+                'type'        => 'dropdown',
+                'default'     => 'blog/category',
+                'group'       => 'Links',
+            ],
+        ];
+    }
+
+    public function getCategoryPageOptions()
+    {
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    }
 
     public function onRun()
     {
-        // $this->currentCategorySlug = $this->page['currentCategorySlug'] = $this->property('slug');
-        // $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
+        $this->currentCategorySlug = $this->page['currentCategorySlug'] = $this->property('slug');
+        $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
         $this->categories = $this->page['categories'] = $this->loadCategories();
     }
 
     protected function loadCategories()
     {
-        $categories = Category::orderBy('name')->getNested();
+        $categories = Category::orderBy('name');
 
-        return $categories;
+        if (!$this->property('displayEmpty')) {
+            $categories->whereExists(function($query) {
+                $prefix = Db::getTablePrefix();
+
+                $query
+                    ->select(Db::raw(1))
+                    ->from('octommerce_octommerce_category_product')
+                    ->join('octommerce_octommerce_products', 'octommerce_octommerce_products.id', '=', 'octommerce_octommerce_category_product.product_id')
+                    ->whereNotNull('octommerce_octommerce_products.is_published')
+                    ->where('octommerce_octommerce_products.is_published', '=', 1)
+                    ->whereRaw($prefix.'octommerce_octommerce_categories.id = '.$prefix.'octommerce_octommerce_category_product.category_id')
+                ;
+            });
+        }
+
+        $categories = $categories->getNested();
+
         /*
          * Add a "url" helper attribute for linking to each category
          */
