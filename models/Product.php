@@ -181,6 +181,10 @@ class Product extends Model
             'table' => 'octommerce_octommerce_product_product_list',
             'otherKey' => 'list_id',
         ],
+        'tags' => [
+            'Octommerce\Octommerce\Models\Tag',
+            'table' => 'octommerce_octommerce_product_tag'
+        ]
     ];
 
     public $morphTo = [];

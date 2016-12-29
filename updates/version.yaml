@@ -57,3 +57,6 @@
 1.0.14:
     - Add Fulltext Index to Products Table
     - add_fulltext_index_to_products_table.php
+1.0.15:
+    - Create tags table
+    - create_tags_table.php
