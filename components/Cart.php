@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use Auth;
+use Flash;
 use Session;
 use Currency;
 use Exception;
@@ -41,6 +42,8 @@ class Cart extends ComponentBase
 
         $this->page['settings'] = Settings::instance();
 
+        Flash::success('Product successfully added to cart.');
+
         return [
             'result' => 'Product successfully added to cart.',
             '.cart-counter' => $cart->count_qty,
@@ -53,6 +56,8 @@ class Cart extends ComponentBase
         $cart = $this->page['cart'] = CartHelper::updateItem(post('product_id'), post('qty'));
 
         $this->page['settings'] = Settings::instance();
+
+        Flash::success('Cart is successfully updated.');
 
         return [
             'result' => 'Cart is successfully updated.',
@@ -67,6 +72,8 @@ class Cart extends ComponentBase
 
         $this->page['settings'] = Settings::instance();
 
+        Flash::success('Product successfully removed from cart.');
+
         return [
             'result' => 'Product successfully removed from cart.',
             '.cart-counter' => $cart->count_qty,
@@ -79,6 +86,8 @@ class Cart extends ComponentBase
         $cart = $this->page['cart'] = CartHelper::clear();
 
         $this->page['settings'] = Settings::instance();
+
+        Flash::success('Cart is successfully cleared.');
 
         return [
             'result' => 'Cart is successfully cleared.',
