@@ -24,11 +24,11 @@
 	            {% if product.sale_price %}
 	            <span class="text-muted"><del><small>{{ product.price|currency({format: 'short'}) }}</small></del></span>
 	            {% endif %}
-	            <span class="text-success"><strong>{{ (product.sale_price ?: product.price)|currency({format: 'short'}) }}</strong></span>
+	            <span><strong>{{ (product.sale_price ?: product.price)|currency({format: 'short'}) }}</strong></span>
 		    </div>
 		    <div class="panel-footer">
 	            {% if product.isAvailable() %}
-	            <button data-request="cart::onAdd" data-request-data="product_id: {{ product.id }}" class="btn btn-primary btn-block">Add to Cart</button>
+	            <button data-request="cart::onAdd" data-request-data="product_id: {{ product.id }}" class="btn btn-primary btn-block" data-request-flash data-attach-loading>Add to Cart</button>
 	            {% else %}
 	            <button class="btn btn-danger btn-block" disabled>Out of Stock</button>
 	            {% endif %}

@@ -1,4 +1,4 @@
-<form data-request="{{ __SELF__ ~ '::onSubmit' }}">
+<form data-request="{{ __SELF__ ~ '::onSubmit' }}" data-request-flash>
 	<div class="row">
 		<div class="col-md-8 col-sm-6">
 			<div class="page-header">
@@ -195,7 +195,7 @@
 
 				<div class="panel-footer">
 					<div class="form-group">
-						<button class="btn btn-block btn-lg btn-primary">Continue to Payment</button>
+						<button class="btn btn-block btn-lg btn-primary" data-attach-loading>Continue to Payment</button>
 					</div>
 				</div>
 			</div>

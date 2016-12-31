@@ -27,7 +27,8 @@
 
 		<form
 			data-request="cart::onAdd"
-			data-request-data="product_id: {{ product.id }}">
+			data-request-data="product_id: {{ product.id }}"
+			data-request-flash>
 
 			<table class="table table-striped">
 				<tr>
@@ -85,22 +86,14 @@
 
             	<input type="number" name="qty" class="form-control" value="1" min="1" max="999" pattern="\d+">
 
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                <button type="submit" class="btn btn-primary" data-attach-loading>Add to Cart</button>
 
                 {% if product.is_low_stock %}
                 <p class="text-danger"><em>Hanya tersisa {{ product.qty }}</em></p>
                 {% endif %}
 
                 {% else %}
-                <div class="row">
-                    <div class="col-sm-6 col-md-4">
-                        <div class="alert alert-danger">Out of Stock</div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-6">
-                        <button type="submit" class="btn btn-default">Remind Me</button>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-primary" disabled>Out of Stock</button>
                 {% endif %}
             </div>
 
