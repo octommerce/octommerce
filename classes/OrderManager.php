@@ -75,7 +75,7 @@ class OrderManager
 
             Db::commit();
 
-            $order = Order::find($order->id);
+            $order = $order->reload();
 
             $invoice = Invoice::create([
                 'user_id'      => $user->id,
