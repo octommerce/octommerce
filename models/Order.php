@@ -73,10 +73,6 @@ class Order extends Model
         'state' => 'RainLab\Location\Models\State',
         'shipping_city' => 'Octommerce\Octommerce\Models\City',
         'shipping_state' => 'RainLab\Location\Models\State',
-        'payment_confirmation' => ['Marthatilaar\Payment\Models\PaymentConfirmation',
-            'key'      => 'order_no',
-            'otherKey' => 'order_no'
-        ],
     ];
     public $belongsToMany = [
         'products' => [

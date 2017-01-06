@@ -91,9 +91,6 @@ class Plugin extends PluginBase
             $model->hasMany['users'] = [
                 'Rainlab\User\Models\User'
             ];
-            $model->hasMany['stores'] = [
-                'Marthatilaar\Core\Models\Store'
-            ];
 
             $model->hasMany['cities'] = [
                 'Octommerce\Octommerce\Models\City'
