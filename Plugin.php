@@ -78,7 +78,7 @@ class Plugin extends PluginBase
             if(!$model instanceof User) return;
             $configFile = __DIR__ .'/config/profile_fields.yaml';
             $config = Yaml::parse(File::get($configFile));
-            $form->addFields($config);
+            $form->addTabFields($config);
             $form->removeField('surname');
         });
 
