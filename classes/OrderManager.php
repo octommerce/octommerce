@@ -116,6 +116,12 @@ class OrderManager
 
             $order->invoices()->add($invoice);
 
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.afterAddInvoice', [$order, $invoice]);
+            Event::fire('order.afterAddInvoice', [$order, $invoice]);
+
             $invoice->save();
 
             $order->save();
