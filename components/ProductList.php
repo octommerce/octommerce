@@ -12,13 +12,13 @@ use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
 {
-    public $searchQuery;
-    public $category;
-    public $categories;
     public $list;
     public $brand;
+    public $category;
     public $products;
+    public $categories;
     public $filterList;
+    public $searchQuery;
 
     public function componentDetails()
     {
@@ -174,6 +174,10 @@ class ProductList extends ComponentBase
 
         $this->filterList = $this->getFilterList($query);
 
+        if ($this->property('sortOrder')) {
+            $this->sortProducts($query, $this->property('sortOrder'));
+        }
+
         return $query->paginate($this->property('productsPerPage'));
     }
 
@@ -259,25 +263,6 @@ class ProductList extends ComponentBase
         }
     }
 
-        /*
-         * Sorting
-         */
-        // $sortOrder = $this->property('sortOrder');
-
-        // if (in_array($sortOrder, array_keys(Product::$allowedSortingOptions))) {
-        //     $parts = explode(' ', $sortOrder);
-        //     if (count($parts) < 2) {
-        //         array_push($parts, 'desc');
-        //     }
-        //     list($sortField, $sortDirection) = $parts;
-        //     if ($sortField == 'random') {
-        //         $sortField = DB::raw('RAND()');
-        //     }
-        //     $query->orderBy($sortField, $sortDirection);
-        // }
-
-        // $products = $query->paginate($this->property('productsPerPage'));
-
     protected function filterByCategory(&$query, $slug)
     {
         $category = $this->category = Category::whereSlug($slug)->first();
@@ -308,6 +293,36 @@ class ProductList extends ComponentBase
             $query->whereHas('brand', function($q) use ($brand) {
                 $q->whereId($brand->id);
             });
+        }
+    }
+
+    public function sortProducts(&$query, $sortOrder)
+    {
+        if (in_array($sortOrder, array_keys(Product::$allowedSortingOptions))) {
+            $sortOrderArray = explode(" ", $sortOrder);
+
+            if ($sortOrder == 'random') {
+                $query->orderByRaw("RAND()");
+            } elseif ($sortOrderArray[0] == 'sales') {
+
+                // order by product sold qty for the last 30 days
+                $query->join(DB::raw("
+                    (
+                        select product_id, sum(qty) as sold
+                        from octommerce_octommerce_order_product
+                        where order_id in
+                        (
+                            select id from octommerce_octommerce_orders
+                            where DATEDIFF(NOW(), created_at) <= 30
+                            and status_code NOT IN (\"expired\", \"waiting\")
+                        )
+                        group by product_id order by sold ". $sortOrderArray[1] ."
+                    ) op
+                    "), 'octommerce_octommerce_products.id', '=', 'op.product_id');
+
+            } else {
+                $query->orderBy($sortOrderArray[0], $sortOrderArray[1]);
+            }
         }
     }
 

@@ -53,15 +53,17 @@ class Product extends Model
      * @var array
      */
     public static $allowedSortingOptions = array(
-        'name asc' => 'Name (ascending)',
-        'name desc' => 'Name (descending)',
-        'created_at asc' => 'Created (ascending)',
+        'name asc'        => 'Name (ascending)',
+        'name desc'       => 'Name (descending)',
+        'created_at asc'  => 'Created (ascending)',
         'created_at desc' => 'Created (descending)',
-        'price asc' => 'Price (ascending)',
-        'price desc' => 'Price (descending)',
-        'random' => 'Random',
-        'sort_order asc' => 'Reordered (ascending)',
-        'sort_order desc' => 'Reordered (descending)'
+        'price asc'       => 'Price (ascending)',
+        'price desc'      => 'Price (descending)',
+        'random'          => 'Random',
+        'sort_order asc'  => 'Reordered (ascending)',
+        'sort_order desc' => 'Reordered (descending)',
+        'sales asc'  => 'Sales (ascending)',
+        'sales desc' => 'Sales (descending)'
     );
 
     /**
@@ -71,10 +73,10 @@ class Product extends Model
      */
     protected $searchable = [
         'columns' => [
-            'octommerce_octommerce_products.name' => 10,
-            'octommerce_octommerce_products.keywords' => 8,
-            'octommerce_octommerce_brands.name' => 5,
-            'octommerce_octommerce_products.sku' => 5,
+            'octommerce_octommerce_products.name'        => 10,
+            'octommerce_octommerce_products.keywords'    => 8,
+            'octommerce_octommerce_brands.name'          => 5,
+            'octommerce_octommerce_products.sku'         => 5,
             'octommerce_octommerce_products.description' => 2,
         ],
         'joins' => [
@@ -134,7 +136,7 @@ class Product extends Model
     ];
 
     public $belongsToMany = [
-        'attributes' => [
+        'product_attributes' => [
             'Octommerce\Octommerce\Models\ProductAttribute',
             'table'    => 'octommerce_octommerce_product_product_attribute',
             'otherKey' => 'attribute_id',
@@ -149,13 +151,13 @@ class Product extends Model
         'up_sells' => [
             'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_product_up_sell',
-            'key' => 'up_sell_id',
+            'key'   => 'up_sell_id',
         ],
 
         'cross_sells' => [
             'Octommerce\Octommerce\Models\Product',
             'table' => 'octommerce_octommerce_product_cross_sell',
-            'key' => 'cross_sell_id',
+            'key'   => 'cross_sell_id',
         ],
 
         'carts' => [
@@ -181,6 +183,10 @@ class Product extends Model
             'table' => 'octommerce_octommerce_product_product_list',
             'otherKey' => 'list_id',
         ],
+        'tags' => [
+            'Octommerce\Octommerce\Models\Tag',
+            'table' => 'octommerce_octommerce_product_tag'
+        ]
     ];
 
     public $morphTo = [];
@@ -190,7 +196,7 @@ class Product extends Model
 
     public $attachMany = [
         'images' => ['System\Models\File'],
-        'files' => ['System\Models\File'],
+        'files'  => ['System\Models\File'],
     ];
 
     public function __construct()
@@ -328,6 +334,11 @@ class Product extends Model
     public function inList($listSlug)
     {
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
+    }
+
+    public function getPageUrlAttribute()
+    {
+        return Settings::get('product_detail_page') ? CmsPage::url(Settings::get('product_detail_page'), ['slug' => $this->slug]) : null;
     }
 
     public function getIsDiscountedAttribute()
