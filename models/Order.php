@@ -73,10 +73,6 @@ class Order extends Model
         'state' => 'RainLab\Location\Models\State',
         'shipping_city' => 'Octommerce\Octommerce\Models\City',
         'shipping_state' => 'RainLab\Location\Models\State',
-        'payment_confirmation' => ['Marthatilaar\Payment\Models\PaymentConfirmation',
-            'key'      => 'order_no',
-            'otherKey' => 'order_no'
-        ],
     ];
     public $belongsToMany = [
         'products' => [
@@ -208,7 +204,7 @@ class Order extends Model
         } else {
             $this->rules['shipping_name']     = 'required';
             $this->rules['shipping_phone']    = 'required';
-            $this->rules['shipping_company']  = 'required';
+            $this->rules['shipping_company']  = '';
             $this->rules['shipping_address']  = 'required';
             $this->rules['shipping_city_id']  = 'required';
             $this->rules['shipping_state_id'] = 'required';

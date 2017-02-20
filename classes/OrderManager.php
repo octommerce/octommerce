@@ -75,7 +75,7 @@ class OrderManager
 
             Db::commit();
 
-            $order = Order::find($order->id);
+            $order = $order->reload();
 
             $invoice = Invoice::create([
                 'user_id'      => $user->id,
@@ -115,6 +115,12 @@ class OrderManager
             }
 
             $order->invoices()->add($invoice);
+
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.afterAddInvoice', [$order, $invoice]);
+            Event::fire('order.afterAddInvoice', [$order, $invoice]);
 
             $invoice->save();
 

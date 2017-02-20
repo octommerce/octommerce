@@ -5,6 +5,7 @@ use Octommerce\Octommerce\Models\Product as ProductModel;
 
 class ProductDetail extends ComponentBase
 {
+    public $product;
 
     public function componentDetails()
     {
@@ -54,6 +55,7 @@ class ProductDetail extends ComponentBase
             ->whereIsPublished(1)
             ->with('categories')
             ->with('lists')
+            ->with('cross_sells')
             ->with('reviews')
             ->first();
 

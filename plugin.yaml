@@ -45,6 +45,8 @@ navigation:
         label: Commerce
         url: octommerce/octommerce/orders
         icon: icon-shopping-cart
+        permissions:
+            - octommerce.octommerce.access_orders
         order: '310'
         sideMenu:
             orders:

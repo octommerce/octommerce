@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use Auth;
+use Flash;
 use Cms\Classes\Page;
 use Cms\Classes\CodeBase;
 use Cms\Classes\ComponentBase;
@@ -36,24 +37,28 @@ class Wishlist extends ComponentBase
 
     public function onRun()
     {
-        $this->page['userWishlist'] = $this->userWishlist = Auth::check() ? $this->wishlistManager->showUserWishlist(Auth::getUser()->id) : []; 
+        $this->page['userWishlist'] = $this->userWishlist = Auth::check() ? $this->wishlistManager->showUserWishlist(Auth::getUser()->id) : [];
     }
 
     public function onAddWishlist()
     {
         if(Auth::check()) {
-            $wishlist = $this->wishlistManager->add(post('productSKU')); 
-            return "You have add ".$wishlist->name." into your wishlist.";
+            $wishlist = $this->wishlistManager->add(post('productSKU'));
+
+            Flash::success($wishlist->name.' has been added to your wishlist.');
+            return $wishlist->name.' has been added to your wishlist.';
         } else {
-            throw new \ApplicationException("Sorry, you should be logged in first if you want to fill your wishlist.");
+            throw new \ApplicationException('Sorry, you should be logged in first if you want to fill your wishlist.');
         }
-    } 
+    }
 
     public function onRemoveWishlist()
     {
        if(Auth::check()) {
             $wishlist = $this->wishlistManager->remove(post('wishlistId'));
-            return "The wishlist has been removed.";
+
+            Flash::success('Wishlist has been removed');
+            return 'Wishlist has been removed.';
        }
     }
 

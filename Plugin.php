@@ -61,6 +61,14 @@ class Plugin extends PluginBase
                 return Currency::format($value);
             });
 
+            $model->addDynamicMethod('getTransactionsAttribute', function($value) {
+                return $value;
+            });
+
+            $model->addDynamicMethod('getLastTransactionAttribute', function($value) {
+                return \Carbon\Carbon::parse($value)->diffForHumans();
+            });
+
         });
 
         /**
@@ -70,16 +78,18 @@ class Plugin extends PluginBase
             if(!$model instanceof User) return;
             $configFile = __DIR__ .'/config/profile_fields.yaml';
             $config = Yaml::parse(File::get($configFile));
-            $form->addFields($config);
+            $form->addTabFields($config);
             $form->removeField('surname');
+        });
+
+        UsersController::extend(function($users) {
+            $users->implement[] = 'Backend.Behaviors.RelationController';
+            $users->relationConfig = '$/octommerce/octommerce/controllers/users/relationConfig.yaml';
         });
 
         State::extend(function($model) {
             $model->hasMany['users'] = [
                 'Rainlab\User\Models\User'
-            ];
-            $model->hasMany['stores'] = [
-                'Marthatilaar\Core\Models\Store'
             ];
 
             $model->hasMany['cities'] = [
@@ -103,13 +113,29 @@ class Plugin extends PluginBase
 			$widget->addColumns([
                 'spend' => [
                     'label'  => 'Spend',
-                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id` 
+                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
                     and (
                         `octommerce_octommerce_orders`.`status_code` = "paid"
                         or `octommerce_octommerce_orders`.`status_code` = "shipped"
                         or `octommerce_octommerce_orders`.`status_code` = "packing"
                         or `octommerce_octommerce_orders`.`status_code` = "delivered"
                     ))'
+                ],
+                'transactions' => [
+                    'label'  => 'Transactions',
+                    'select' => '(select count(*) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    and (
+                        `octommerce_octommerce_orders`.`status_code` = "paid"
+                        or `octommerce_octommerce_orders`.`status_code` = "shipped"
+                        or `octommerce_octommerce_orders`.`status_code` = "packing"
+                        or `octommerce_octommerce_orders`.`status_code` = "delivered"
+                    ))'
+                ],
+                'last_transaction' => [
+                    'label'  => 'Last Transaction',
+                    'select' => '(select created_at from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    order by created_at desc limit 1
+                    )'
                 ]
 			]);
         });
@@ -207,6 +233,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
             'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
+            'Octommerce\Octommerce\Components\CategoryList'  => 'categoryList',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
             'Octommerce\Octommerce\Components\OrderList'     => 'orderList',

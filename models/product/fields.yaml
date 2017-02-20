@@ -1,4 +1,7 @@
 fields:
+    page_url@update:
+        type: partial
+        path: $/octommerce/octommerce/controllers/products/_preview_link.htm
     name:
         label: Name
         span: auto
@@ -18,6 +21,10 @@ fields:
         span: auto
         type: relation
         emptyOption: -- None --
+    tags:
+        label: Tags
+        type: taglist
+        mode: relation
 tabs:
     fields:
         price:
@@ -60,24 +67,10 @@ tabs:
             span: auto
             type: relation
             tab: Information
-        # attributes:
-        #     type: partial
-        #     path: $/octommerce/octommerce/controllers/products/_relation_attributes.htm
-        #     tab: Attributes
-        # attributes:
-        #     type: repeater
-        #     # form: $/octommerce/octommerce/models/productattribute/fields_relation_product.yaml
-        #     form:
-        #         fields:
-        #             attribute_id:
-        #                 label: Attribute
-        #                 type: dropdown
-        #                 span: auto
-        #             value:
-        #                 label: Value
-        #                 type: text
-        #                 span: auto
-        #     tab: Attributes
+        product_attributes:
+            type: partial
+            path: $/octommerce/octommerce/controllers/products/_relation_attributes.htm
+            tab: Attributes
         categories:
             tab: Categories & Lists
             type: relation

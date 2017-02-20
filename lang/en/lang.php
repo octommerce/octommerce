@@ -36,5 +36,18 @@
                 'id_param_desc' => 'The URL route parameter used for looking up the product by its slug.',
             ],
         ],
+    	'category_list' => [
+            'name' => 'Category List',
+            'description' => 'Display a list of categories',
+            'param' => [
+                'isplay_empty_description' => 'Show categories that do not have any products.',
+                'slug' => 'Category slug',
+                'slug_description' => "Look up the blog category using the supplied slug value. This property is used by the default component partial for marking the currently active category.",
+                'display_empty' => 'Display empty categories',
+                'display_empty_description' => 'Show categories that do not have any posts.',
+                'category_page' => 'Category page',
+                'category_page_description' => 'Name of the category page file for the category links. This property is used by the default component partial.',
+            ],
+        ],
     ],
 ];

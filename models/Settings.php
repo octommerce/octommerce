@@ -1,6 +1,8 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
 
 /**
  * Settings Model
@@ -32,5 +34,26 @@ class Settings extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+
+    public function getProductsPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getCategoryPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getProductDetailPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getCartPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getCheckoutPageOptions() {
+        return Page::getNameList();
+    }
 
 }
