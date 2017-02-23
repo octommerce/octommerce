@@ -146,10 +146,7 @@ class ProductList extends ComponentBase
 
     public function listProducts()
     {
-        $query = Product::whereIsPublished(1)
-            ->with('categories')
-            ->with('brand')
-            ->with('lists');
+        $query = Product::with(['categories', 'brand', 'lists'])->published();
 
         //
         // Filtering
@@ -254,12 +251,16 @@ class ProductList extends ComponentBase
 
         if ($searchQuery) {
 
-            // Fulltext Search
-            $query->whereRaw('MATCH (octommerce_octommerce_products.name) AGAINST (? IN NATURAL LANGUAGE MODE)', [$searchQuery]);
-
+            // Simple search
             // $query->where(function($q) use ($searchQuery) {
             //     $q->where('octommerce_octommerce_products.name', 'like', '%' . $searchQuery . '%');
             // });
+
+            // Fulltext Search
+            // $query->whereRaw('MATCH (octommerce_octommerce_products.name) AGAINST (? IN NATURAL LANGUAGE MODE)', [$searchQuery]);
+
+            // Using searchable trait
+            $query->search($searchQuery);
         }
     }
 

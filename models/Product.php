@@ -62,8 +62,8 @@ class Product extends Model
         'random'          => 'Random',
         'sort_order asc'  => 'Reordered (ascending)',
         'sort_order desc' => 'Reordered (descending)',
-        'sales asc'  => 'Sales (ascending)',
-        'sales desc' => 'Sales (descending)'
+        'sales asc'       => 'Sales (ascending)',
+        'sales desc'      => 'Sales (descending)'
     );
 
     /**
@@ -288,7 +288,7 @@ class Product extends Model
 
     public function scopePublished($query)
     {
-        return $query->whereIsPublished(1);
+        return $query->where('octommerce_octommerce_products.is_published', true);
     }
 
     public function isAvailable($qty = 1)

@@ -10,6 +10,8 @@ class AddFulltextIndexToProductsTable extends Migration
 
     public function up()
     {
+        return; // Comment this line if you want to use fulltext search
+
         try {
             DB::statement('ALTER TABLE octommerce_octommerce_products ADD FULLTEXT (name)');
             DB::statement('ALTER TABLE octommerce_octommerce_products ADD FULLTEXT (description)');
@@ -22,6 +24,8 @@ class AddFulltextIndexToProductsTable extends Migration
 
     public function down()
     {
+        return; // Comment this line if you want to use fulltext search
+
         try {
             Schema::table('octommerce_octommerce_products', function($table) {
                 $table->dropIndex(['name', 'description', 'sku', 'keywords']);
