@@ -73,6 +73,9 @@ class Cart extends Model
 
     public function getIsAllowedCheckoutAttribute()
     {
+        if (! $this->count_qty)
+            return false;
+
         return $this->total_price >= Settings::get('checkout_min_subtotal', 0);
     }
 
