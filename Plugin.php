@@ -232,7 +232,6 @@ class Plugin extends PluginBase
         return [
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
-            'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
             'Octommerce\Octommerce\Components\CategoryList'  => 'categoryList',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
