@@ -29,13 +29,13 @@ tabs:
     fields:
         price:
             tab: Information
-            type: number
+            type: currency
             label: Price
             span: left
             placeholder: '0.00'
         sale_price:
             tab: Information
-            type: number
+            type: currency
             label: 'Sale Price'
             span: right
         discount_type:
@@ -64,6 +64,16 @@ tabs:
             oc.commentPosition: ''
             nameFrom: name
             descriptionFrom: description
+            emptyOption: 'No Tax'
+            span: auto
+            type: relation
+            tab: Information
+        currency:
+            label: Currency
+            oc.commentPosition: ''
+            nameFrom: currency_code
+            descriptionFrom: name
+            emptyOption: '-- Default --'
             span: auto
             type: relation
             tab: Information

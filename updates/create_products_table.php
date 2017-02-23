@@ -41,7 +41,7 @@ class CreateProductsTable extends Migration
 
             // price
             $table->decimal('price', 12, 2)->unsigned()->default('0.00');
-            $table->integer('currency_code')->unsigned()->nullable();
+            $table->string('currency_code', 10)->nullable();
 
             // discount
             $table->enum('discount_type', ['percent', 'price', 'shipping_percent', 'shipping_price'])->nullable();

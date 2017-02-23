@@ -112,9 +112,7 @@ class Product extends Model
     /**
      * @var array Relations
      */
-    public $hasOne = [
-        'currency' => 'Octommerce\Octommerce\Models\Currency',
-    ];
+    public $hasOne = [];
 
     public $hasMany = [
         'variations' => [
@@ -132,7 +130,12 @@ class Product extends Model
         'tax' => 'Octommerce\Octommerce\Models\Tax',
         'brand' => [
             'Octommerce\Octommerce\Models\Brand'
-        ]
+        ],
+        'currency' => [
+            'Octommerce\Octommerce\Models\Currency',
+            'key' => 'currency_code',
+            'otherKey' => 'currency_code',
+        ],
     ];
 
     public $belongsToMany = [
