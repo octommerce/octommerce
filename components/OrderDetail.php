@@ -31,17 +31,22 @@ class OrderDetail extends ComponentBase
     public function onRun()
     {
         if (! Auth::check()) {
-            return 404;
+            return $this->controller->run('404');
         }
 
         $this->order = $order = $this->getOrder();
+
+        if (! $order) {
+            return $this->controller->run('404');
+        }
     }
 
     protected function getOrder()
     {
         $user = Auth::getUser();
 
-        return Order::whereOrderNo($this->property('order_no'))
+        return Order::with(['user', 'status_logs', 'products'])
+            ->whereOrderNo($this->property('order_no'))
             ->whereUserId($user->id)
             ->first();
     }
