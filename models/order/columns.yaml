@@ -35,11 +35,6 @@ columns:
         searchable: false
         invisible: true
         type: number
-    unique_number:
-        label: Unique Number
-        type: partial
-        path: $/octommerce/octommerce/controllers/orders/_unique_number.htm
-        sortable: false
     total:
         label: Total
     status:
