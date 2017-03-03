@@ -132,7 +132,7 @@ class Product extends Model
             'Octommerce\Octommerce\Models\Brand'
         ],
         'currency' => [
-            'Octommerce\Octommerce\Models\Currency',
+            'Responsiv\Currency\Models\Currency',
             'key' => 'currency_code',
             'otherKey' => 'currency_code',
         ],

@@ -26,7 +26,7 @@ class Settings extends Model
     public $hasMany = [];
     public $belongsTo = [
         'base_location' => 'Octommerce\Octommerce\Models\City',
-        'default_currency' => 'Octommerce\Octommerce\Models\Currency',
+        'default_currency' => 'Responsiv\Currency\Models\Currency',
     ];
     public $belongsToMany = [];
     public $morphTo = [];
