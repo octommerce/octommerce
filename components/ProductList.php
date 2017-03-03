@@ -93,6 +93,12 @@ class ProductList extends ComponentBase
                 'default'     => '',
                 'group'       => 'Pagination',
             ],
+            'showFilterList' => [
+                'title'       => 'Show filter list',
+                'description' => 'It will show the available filter. Recommended for sidebar filter.',
+                'type'        => 'boolean',
+                'default'     => 0,
+            ],
         ];
     }
 
@@ -146,7 +152,7 @@ class ProductList extends ComponentBase
 
     public function listProducts()
     {
-        $query = Product::with(['categories', 'brand', 'lists'])->published();
+        $query = Product::with(['categories', 'brand', 'lists', 'images'])->published();
 
         //
         // Filtering
@@ -169,7 +175,9 @@ class ProductList extends ComponentBase
             $query->available();
         }
 
-        $this->filterList = $this->getFilterList($query);
+        if ($this->property('showFilterList')) {
+            $this->filterList = $this->getFilterList($query);
+        }
 
         if ($this->property('sortOrder')) {
             $this->sortProducts($query, $this->property('sortOrder'));
