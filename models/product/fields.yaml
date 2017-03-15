@@ -29,13 +29,13 @@ tabs:
     fields:
         price:
             tab: Information
-            type: currency
+            type: number
             label: Price
             span: left
             placeholder: '0.00'
         sale_price:
             tab: Information
-            type: currency
+            type: number
             label: 'Sale Price'
             span: right
         discount_type:
