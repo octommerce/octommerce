@@ -1,0 +1,86 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="form-group is-required">
+			<label for="address">Address</label>
+			<textarea cols="30" id="address" name="address" class="form-control" required> {{ user.address }} </textarea>
+		</div>
+
+		<div class="row">
+			{% if __SELF__.states|length %}
+			<div class="col-md-4 col-sm-12">
+				{% partial __SELF__ ~ '::statepicker' states=__SELF__.states citySelectTarget='#citySelectForm' %}
+			</div>
+			{% endif %}
+
+			{% if __SELF__.states|length %}
+			<div class="col-md-4 col-sm-12" id="citySelectForm">
+				{% partial __SELF__ ~ '::citypicker' cities=__SELF__.cities %}
+			</div>
+			{% endif %}
+
+			<div class="col-md-4 col-sm-12">
+				<div class="form-group">
+					<label for="">Postal Code</label>
+					<input type="text" name="postcode" value="{{ user.postcode ?: null }}" class="form-control">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-12">
+		<div class="form-group">
+			<label>
+				<input name="is_same_address" type="checkbox" checked>
+				Send to same address above.
+			</label>
+		</div>
+	</div>
+</div>
+
+<div id="shippingAddressForm" style="display: none">
+	<div class="page-header">
+		<div class="h3">Shipping Address</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="">Receiver Name</label>
+				<input type="text" name="shipping_name" class="form-control">
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="">Phone</label>
+				<input type="tel" name="shipping_phone" class="form-control">
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="">Address</label>
+		<textarea cols="30" name="shipping_address" class="form-control"></textarea>
+	</div>
+
+	<div class="row">
+		{% if __SELF__.states|length %}
+		<div class="col-md-4 col-sm-12">
+			{% partial __SELF__ ~ '::statepicker' states=__SELF__.states citySelectTarget='#shippingCitySelectForm' name='shipping_state_id' is_shipping=true %}
+		</div>
+		{% endif %}
+
+		{% if __SELF__.states|length %}
+		<div class="col-md-4 col-sm-12" id="shippingCitySelectForm">
+			{% partial __SELF__ ~ '::citypicker' cities=__SELF__.cities is_shipping=true %}
+		</div>
+		{% endif %}
+
+		<div class="col-md-4 col-sm-12">
+			<div class="form-group">
+				<label for="">Postal Code</label>
+				<input type="text" name="shipping_postcode" class="form-control">
+			</div>
+		</div>
+	</div>
+</div>

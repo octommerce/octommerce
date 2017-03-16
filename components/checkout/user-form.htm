@@ -1,0 +1,47 @@
+<div class="page-header">
+	<div class="h3">Your Information</div>
+</div>
+
+{% if user %}
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="well">
+			<h4>
+				{{ user.name }}<br>
+				<small><i class="fa fa-envelope fa-fw"></i> {{ user.email }}</small><br>
+			</h4>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group is-required">
+			<label for="phone">Phone</label>
+			<input type="tel" id="phone" name="phone" value="{{ user.phone ?: null }}" class="form-control" required>
+		</div>
+	</div>
+</div>
+{% else %}
+
+<div class="row">
+	<div class="col-sm-12 col-md-6 col-md-push-6">
+		<a href="#modalLogin" data-toggle="modal" class="btn btn-default btn-block">Login</a>
+	</div>
+
+	<div class="col-sm-12 col-md-6 col-md-pull-6">
+		<div class="form-group is-required">
+			<label for="name">Name</label>
+			<input type="text" id="name" name="name" class="form-control" required>
+		</div>
+
+		<div class="form-group is-required">
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email" class="form-control" required>
+		</div>
+
+		<div class="form-group is-required">
+			<label for="phone">Phone</label>
+			<input type="tel" id="phone" name="phone" value="{{ user.phone }}" class="form-control" required>
+		</div>
+	</div>
+</div>
+{% endif %}
