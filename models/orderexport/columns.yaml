@@ -57,6 +57,8 @@ columns:
         label: Status
     unique_code:
         label: Unique Code
+    coupon_code:
+        label: Coupon Code
     due_at:
         label: Due At
     message:

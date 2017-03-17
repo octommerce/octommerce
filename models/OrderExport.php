@@ -98,6 +98,7 @@ class OrderExport extends ExportModel
                 $order->discount = $order->order ? $order->order->discount : '';
                 $order->total = $order->order ? $order->order->total : '';
 
+                $order->coupon_code = $order->order ? $order->order->coupon_code : '';
 
                 if ($invoice = $order->order->invoice) {
                     $order->payment_method = $invoice->payment_method ? $invoice->payment_method->name : '';
@@ -167,6 +168,7 @@ class OrderExport extends ExportModel
                     $order->due_at         = $invoice->due_at ? $invoice->due_at : '';
                 }
 
+                $order->coupon_code = $order->coupon_code ? $order->coupon_code : '';
                 $order->status_name = $order->status ? $order->status->name : '';
             });
 
