@@ -96,8 +96,8 @@ class ProductList extends ComponentBase
             'showFilterList' => [
                 'title'       => 'Show filter list',
                 'description' => 'It will show the available filter. Recommended for sidebar filter.',
-                'type'        => 'boolean',
-                'default'     => 0,
+                'type'        => 'checkbox',
+                'default'     => false,
             ],
         ];
     }
