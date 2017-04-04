@@ -178,8 +178,11 @@ class OrderManager
                 // Set the order status to expired
                 $order->updateStatus('expired');
 
-                // TODO:
-                // Extensibility
+                /*
+                 * Extensibility
+                 */
+                $this->fireEvent('order.afterExpired', [$order]);
+                Event::fire('order.afterExpired', [$order]);
             });
     }
 

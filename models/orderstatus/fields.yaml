@@ -41,6 +41,7 @@ secondaryTabs:
             tab: Customer
             type: relation
             select: code
+            emptyOption: -- None --
             trigger:
                 action: enable
                 field: send_email
@@ -63,6 +64,7 @@ secondaryTabs:
             tab: Admin
             type: relation
             select: code
+            emptyOption: -- None --
             trigger:
                 action: enable
                 field: send_email_to_admin

@@ -75,6 +75,7 @@ class Checkout extends ComponentBase
             $order = $this->orderManager->create($data);
         }
         catch(Exception $e) {
+            trace_log($e);
             throw new \ApplicationException($e->getMessage());
         }
 
