@@ -126,7 +126,7 @@ class OrderManager
 
             $order->save();
 
-            \Cart::clear();
+            \Cart::destroy();
 
             return $order;
         }

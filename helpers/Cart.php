@@ -171,6 +171,13 @@ class Cart
         return $cart;
     }
 
+    public function destroy()
+    {
+        $cart = $this->get();
+
+        $cart->delete();
+    }
+
     public function get($cartId = null)
     {
         // If cart id
