@@ -61,3 +61,6 @@
 1.0.16:
     - Add discount_start_at and discount_end_at to products table
     - add_discount_start_at_and_discount_end_at_to_products_table.php
+1.0.17:
+    - Add priority to products table
+    - add_priority_to_products_table.php

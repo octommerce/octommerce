@@ -25,6 +25,10 @@ fields:
         label: Tags
         type: taglist
         mode: relation
+    priority:
+        label: Priority
+        type: dropdown
+        span: left
 tabs:
     fields:
         price:

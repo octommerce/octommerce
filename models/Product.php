@@ -220,6 +220,17 @@ class Product extends Model
         return $list;
     }
 
+    public function getPriorityOptions()
+    {
+        $list = [];
+
+        foreach(range(1, 10) as $number) {
+            $list[$number] = $number;
+        }
+
+        return $list;
+    }
+
     public function filterFields($fields, $context = null)
     {
         // Hide category on update
@@ -292,6 +303,11 @@ class Product extends Model
     public function scopePublished($query)
     {
         return $query->where('octommerce_octommerce_products.is_published', true);
+    }
+
+    public function scopeApplyPriority($query, $direction = 'desc')
+    {
+        return $query->orderBy('priority', $direction);
     }
 
     public function isAvailable($qty = 1)

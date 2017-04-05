@@ -152,7 +152,7 @@ class ProductList extends ComponentBase
 
     public function listProducts()
     {
-        $query = Product::with(['categories', 'brand', 'lists', 'images'])->published();
+        $query = Product::with(['categories', 'brand', 'lists', 'images'])->published()->applyPriority();
 
         //
         // Filtering
