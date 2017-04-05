@@ -72,7 +72,7 @@ tabs:
             type: datepicker
             mode: datetime
             label: 'Discount Start at'
-            span: auto
+            span: left
             trigger:
                 action: show
                 field: discount_type
@@ -82,7 +82,7 @@ tabs:
             type: datepicker
             mode: datetime
             label: 'Discount End at'
-            span: auto
+            span: left
             trigger:
                 action: show
                 field: discount_type

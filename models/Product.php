@@ -92,7 +92,7 @@ class Product extends Model
     /**
      * @var array Soft deletes.
      */
-    protected $dates = ['deleted_at', 'available_from', 'available_to'];
+    protected $dates = ['deleted_at', 'available_from', 'available_to', 'discount_start_at', 'discount_end_at'];
 
     /**
      * @var array Guarded fields
@@ -373,6 +373,15 @@ class Product extends Model
     public function getPageUrlAttribute()
     {
         return Settings::get('product_detail_page') ? CmsPage::url(Settings::get('product_detail_page'), ['slug' => $this->slug]) : null;
+    }
+
+    public function getSalePriceAttribute($value)
+    {
+        if (Carbon::now() >= $this->discount_start_at && Carbon::now() <= $this->discount_end_at) {
+            return $value;
+        }
+
+        return null;
     }
 
     public function getIsDiscountedAttribute()
