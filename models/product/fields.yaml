@@ -37,28 +37,36 @@ tabs:
             label: Price
             span: left
             placeholder: '0.00'
+        discount_type:
+            tab: Information
+            label: 'Discount Type'
+            type: radio
+            span: right
+            options:
+                '': [No Discount]
+                sale_price: [Sale Price, Set the discounted price directly.]
+                percentage: [Percentage, Set the percentage of discount.]
+                fixed: [Fixed Amount, Set the fixed amount of discount.]
         sale_price:
             tab: Information
             type: number
             label: 'Sale Price'
-            span: right
-        discount_type:
-            tab: Information
-            label: 'Discount Type'
-            type: dropdown
             span: left
-            options:
-                '': 'No discount'
-                price: Price
-                percentage: Percentage
-                shipping_price: 'Shipping Price'
-                shipping_percentage: 'Shipping Percentage'
+            comment: The normal price will be overriden by this value
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[sale_price]
         discount_amount:
             tab: Information
             type: number
             label: 'Discount Amount'
-            span: right
+            span: left
             placeholder: '0.00'
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[percentage] or value[fixed]
         discount_start_at:
             tab: Information
             type: datepicker
@@ -68,7 +76,7 @@ tabs:
             trigger:
                 action: show
                 field: discount_type
-                condition: value[price], value[percentage], value[shipping_price], value[shipping_percentage]
+                condition: value[sale_price], value[percentage], value[fixed]
         discount_end_at:
             tab: Information
             type: datepicker
@@ -78,7 +86,7 @@ tabs:
             trigger:
                 action: show
                 field: discount_type
-                condition: value[price], value[percentage], value[shipping_price], value[shipping_percentage]
+                condition: value[sale_price], value[percentage], value[fixed]
         description:
             tab: Information
             label: Description
