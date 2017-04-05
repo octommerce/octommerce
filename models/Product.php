@@ -270,9 +270,24 @@ class Product extends Model
 
     public function beforeSave()
     {
-        // Sale price must below the regular price
-        if (! is_null($this->sale_price)) {
-            $this->sale_price = $this->sale_price < $this->price ? $this->sale_price : null;
+        // Set the sale price based on discount type
+        switch ($this->discount_type) {
+            case 'sale_price':
+                // Sale price must below the regular price
+                if (! is_null($this->sale_price)) {
+                    $this->sale_price = $this->sale_price < $this->price ? $this->sale_price : null;
+                }
+                $this->discount_amount = null;
+                break;
+            case 'percentage':
+                $this->sale_price = $this->price * ( 1 - $this->discount_amount / 100 );
+                break;
+            case 'fixed':
+                $this->sale_price = $this->price - $this->discount_amount;
+                break;
+            default:
+                $this->sale_price = null;
+                $this->discounted_amount = null;
         }
     }
 
