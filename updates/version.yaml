@@ -58,3 +58,6 @@
 1.0.15:
     - Create tags table
     - create_tags_table.php
+1.0.16:
+    - Add discount_start_at and discount_end_at to products table
+    - add_discount_start_at_and_discount_end_at_to_products_table.php

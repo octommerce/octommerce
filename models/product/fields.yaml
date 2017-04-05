@@ -55,6 +55,26 @@ tabs:
             label: 'Discount Amount'
             span: right
             placeholder: '0.00'
+        discount_start_at:
+            tab: Information
+            type: datepicker
+            mode: datetime
+            label: 'Discount Start at'
+            span: auto
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[price], value[percentage], value[shipping_price], value[shipping_percentage]
+        discount_end_at:
+            tab: Information
+            type: datepicker
+            mode: datetime
+            label: 'Discount End at'
+            span: auto
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[price], value[percentage], value[shipping_price], value[shipping_percentage]
         description:
             tab: Information
             label: Description
