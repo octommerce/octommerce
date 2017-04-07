@@ -49,5 +49,13 @@
                 'category_page_description' => 'Name of the category page file for the category links. This property is used by the default component partial.',
             ],
         ],
+    	'order_list' => [
+            'name' => 'Order List',
+            'description' => 'Display a list of orders',
+            'param' => [
+                'orders_per_page_title' => 'Products per page',
+                'orders_per_page_validation_message' => 'Invalid format of the orders per page value',
+            ],
+        ],
     ],
 ];

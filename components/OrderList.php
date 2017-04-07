@@ -1,12 +1,13 @@
 <?php namespace Octommerce\Octommerce\Components;
 
 use Auth;
-use Redirect;
 use Flash;
+use Input;
+use Redirect;
 use Cms\Classes\Page;
+use ApplicationException;
 use Cms\Classes\ComponentBase;
 use Octommerce\Octommerce\Models\Order as OrderModel;
-use ApplicationException;
 
 class OrderList extends ComponentBase
 {
@@ -15,14 +16,23 @@ class OrderList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'Order List',
-            'description' => 'Displays a list of orders belonging to a user.'
+            'name'        => 'octommerce.octommerce::lang.component.order_list.name',
+            'description' => 'octommerce.octommerce::lang.component.order_list.description'
         ];
     }
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'ordersPerPage' => [
+                'title'             => 'octommerce.octommerce::lang.component.order_list.param.orders_per_page_title',
+                'type'              => 'string',
+                'validationPattern' => '^[0-9]+$',
+                'validationMessage' => 'octommerce.octommerce::lang.component.order_list.param.orders_per_page_validation_message',
+                'default'           => '10',
+                'group'             => 'Pagination',
+            ],
+        ];
     }
 
     public function onRun()
@@ -33,6 +43,8 @@ class OrderList extends ComponentBase
 
         $user = Auth::getUser();
 
-        $this->orders = $this->page['orders'] = $user->orders;
+        $page = Input::get('page') ?: 1;
+
+        $this->orders = $this->page['orders'] = $user->orders()->paginate($this->property('ordersPerPage'), $page);
     }
 }
