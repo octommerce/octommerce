@@ -55,7 +55,7 @@ class Plugin extends PluginBase
                 'order' => 'created_at desc',
             ];
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
-            $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
+            $model->belongsTo['state'] = 'RainLab\Location\Models\State';
 
             $model->addDynamicMethod('getSpendAttribute', function($value) {
                 return Currency::format($value);
