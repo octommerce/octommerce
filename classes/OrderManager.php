@@ -70,8 +70,8 @@ class OrderManager
             /*
              * Extensibility
              */
-            $this->fireEvent('order.afterCreate', [$order, $data]);
-            Event::fire('order.afterCreate', [$order, $data]);
+            $this->fireEvent('order.afterCreate', [$order, $data, $cart]);
+            Event::fire('order.afterCreate', [$order, $data, $cart]);
 
             Db::commit();
 
