@@ -116,8 +116,7 @@ class Product extends Model
 
     public $hasMany = [
         'variations' => [
-            'Octommerce\Octommerce\Models\Product',
-            'key' => 'parent_id',
+            'Octommerce\Octommerce\Models\Variation'
         ],
         'reviews' => 'Octommerce\Octommerce\Models\Review',
     ];

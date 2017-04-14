@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Variation Group
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/variationgroup/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\VariationGroup
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/variationgroups
+
+# Create page
+create:
+    title: Create Variation Group
+    redirect: octommerce/octommerce/variationgroups/update/:id
+    redirectClose: octommerce/octommerce/variationgroups
+
+# Update page
+update:
+    title: Edit Variation Group
+    redirect: octommerce/octommerce/variationgroups
+    redirectClose: octommerce/octommerce/variationgroups
+
+# Preview page
+preview:
+    title: Preview Variation Group

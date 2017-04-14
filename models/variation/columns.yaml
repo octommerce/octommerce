@@ -1,0 +1,15 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    variation_group:
+        label: Group
+        relation: variation_group
+        select: concat(name, ' (', code, ')')
+    label:
+        label: Label
+    price:
+        label: Price
+    sort_order:
+        label: sort order

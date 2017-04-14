@@ -1,0 +1,11 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    code:
+        label: code
+    name:
+        label: name
+    sort_order:
+        label: sort order

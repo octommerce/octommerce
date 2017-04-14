@@ -14,8 +14,8 @@ product_attributes:
 
 variations:
     label: Variation
-    list: ~/plugins/octommerce/octommerce/models/product/columns_relation_product.yaml
-    form: ~/plugins/octommerce/octommerce/models/product/fields_relation_product.yaml
+    list: ~/plugins/octommerce/octommerce/models/variation/columns.yaml
+    form: ~/plugins/octommerce/octommerce/models/variation/fields.yaml
     view:
         toolbarButtons: create|delete|add|remove
         showCheckboxes: true

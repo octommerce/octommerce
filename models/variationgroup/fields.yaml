@@ -1,0 +1,15 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        span: auto
+    code:
+        label: Code
+        span: auto
+        disabled: true
+    description:
+        label: Description
+        type: richeditor

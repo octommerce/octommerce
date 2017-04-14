@@ -64,3 +64,7 @@
 1.0.17:
     - Add priority to products table
     - add_priority_to_products_table.php
+1.1.1:
+    - Create variations and variation_groups tables
+    - create_variations_table.php
+    - create_variation_groups_table.php

@@ -1,0 +1,24 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    label:
+        label: Label
+        span: auto
+    variation_group:
+        label: Group
+        type: relation
+        select: concat(name, ' (', code, ')')
+        span: auto
+    price:
+        label: Price
+        type: number
+        span: auto
+    description:
+        label: Description
+        type: richeditor
+    images:
+        label: Images
+        type: fileupload
+        mode: image
