@@ -20,7 +20,7 @@ navigation:
             variationgroups:
                 label: 'Variation Groups'
                 url: octommerce/octommerce/variationgroups
-                icon: icon-barcode
+                icon: icon-cogs
             attributes:
                 label: Attributes
                 url: octommerce/octommerce/productattributes
