@@ -38,7 +38,8 @@ class Cart extends ComponentBase
 
     public function onAdd()
     {
-        $cart = $this->page['cart'] = CartHelper::addItem(post('product_id'), post('qty') ?: 1);
+        $data = array_except(post(), ['product_id', 'qty']);
+        $cart = $this->page['cart'] = CartHelper::addItem(post('product_id'), post('qty') ?: 1, $data);
 
         $this->page['settings'] = Settings::instance();
 
