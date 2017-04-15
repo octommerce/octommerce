@@ -13,3 +13,12 @@ fields:
     description:
         label: Description
         type: richeditor
+    images:
+        label: Images
+        type: fileupload
+        mode: image
+    files:
+        label: Files
+        type: fileupload
+        mode: file
+        fileTypes: zip,pdf
