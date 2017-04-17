@@ -31,6 +31,12 @@ class OrderManager
 
             $user = $this->getOrRegisterUser($data);
 
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.beforeCreate', [$cart, $data]);
+            Event::fire('order.beforeCreate', [$cart, $data]);
+
             $order = new Order($data);
 
             $order->fill([
