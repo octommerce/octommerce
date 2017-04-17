@@ -298,7 +298,7 @@ class Product extends Model
                 break;
             default:
                 $this->sale_price = null;
-                $this->discounted_amount = null;
+                $this->discount_amount = null;
         }
     }
 
