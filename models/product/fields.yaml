@@ -27,7 +27,7 @@ fields:
         mode: relation
     priority:
         label: Priority
-        type: dropdown
+        type: number
         span: left
 tabs:
     fields:

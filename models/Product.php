@@ -38,6 +38,7 @@ class Product extends Model
         'name' => 'required',
         'price' => 'required|regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'discount_price' => 'regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
+        'priority' => 'numeric',
     ];
 
     /**
@@ -215,17 +216,6 @@ class Product extends Model
 
         foreach($this->manager->types as $type) {
             $list[$type['code']] = $type['name'];
-        }
-
-        return $list;
-    }
-
-    public function getPriorityOptions()
-    {
-        $list = [];
-
-        foreach(range(1, 10) as $number) {
-            $list[$number] = $number;
         }
 
         return $list;
