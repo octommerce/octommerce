@@ -72,6 +72,16 @@ class ProductList extends ComponentBase
                 'default'      => 'No product found',
                 'group'        => 'Filter'
             ],
+            'priorityDirection' => [
+                'title'       => 'octommerce.octommerce::lang.component.product_list.param.priority_direction_title',
+                'description' => 'octommerce.octommerce::lang.component.product_list.param.priority_direction_desc',
+                'type'        => 'dropdown',
+                'options'     => [
+                    'asc'     => 'Ascending',
+                    'desc'    => 'Descending',
+                ],
+                'default'     => 'asc'
+            ],
             'sortOrder' => [
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.sort_order_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.sort_order_desc',
@@ -152,7 +162,11 @@ class ProductList extends ComponentBase
 
     public function listProducts()
     {
-        $query = Product::with(['categories', 'brand', 'lists', 'images'])->published()->applyPriority();
+        $query = Product::with(['categories', 'brand', 'lists', 'images'])
+            ->published()
+            ->applyPriority(
+                $this->property('priorityDirection')
+            );
 
         //
         // Filtering

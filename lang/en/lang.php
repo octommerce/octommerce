@@ -20,6 +20,8 @@
                 'hide_out_of_stock_desc' => 'Don\'t show products that out of stock.',
                 'no_product_title' => 'No products message',
                 'no_product_desc' => 'Message to display in the product list in case if there are no products. This property is used by the default component partial.',
+                'priority_direction_title' => 'Priority sort direction',
+                'priority_direction_desc' => 'Select the priority direction to order by ascending or descending',
                 'sort_order_title' => 'Sort order',
                 'sort_order_desc' => 'Which the order method.',
                 'products_per_page_title' => 'Products per page',
