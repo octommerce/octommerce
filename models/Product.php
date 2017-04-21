@@ -428,6 +428,28 @@ class Product extends Model
         }
     }
 
+    public function getWeightAttribute()
+    {
+        if ($this->is_virtual)
+            return 0;
+
+        return $this->getWeight();
+    }
+
+    public function getWeight()
+    {
+        switch($this->unit) {
+            case 'gr':
+                return $this->weight;
+            case 'kg':
+                return $this->weight * 1000;
+            case 'ounce':
+                return $this->weight * 28.3495;
+            case 'pound':
+                return $this->weight * 453.592;
+        }
+    }
+
     /**
      * Handler for the pages.menuitem.getTypeInfo event.
      * Returns a menu item type information. The type information is returned as array

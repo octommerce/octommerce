@@ -71,6 +71,18 @@ class Cart extends Model
         return $total;
     }
 
+    public function getTotalWeightAttribute()
+    {
+        $total = 0;
+
+        foreach($this->products as $product) {
+
+            $total += $product->weight;
+        }
+
+        return $total;
+    }
+
     public function getIsAllowedCheckoutAttribute()
     {
         if (! $this->count_qty)
