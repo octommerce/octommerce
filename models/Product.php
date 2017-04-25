@@ -367,11 +367,12 @@ class Product extends Model
 
     public function getSalePriceAttribute($value)
     {
-        if (Carbon::now() >= $this->discount_start_at && Carbon::now() <= $this->discount_end_at) {
-            return $value;
+        if (($this->discount_start_at && Carbon::now() < $this->discount_start_at) ||
+            ($this->discount_end_at && Carbon::now() > $this->discount_end_at)) {
+            return null;
         }
 
-        return null;
+        return $value;
     }
 
     public function getIsDiscountedAttribute()
