@@ -101,15 +101,17 @@ class OrderManager
                 $invoiceItem = new InvoiceItem([
                     'description' => $product->name,
                     'quantity' => $product->pivot->qty,
-                    'price' => $product->pivot->price,
-                    'discount' => $product->pivot->discount,
+                    // To prevent Responsiv.Pay wrong calculation
+                    'price' => $product->pivot->price - $product->pivot->discount,
+                    // 'price' => $product->pivot->price,
+                    // 'discount' => $product->pivot->discount / $product->pivot->price,
                 ]);
 
                 $invoice->items()->save($invoiceItem);
             }
 
             // If have a discount, put to invoice items
-            if ($order->discount) {
+            if ($order->discount > 0) {
                 $discountItem = new InvoiceItem([
                     'description' => 'Discount',
                     'quantity' => 1,
