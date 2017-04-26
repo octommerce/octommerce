@@ -65,7 +65,7 @@ class Cart extends Model
         $total = 0;
 
         foreach($this->products as $product) {
-            $total += ($product->pivot->qty * ($product->pivot->price - $product->pivot->discount));
+            $total += ($product->pivot->qty * ($product->final_price - $product->pivot->discount));
         }
 
         return $total;

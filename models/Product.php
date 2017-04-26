@@ -375,6 +375,11 @@ class Product extends Model
         return $value;
     }
 
+    public function getFinalPriceAttribute()
+    {
+        return $this->sale_price ?: $this->price;
+    }
+
     public function getIsDiscountedAttribute()
     {
         if (!is_null($this->sale_price)) {
