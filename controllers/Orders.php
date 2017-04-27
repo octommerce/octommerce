@@ -51,7 +51,8 @@ class Orders extends Controller
     public function preview($recordId = null)
     {
         $this->vars['id'] = $recordId;
-        $this->vars['order'] = Order::find($recordId);
+        $this->vars['order'] = $order = Order::find($recordId);
+        $this->vars['isExtendedShippingCost'] = $order->isClassExtendedWith('Octommerce.Shipping.Behaviors.ShippingCost');
 
         return $this->asExtension('FormController')->preview($recordId);
     }
