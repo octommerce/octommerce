@@ -64,3 +64,6 @@
 1.0.17:
     - Add priority to products table
     - add_priority_to_products_table.php
+1.0.18:
+    - Add tax to products table
+    - add_tax_to_products_table.php

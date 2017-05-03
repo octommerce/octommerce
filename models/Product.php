@@ -128,7 +128,6 @@ class Product extends Model
             'Octommerce\Octommerce\Models\Product',
             'key' => 'parent_id',
         ],
-        'tax' => 'Octommerce\Octommerce\Models\Tax',
         'brand' => [
             'Octommerce\Octommerce\Models\Brand'
         ],
@@ -221,6 +220,20 @@ class Product extends Model
         return $list;
     }
 
+    /**
+     * Get tax options for dropdown tax field
+     *
+     * @return array taxes
+     */
+    public function getTaxOptions()
+    {
+        return collect(Settings::get('taxes'))->prepend([
+                'name' => 'Default tax',
+                'tax'  => Settings::get('default_tax')
+            ])
+            ->lists('name', 'tax');
+    }
+
     public function filterFields($fields, $context = null)
     {
         // Hide category on update
@@ -269,6 +282,11 @@ class Product extends Model
         return is_null($this->sale_price) ? $this->price : $this->sale_price;
     }
 
+    public function getPriceAttribute($value)
+    {
+        return $this->calculateTax($value);
+    }
+
     public function beforeSave()
     {
         // Set the sale price based on discount type
@@ -290,6 +308,8 @@ class Product extends Model
                 $this->sale_price = null;
                 $this->discount_amount = null;
         }
+
+        $this->sale_price = $this->sale_price ? $this->calculateTax($this->sale_price) : null;
     }
 
     public function scopeAvailable($query)
@@ -579,5 +599,10 @@ class Product extends Model
         $url = CmsPage::url($page->getBaseFileName(), [$paramName => $product->slug]);
 
         return $url;
+    }
+
+    protected function calculateTax($price)
+    {
+        return $price * (1 + $this->tax / 100);
     }
 }
