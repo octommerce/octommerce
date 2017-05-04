@@ -162,7 +162,7 @@ class OrderStatusLog extends Model
         });
     }
 
-    public static function createRecord($statusCode, $order, $note = null, $data)
+    public static function createRecord($statusCode, $order, $note = null, $data = null)
     {
         if (! $order instanceof \Octommerce\Octommerce\Models\Order)
             return;
