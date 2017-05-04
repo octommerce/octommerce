@@ -108,10 +108,10 @@ class Order extends Model
         });
     }
 
-    public function updateStatus($statusCode, $note = '')
+    public function updateStatus($statusCode, $note = '', $data = [])
     {
         if ($status = OrderStatus::find($statusCode)) {
-            OrderStatusLog::createRecord($status, $this, $note);
+            OrderStatusLog::createRecord($status, $this, $note, $data);
         }
 
         /*

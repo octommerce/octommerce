@@ -77,7 +77,7 @@ class Orders extends Controller
         $widget = $this->makeStatusFormWidget($order->status->code);
         $data = $widget->getSaveData();
 
-        $order->updateStatus($data['status'], $data['note']);
+        $order->updateStatus($data['status'], $data['note'], $data);
 
         Flash::success('Order status updated successfully');
         return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $order->id));

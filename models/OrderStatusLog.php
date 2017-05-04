@@ -162,7 +162,7 @@ class OrderStatusLog extends Model
         });
     }
 
-    public static function createRecord($statusCode, $order, $note = null)
+    public static function createRecord($statusCode, $order, $note = null, $data)
     {
         if (! $order instanceof \Octommerce\Octommerce\Models\Order)
             return;
@@ -186,7 +186,7 @@ class OrderStatusLog extends Model
             $record->status_code = $statusCode;
             $record->order_id = $order->id;
             // $record->admin_id = BackendAuth::getUser()->id;
-            $record->data = null;
+            $record->data = array_except($data, ['status', 'note']);
             $record->timestamp = Carbon::now();
             $record->note = $note;
 
