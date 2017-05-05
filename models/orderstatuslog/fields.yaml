@@ -6,6 +6,7 @@ fields:
     status:
         label: New Status
         type: dropdown
+        placeholder: -- select status --
 
     note:
         label: Note
