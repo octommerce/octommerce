@@ -67,3 +67,6 @@
 1.0.18:
     - Add tax to products table
     - add_tax_to_products_table.php
+1.0.19:
+    - Add total_weight column to orders table
+    - add_total_weight_column_to_orders_table.php
