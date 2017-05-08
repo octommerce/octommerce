@@ -9,6 +9,7 @@ use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Models\Product;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Classes\ProductSort;
+use Octommerce\Octommerce\Classes\ProductFilters;
 use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
@@ -170,6 +171,11 @@ class ProductList extends ComponentBase
             )
             ->sort(
                 new ProductSort(Request::get('sort'))
+            )
+            ->filter(
+                new ProductFilters(
+                    array_diff(Request::all(), ['']) // Exclude params without value
+                )
             );
 
         //
