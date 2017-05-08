@@ -53,6 +53,7 @@ class Order extends Model
         'shipping_cost',
         'message',
         'subtotal',
+        'total_weight',
     ];
 
     protected $dates = ['status_updated_at', 'expired_at', 'deleted_at'];

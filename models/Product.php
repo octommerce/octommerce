@@ -456,25 +456,20 @@ class Product extends Model
         }
     }
 
-    public function getWeightAttribute()
+    public function getWeightAttribute($value)
     {
         if ($this->is_virtual)
             return 0;
 
-        return $this->getWeight();
-    }
-
-    public function getWeight()
-    {
-        switch($this->unit) {
+        switch($this->weight_unit) {
             case 'gr':
-                return $this->weight;
+                return $value;
             case 'kg':
-                return $this->weight * 1000;
+                return $value * 1000;
             case 'ounce':
-                return $this->weight * 28.3495;
+                return $value * 28.3495;
             case 'pound':
-                return $this->weight * 453.592;
+                return $value * 453.592;
         }
     }
 

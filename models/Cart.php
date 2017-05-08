@@ -77,7 +77,7 @@ class Cart extends Model
 
         foreach($this->products as $product) {
 
-            $total += $product->weight;
+            $total += $product->pivot->qty * $product->weight;
         }
 
         return $total;

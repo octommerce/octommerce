@@ -44,6 +44,7 @@ class OrderManager
                 'email' => $user->email,
                 'phone' => $user->phone,
                 'subtotal' => $cart->total_price,
+                'total_weight' => $cart->total_weight,
             ]);
 
             if (isset($data['city_id']) && $cityId = $data['city_id']) {
