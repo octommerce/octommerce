@@ -19,6 +19,7 @@ class Product extends Model
     use \October\Rain\Database\Traits\Sluggable;
     // use \October\Rain\Database\Traits\Sortable;
     use \Nicolaslopezj\Searchable\SearchableTrait;
+    use \Octommerce\Octommerce\Traits\Sortable;
 
     protected $manager;
 

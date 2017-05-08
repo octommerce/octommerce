@@ -5,9 +5,10 @@ use Input;
 use Request;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
-use Octommerce\Octommerce\Models\Category;
-use Octommerce\Octommerce\Models\Product;
 use Octommerce\Octommerce\Models\Brand;
+use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\Category;
+use Octommerce\Octommerce\Classes\ProductSort;
 use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
@@ -166,6 +167,9 @@ class ProductList extends ComponentBase
             ->published()
             ->applyPriority(
                 $this->property('priorityDirection')
+            )
+            ->sort(
+                new ProductSort(Request::get('sort'))
             );
 
         //
