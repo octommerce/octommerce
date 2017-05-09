@@ -58,7 +58,7 @@ class ProductSort extends QuerySort
     {
         return $this->builder->join(Db::raw("
                     (
-                        select product_id, sum(qty) as sold
+                        select product_id as p_id, sum(qty) as sold
                         from octommerce_octommerce_order_product
                         where order_id in
                         (
@@ -68,6 +68,6 @@ class ProductSort extends QuerySort
                         )
                         group by product_id order by sold ". $direction ."
                     ) op
-                    "), 'octommerce_octommerce_products.id', '=', 'op.product_id');
+                    "), 'octommerce_octommerce_products.id', '=', 'op.p_id');
     }
 }
