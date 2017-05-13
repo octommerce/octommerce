@@ -60,16 +60,22 @@ class Cart extends Model
         return $count;
     }
 
-    public function getTotalPriceAttribute()
+    public function getSubtotalAttribute()
     {
-        $total = 0;
+        $subtotal = 0;
 
         foreach($this->products as $product) {
-            $total += ($product->pivot->qty * ($product->final_price - $product->pivot->discount));
+            $subtotal += ($product->pivot->qty * ($product->final_price - $product->pivot->discount));
         }
 
-        return $total;
+        return $subtotal;
     }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->subtotal - $this->discount;
+    }
+
 
     public function getTotalWeightAttribute()
     {
@@ -88,7 +94,7 @@ class Cart extends Model
         if (! $this->count_qty)
             return false;
 
-        return $this->total_price >= Settings::get('checkout_min_subtotal', 0);
+        return $this->subtotal >= Settings::get('checkout_min_subtotal', 0);
     }
 
     public function sendReminder()

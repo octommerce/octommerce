@@ -6,20 +6,41 @@
 	<div class="panel-body">
 		<table class="table">
 			<tbody>
-				{% for product in cart.cart.products %}
+				{% for product in cart.products %}
 				<tr>
 					<td>
 						<strong>{{ product.name }}</strong><br>
-						<small>{{ product.pivot.qty }} x {{ product.pivot.price }}</small>
+						<small>
+							{{ product.pivot.qty }} x
+
+							{% if product.pivot.discount > 0 %}
+								<strike>{{ product.pivot.price|currency({format: 'short'}) }}</strike>
+								{{ (product.pivot.price - product.pivot.discount)|currency({format: 'short'}) }}
+							{% else %}
+								{{ product.pivot.price|currency({format: 'short'}) }}
+							{% endif %}
+						</small>
 					</td>
-					<td align="right" class="text-right">{{ (product.pivot.qty * product.pivot.price)|currency({format: 'short'}) }}</td>
+					<td align="right" class="text-right">
+						{{ (product.pivot.qty * (product.pivot.price - product.pivot.discount))|currency({format: 'short'}) }}
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
 			<tfoot>
+				{% if cart.discount > 0 %}
+				<tr>
+					<th>Subtotal</th>
+					<th align="right" class="text-right">{{ cart.subtotal|currency({format: 'short'}) }}</th>
+				</tr>
+				<tr>
+					<th>Discount</th>
+					<th align="right" class="text-right text-success">{{ (-cart.discount)|currency({format: 'short'}) }}</th>
+				</tr>
+				{% endif %}
 				<tr>
 					<th>Total</th>
-					<th align="right" class="text-right">{{ cart.cart.total_price|currency({format: 'short'}) }}</th>
+					<th align="right" class="text-right">{{ cart.total_price|currency({format: 'short'}) }}</th>
 				</tr>
 			</tfoot>
 		</table>
@@ -27,7 +48,7 @@
 
 	<div class="panel-footer">
 		<div class="form-group">
-			<button class="btn btn-block btn-lg btn-primary" data-attach-loading>Continue to Payment</button>
+			<button type="submit" class="btn btn-block btn-lg btn-primary" data-attach-loading>Continue to Payment</button>
 		</div>
 	</div>
 </div>
