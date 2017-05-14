@@ -13,8 +13,8 @@ class ProductSort extends QuerySort
     protected $sortList = [
         'name asc'        => 'Name (ascending)',
         'name desc'       => 'Name (descending)',
-        'created_at asc'  => 'Created (ascending)',
-        'created_at desc' => 'Created (descending)',
+        'createtAtAsc'    => 'Created (ascending)',
+        'createtAtDesc'   => 'Created (descending)',
         'price asc'       => 'Price (ascending)',
         'price desc'      => 'Price (descending)',
         'random'          => 'Random',
@@ -25,11 +25,27 @@ class ProductSort extends QuerySort
     ];
 
     /**
+     * Order products by created_at asc
+     */
+    public function createtAtAsc()
+    {
+        $this->builder->orderBy('octommerce_octommerce_products.created_at', "asc");
+    }
+
+    /**
+     * Order products by created_at desc
+     */
+    public function createtAtDesc()
+    {
+        $this->builder->orderBy('octommerce_octommerce_products.created_at', 'desc');
+    }
+
+    /**
      * Order random products
      */
     public function random()
     {
-        $this->builder->orderByRaw("RAND()");
+        $this->builder->orderByRaw('RAND()');
     }
 
     /**
