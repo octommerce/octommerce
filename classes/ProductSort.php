@@ -13,8 +13,8 @@ class ProductSort extends QuerySort
     protected $sortList = [
         'name asc'        => 'Name (ascending)',
         'name desc'       => 'Name (descending)',
-        'createtAtAsc'    => 'Created (ascending)',
-        'createtAtDesc'   => 'Created (descending)',
+        'createdAtAsc'    => 'Created (ascending)',
+        'createdAtDesc'   => 'Created (descending)',
         'price asc'       => 'Price (ascending)',
         'price desc'      => 'Price (descending)',
         'random'          => 'Random',
@@ -27,7 +27,7 @@ class ProductSort extends QuerySort
     /**
      * Order products by created_at asc
      */
-    public function createtAtAsc()
+    public function createdAtAsc()
     {
         $this->builder->orderBy('octommerce_octommerce_products.created_at', "asc");
     }
@@ -35,7 +35,7 @@ class ProductSort extends QuerySort
     /**
      * Order products by created_at desc
      */
-    public function createtAtDesc()
+    public function createdAtDesc()
     {
         $this->builder->orderBy('octommerce_octommerce_products.created_at', 'desc');
     }
