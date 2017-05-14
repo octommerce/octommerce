@@ -70,3 +70,6 @@
 1.0.19:
     - Add total_weight column to orders table
     - add_total_weight_column_to_orders_table.php
+1.0.20:
+    - Add discount column on carts table
+    - add_discount_column_on_carts_table.php
