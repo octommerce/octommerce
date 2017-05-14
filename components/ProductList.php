@@ -165,7 +165,7 @@ class ProductList extends ComponentBase
 
     public function onFilter()
     {
-        $url = Request::url() . '?' . http_build_query(array_diff(post(), []));
+        $url = Request::url() . '?' . http_build_query(array_diff(post(), ['']));
 
         return Redirect::to($url);
     }
