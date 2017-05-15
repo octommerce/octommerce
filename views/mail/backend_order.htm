@@ -5,17 +5,17 @@ subject = "New Order [#{{ order.order_no }}]"
 {% set invoice = order.invoices.first() %}
 
 <p>
-    {{ 'Hi admin,'|_ }}
+    Hi admin,
 </p>
 <p>
-    {{ 'The order #:order_no is ready to be processed.'|_({order_no: order.order_no}) }}
+    The order #{{ order.order_no }} is ready to be processed.
 </p>
 
 <table class="table-information-order">
     <tr>
         <td>
             <div class="information-head">
-                {{ 'Order No'|_ }}
+                Order No
             </div>
             <div class="information-body info-order">
                 {{ order.order_no }}
@@ -23,7 +23,7 @@ subject = "New Order [#{{ order.order_no }}]"
         </td>
         <td>
             <div class="information-head">
-                {{ 'Total'|_ }}
+                Total
             </div>
             <div class="information-body">
                 {{ order.total|currency({format: 'short'}) }}
@@ -31,7 +31,7 @@ subject = "New Order [#{{ order.order_no }}]"
         </td>
         <td>
             <div class="information-head">
-                {{ 'Status'|_ }}
+                Status
             </div>
             <div class="information-body info-status">
                 <span class="text-success">
@@ -46,13 +46,13 @@ subject = "New Order [#{{ order.order_no }}]"
     <thead>
         <tr>
             <th>
-                {{ 'Product'|_ }}
+                Product
             </th>
             <th>
-                {{ 'Price'|_ }}
+                Price
             </th>
             <th>
-                {{ 'Subtotal'|_ }}
+                Subtotal
             </th>
         </tr>
     </thead>
@@ -73,21 +73,29 @@ subject = "New Order [#{{ order.order_no }}]"
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2">{{ 'Subtotal'|_ }}</td>
+            <td colspan="2">Subtotal</td>
             <td class="text-right"><b>{{ order.subtotal|currency({format: 'short'}) }}</b></td>
         </tr>
+        {% if order.tax > 0 %}
         <tr>
-            <td colspan="2">{{ 'Shipping Cost'|_ }}</td>
-            <td class="text-right text-success">{{ 'FREE'|_ }}</td>
+            <td colspan="2">Tax</td>
+            <td class="text-right text-success">{{ order.tax|currency({format: 'short'}) }}</td>
         </tr>
+        {% endif %}
+        {% if order.shipping_cost > 0 %}
+        <tr>
+            <td colspan="2">Shipping Cost</td>
+            <td class="text-right text-success">{{ order.shipping_cost|currency({format: 'short'}) }}</td>
+        </tr>
+        {% endif %}
         {% if order.discount > 0 %}
         <tr>
-            <td colspan="2">{{ 'Discount'|_ }}</td>
+            <td colspan="2">Discount</td>
             <td class="text-right">-{{ order.discount|currency({format: 'short'}) }}</td>
         </tr>
         {% endif %}
         <tr>
-            <td colspan="2"><b>{{ 'Total'|_ }}</b></td>
+            <td colspan="2"><b>Total</b></td>
             <td class="text-right"><b>{{ order.total|currency({format: 'short'}) }}</b></td>
         </tr>
     </tfoot>
@@ -96,7 +104,7 @@ subject = "New Order [#{{ order.order_no }}]"
     <tr>
         <td>
             <div class="muted">
-                {{ 'Shipping Address'|_ }}
+                Shipping Address
             </div>
             <div class="shipping-content">
                 <b>
@@ -111,7 +119,7 @@ subject = "New Order [#{{ order.order_no }}]"
         </td>
         <td>
             <div class="muted">
-                {{ 'Payment'|_ }}
+                Payment
             </div>
             <div class="shipping-content">
                 {% if invoice %}

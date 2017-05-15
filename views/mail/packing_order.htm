@@ -1,20 +1,20 @@
-subject = "{{ 'We\'re Preparing Your Order'|_ }} [#{{ order.order_no }}]"
+subject = "We\'re Preparing Your Order [#{{ order.order_no }}]"
 ==
 
 ==
 {% set invoice = order.invoices.first() %}
 <p>
-    {{ 'Hi :name,'|_({name: order.name}) }}
+    Hi {{ order.name }},
 </p>
 <p>
-	{{ 'Your order #:order_no is being prepared. We\'ll notify you when your order is shipped by courier.'|_({order_no: order.order_no}) }}
+	Your order #{{ order.order_no }} is being prepared. We\'ll notify you when your order is shipped by courier.
 </p>
 
 <table class="table-information-order">
     <tr>
         <td>
             <div class="information-head">
-                {{ 'Order No'|_ }}
+                Order No
             </div>
             <div class="information-body info-order">
                 {{ order.order_no }}
@@ -22,7 +22,7 @@ subject = "{{ 'We\'re Preparing Your Order'|_ }} [#{{ order.order_no }}]"
         </td>
         <td>
             <div class="information-head">
-                {{ 'Total'|_ }}
+                Total
             </div>
             <div class="information-body">
                 {{ order.total|currency({format: 'short'}) }}
@@ -30,7 +30,7 @@ subject = "{{ 'We\'re Preparing Your Order'|_ }} [#{{ order.order_no }}]"
         </td>
         <td>
             <div class="information-head">
-                {{ 'Status'|_ }}
+                Status
             </div>
             <div class="information-body info-status">
                 <span class="text-success">
@@ -42,8 +42,8 @@ subject = "{{ 'We\'re Preparing Your Order'|_ }} [#{{ order.order_no }}]"
 </table>
 
 <p>
-    {{ 'You can track the order status by clicking link below.'|_ }}
+    You can track the order status by clicking link below.
 </p>
 <p>
-    <a href="#" class="button button-primary">{{ 'Track Now'|_ }}</a>
+    <a href="#" class="button button-primary">Track Now</a>
 </p>

@@ -3,22 +3,22 @@ subject = "Wait, We Saved Your Selected Items"
 
 ==
 <p>
-	{{ 'Hi :name,'|_({name: cart.user.name}) }}
+	Hi {{ cart.user.name }},
 </p>
 <p>
-	{{ 'Forget something? You left some great items in your shopping bag. Don\'t miss out, complete your order now.'|_ }}
+	Forget something? You left some great items in your shopping bag. Don\'t miss out, complete your order now.
 </p>
 <table class="table-summary">
     <thead>
         <tr>
             <th>
-                {{ 'Product'|_ }}
+                Product
             </th>
             <th>
-                {{ 'Price'|_ }}
+                Price
             </th>
             <th>
-                {{ 'Subtotal'|_ }}
+                Subtotal
             </th>
         </tr>
     </thead>
@@ -39,7 +39,7 @@ subject = "Wait, We Saved Your Selected Items"
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2">{{ 'Subtotal'|_ }}</td>
+            <td colspan="2">Subtotal</td>
             <td class="text-right"><b>{{ cart.total_price|currency({format: 'short'}) }}</b></td>
         </tr>
     </tfoot>
