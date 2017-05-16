@@ -31,6 +31,13 @@
                 <p><?= $order->status ? $order->status->name : '' ?></p>
                 <p class="description"><?= $order->status_updated_at ?></p>
             </div>
+            <?php if ($isExtendedShippingCost): ?>
+            <div class="scoreboard-item title-value">
+                <h4>Courier</h4>
+                <p><?= strtoupper($order->shipping_courier) ?></p>
+                <p class="description"><?= strtoupper($order->shipping_service) ?></p>
+            </div>
+            <?php endif ?>
         </div>
     </div>
 

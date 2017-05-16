@@ -53,6 +53,7 @@ class Order extends Model
         'shipping_cost',
         'message',
         'subtotal',
+        'total_weight',
     ];
 
     protected $dates = ['status_updated_at', 'expired_at', 'deleted_at'];
@@ -108,10 +109,10 @@ class Order extends Model
         });
     }
 
-    public function updateStatus($statusCode, $note = '')
+    public function updateStatus($statusCode, $note = '', $data = [])
     {
         if ($status = OrderStatus::find($statusCode)) {
-            OrderStatusLog::createRecord($status, $this, $note);
+            OrderStatusLog::createRecord($status, $this, $note, $data);
         }
 
         /*

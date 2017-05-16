@@ -3,11 +3,14 @@
 use DB;
 use Input;
 use Request;
+use Redirect;
 use Cms\Classes\Page;
 use Cms\Classes\ComponentBase;
-use Octommerce\Octommerce\Models\Category;
-use Octommerce\Octommerce\Models\Product;
 use Octommerce\Octommerce\Models\Brand;
+use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\Category;
+use Octommerce\Octommerce\Classes\ProductSort;
+use Octommerce\Octommerce\Classes\ProductFilters;
 use Octommerce\Octommerce\Models\ProductList as ProductListModel;
 
 class ProductList extends ComponentBase
@@ -160,12 +163,27 @@ class ProductList extends ComponentBase
 
     }
 
+    public function onFilter()
+    {
+        $url = Request::url() . '?' . http_build_query(array_diff(post(), ['']));
+
+        return Redirect::to($url);
+    }
+
     public function listProducts()
     {
         $query = Product::with(['categories', 'brand', 'lists', 'images'])
             ->published()
             ->applyPriority(
                 $this->property('priorityDirection')
+            )
+            ->sort(
+                new ProductSort(Request::get('sort'))
+            )
+            ->filter(
+                new ProductFilters(
+                    array_diff(Request::all(), ['']) // Exclude params without value
+                )
             );
 
         //
@@ -261,6 +279,11 @@ class ProductList extends ComponentBase
                 ];
             }
         }
+
+        $this->page['sortList'] = (new ProductSort)->sortList();
+        $this->page['categoryList'] = Category::lists('name', 'slug');
+        $this->page['brandList'] = Brand::lists('name', 'slug');
+        $this->page['productListList'] = ProductListModel::lists('name', 'slug');
 
         $items = collect($items)->sortByDesc('count');
 

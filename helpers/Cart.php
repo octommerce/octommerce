@@ -213,6 +213,7 @@ class Cart
             if (Auth::check()) {
                 $cart = CartModel::create([
                     'user_id' => Auth::getUser()->id,
+                    'session_id' => '',
                 ]);
             }
             // If not logged in, attach to session_id

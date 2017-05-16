@@ -32,7 +32,7 @@ class Cart extends ComponentBase
 
     public function onRun()
     {
-        $this->cart = CartHelper::get();
+        $this->page['cart'] = $this->cart = CartHelper::get();
         $this->settings = Settings::instance();
     }
 

@@ -98,7 +98,7 @@ tabs:
             descriptionFrom: description
             emptyOption: 'No Tax'
             span: auto
-            type: relation
+            type: dropdown
             tab: Information
         currency:
             label: Currency
