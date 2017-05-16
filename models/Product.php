@@ -473,6 +473,11 @@ class Product extends Model
         }
     }
 
+    public function getTypeAttribute($value)
+    {
+        return ProductManager::instance()->findTypeByCode($value, $this);
+    }
+
     /**
      * Handler for the pages.menuitem.getTypeInfo event.
      * Returns a menu item type information. The type information is returned as array
