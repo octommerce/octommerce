@@ -15,22 +15,19 @@ fields:
         list: $/rainlab/user/models/user/columns.yaml
         span: auto
         type: recordfinder
+    order:
+        label: Order
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: ''
+        list: $/octommerce/octommerce/models/order/columns.yaml
+        span: auto
+        type: recordfinder
     title:
         label: Title
         oc.commentPosition: ''
         span: auto
         type: text
-    rating:
-        label: Rating
-        oc.commentPosition: ''
-        options:
-            1: '1'
-            2: '2'
-            3: '3'
-            4: '4'
-            5: '5'
-        span: auto
-        type: dropdown
     content:
         label: Content
         size: small

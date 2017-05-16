@@ -15,12 +15,13 @@ class CreateReviewsTable extends Migration
 
             $table->integer('product_id')->unsigned();
             $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('order_id')->unsigned()->nullable();
 
             $table->string('title')->nullable();
             $table->text('content')->nullable();
-            $table->integer('rating')->unsigned()->nullable();
-
+            $table->boolean('is_masked')->defautl(0);
             $table->boolean('is_buyer')->default(0);
+            $table->softDeletes();
 
             $table->timestamps();
         });

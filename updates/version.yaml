@@ -64,3 +64,7 @@
 1.0.17:
     - Add priority to products table
     - add_priority_to_products_table.php
+1.0.18:
+    - create review item and review type
+    - create_review_items_table.php
+    - create_review_types_table.php

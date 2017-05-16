@@ -3,15 +3,14 @@
 use Model;
 
 /**
- * Review Model
+ * review_item Model
  */
-class Review extends Model
+class ReviewItem extends Model
 {
-
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'octommerce_octommerce_reviews';
+    public $table = 'octommerce_octommerce_review_items';
 
     /**
      * @var array Guarded fields
@@ -27,13 +26,10 @@ class Review extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [
-        'review_items' => 'Octommerce\Octommerce\Models\ReviewItem'
-                ];
+    public $hasMany = [];
     public $belongsTo = [
-        'product' => 'Octommerce\Octommerce\Models\Product',
-        'user' => 'RainLab\User\Models\User',
-        'order' => 'Octommerce\Octommerce\Models\Order'
+        'review' => 'Octommerce\Octommerce\Models\Review',
+        'review_type' => 'Octommerce\Octommerce\Models\ReviewType'
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -41,5 +37,4 @@ class Review extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
-
 }
