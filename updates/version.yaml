@@ -65,9 +65,6 @@
     - Add priority to products table
     - add_priority_to_products_table.php
 1.0.18:
-    - create review item and review type
-    - create_review_items_table.php
-    - create_review_types_table.php
     - Add tax to products table
     - add_tax_to_products_table.php
 1.0.19:
@@ -76,3 +73,7 @@
 1.0.20:
     - Add discount column on carts table
     - add_discount_column_on_carts_table.php
+1.0.21:
+    - create review item and review type
+    - create_review_items_table.php
+    - create_review_types_table.php

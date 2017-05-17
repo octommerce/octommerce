@@ -18,7 +18,7 @@ fields:
     order:
         label: Order
         oc.commentPosition: ''
-        nameFrom: name
+        nameFrom: order_no
         descriptionFrom: ''
         list: $/octommerce/octommerce/models/order/columns.yaml
         span: auto

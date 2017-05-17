@@ -1,12 +1,14 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
-
+use Octommerce\Octommerce\Classes\ProductManager;
 /**
- * review_type Model
+ * reviewType Model
  */
 class ReviewType extends Model
 {
+    private $manager;
+
     /**
      * @var string The database table used by the model.
      */
@@ -22,6 +24,8 @@ class ReviewType extends Model
      */
     protected $fillable = [];
 
+
+    protected $jsonable = ['product_type_classes'];
     /**
      * @var array Relations
      */
@@ -36,4 +40,23 @@ class ReviewType extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->manager = ProductManager::instance();
+    }
+
+    public function getProductTypeClassesOptions()
+    {
+        // $list = [];
+
+        foreach($this->manager->types as $type) {
+            $list[$type['code']] = $type['name'];
+        }
+
+        return $list;
+    }
 }

@@ -3,7 +3,7 @@
 use Model;
 
 /**
- * review_item Model
+ * reviewItem Model
  */
 class ReviewItem extends Model
 {
@@ -29,7 +29,7 @@ class ReviewItem extends Model
     public $hasMany = [];
     public $belongsTo = [
         'review' => 'Octommerce\Octommerce\Models\Review',
-        'review_type' => 'Octommerce\Octommerce\Models\ReviewType'
+        'reviewType' => 'Octommerce\Octommerce\Models\ReviewType'
     ];
     public $belongsToMany = [];
     public $morphTo = [];

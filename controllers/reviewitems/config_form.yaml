@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Review Item
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/reviewitem/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\ReviewItem
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/reviewitems
+
+# Create page
+create:
+    title: Create Review Item
+    redirect: octommerce/octommerce/reviewitems/update/:id
+    redirectClose: octommerce/octommerce/reviewitems
+
+# Update page
+update:
+    title: Edit Review Item
+    redirect: octommerce/octommerce/reviewitems
+    redirectClose: octommerce/octommerce/reviewitems
+
+# Preview page
+preview:
+    title: Preview Review Item
