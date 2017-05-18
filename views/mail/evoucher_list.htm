@@ -60,9 +60,7 @@ subject = "{{ 'Your e-Voucher'|_ }} [#{{ order.order_no }}]"
                 {{ product.name }}
             </td>
             <td>
-                {% for evoucher in product.pivot.data['evouchers'] %}
-                    {{ evoucher|join(', ') }}
-                {% endfor %}
+                {{  product.pivot.data['evouchers'][product.sku]|join(', ') }}
             </td>
         </tr>
         {% endfor %}
