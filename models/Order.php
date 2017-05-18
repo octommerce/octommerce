@@ -79,8 +79,9 @@ class Order extends Model
     public $belongsToMany = [
         'products' => [
             'Octommerce\Octommerce\Models\Product',
-            'table' => 'octommerce_octommerce_order_product',
-            'pivot' => ['qty', 'price', 'discount', 'name'],
+            'table'      => 'octommerce_octommerce_order_product',
+            'pivot'      => ['qty', 'price', 'discount', 'name', 'data'],
+            'pivotModel' => 'Octommerce\Octommerce\Models\OrderProductPivot'
         ],
     ];
     public $morphTo = [];

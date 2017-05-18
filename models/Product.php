@@ -1,12 +1,13 @@
 <?php namespace Octommerce\Octommerce\Models;
 
-use Model;
 use DB;
+use Model;
 use Carbon\Carbon;
-use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
-use Octommerce\Octommerce\Classes\ProductManager;
+use Cms\Classes\Page as CmsPage;
 use Octommerce\Octommerce\Models\Settings;
+use Octommerce\Octommerce\Classes\ProductManager;
+use Octommerce\Octommerce\Observers\Product as ProductObserver;
 
 /**
  * Product Model
@@ -209,6 +210,13 @@ class Product extends Model
         parent::__construct($attributes);
 
         $this->manager = ProductManager::instance();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        Product::observe(new ProductObserver);
     }
 
     public function getTypeOptions()
@@ -471,6 +479,11 @@ class Product extends Model
             case 'pound':
                 return $value * 453.592;
         }
+    }
+
+    public function getTypeAttribute($value)
+    {
+        return ProductManager::instance()->findTypeByCode($value, $this);
     }
 
     /**

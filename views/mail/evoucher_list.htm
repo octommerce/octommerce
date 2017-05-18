@@ -1,0 +1,68 @@
+subject = "{{ 'Your e-Voucher'|_ }} [#{{ order.order_no }}]"
+==
+
+==
+<h2>
+    {{ 'Your e-voucher list'|_ }}
+</h2>
+<p>
+    {{ 'Hi :name,'|_({name: order.name}) }}
+</p>
+<p>
+    {{ 'Thank you for your purchase, here are your e-voucher list.'|_ }}
+</p>
+<table class="table-information-order">
+    <tr>
+        <td>
+            <div class="information-head">
+                {{ 'Order No'|_ }}
+            </div>
+            <div class="information-body info-order">
+                {{ order.order_no }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                {{ 'Total'|_ }}
+            </div>
+            <div class="information-body">
+                {{ order.total|currency({format: 'short'}) }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                {{ 'Status'|_ }}
+            </div>
+            <div class="information-body info-status">
+                <span class="text-warning">
+                    {{ order.status.name }}
+                </span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<table class="table-summary">
+    <thead>
+        <tr>
+            <th>
+                {{ 'Product'|_ }}
+            </th>
+            <th>
+                {{ 'e-Voucher'|_ }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>
+                {{ product.name }}
+            </td>
+            <td>
+                {{  product.pivot.data['evouchers'][product.sku]|join(', ') }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -6,9 +6,12 @@
 class ProductTypeBase
 {
 
-    public function __construct()
+    protected $product;
+
+    public function __construct($product = null)
     {
         $this->details = $this->typeDetails();
+        $this->product = $product;
     }
 
     public function typeDetails()
@@ -27,28 +30,45 @@ class ProductTypeBase
     {
     }
 
-    public function beforeCreateProduct($product)
+    public function invoicePaid($invoice)
     {
     }
 
-    public function afterCreateProduct($product)
+    public function beforeCreateProduct()
     {
     }
 
-    public function beforeSaveProduct($product)
+    public function afterCreateProduct()
     {
     }
 
-    public function afterSaveProduct($product)
+    public function beforeUpdateProduct()
     {
     }
 
-    public function beforeDeleteProduct($product)
+    public function afterUpdateProduct()
     {
     }
 
-    public function afterDeleteProduct($product)
+    public function beforeSaveProduct()
     {
+    }
+
+    public function afterSaveProduct()
+    {
+    }
+
+    public function beforeDeleteProduct()
+    {
+    }
+
+    public function afterDeleteProduct()
+    {
+    }
+
+    public function __toString()
+    {
+        return $this->details['code'];
     }
 
 }
