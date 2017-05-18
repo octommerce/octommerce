@@ -30,6 +30,10 @@ class ProductTypeBase
     {
     }
 
+    public function invoicePaid($invoice)
+    {
+    }
+
     public function beforeCreateProduct()
     {
     }
