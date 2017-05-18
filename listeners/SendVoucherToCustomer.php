@@ -1,7 +1,6 @@
 <?php namespace Octommerce\Octommerce\Listeners;
 
 use Mail;
-use Octommerce\Octommerce\Classes\ProductManager;
 
 class SendVoucherToCustomer 
 {

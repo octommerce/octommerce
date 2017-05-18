@@ -1,7 +1,6 @@
 <?php namespace Octommerce\Octommerce\Listeners;
 
 use Event;
-use Octommerce\Octommerce\Classes\ProductManager;
 
 class TriggerProductType 
 {
