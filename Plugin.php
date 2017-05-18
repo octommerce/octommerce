@@ -23,7 +23,7 @@ use Octommerce\Octommerce\Models\OrderStatusLog;
  */
 class Plugin extends PluginBase
 {
-    public $require = ['RainLab.User', 'RainLab.Location', 'Responsiv.Currency', 'Responsiv.Pay', 'RainLab.Translate'];
+    public $require = ['RainLab.User', 'RainLab.Location', 'Responsiv.Currency', 'Responsiv.Pay'];
 
     public function boot()
     {
