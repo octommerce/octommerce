@@ -149,6 +149,7 @@ class Plugin extends PluginBase
         $productManager->registerTypes([
             'Octommerce\Octommerce\ProductTypes\Simple',
             'Octommerce\Octommerce\ProductTypes\Variable',
+            'Octommerce\Octommerce\ProductTypes\Evoucher',
         ]);
 
         \Octommerce\Octommerce\Controllers\Products::extendFormFields(function($form, $model, $context) use($productManager) {
@@ -299,6 +300,7 @@ class Plugin extends PluginBase
             'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
             'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
             'octommerce.octommerce::mail.forgot_password'      => 'Forgot password link',
+            'octommerce.octommerce::mail.evoucher_list'        => 'e-Voucher list',
         ];
     }
 
