@@ -53,7 +53,7 @@ class Cart
                 $product->id => [
                     'qty' => $qty,
                     'discount' => 0, // temporary
-                    'price' => $product->getPrice(),
+                    'price' => $product->final_price,
                     'data' => $data ? json_encode($data) : null,
                 ]
             ]);
@@ -106,7 +106,7 @@ class Cart
                 $product->id => [
                     'qty' => $qty,
                     'discount' => 0, // temporary
-                    'price' => $product->getPrice(),
+                    'price' => $product->final_price,
                     'data' => $data ? json_encode($data) : null,
                 ]
             ]);
