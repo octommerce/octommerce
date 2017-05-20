@@ -305,8 +305,6 @@ class Product extends Model
                 $this->sale_price = null;
                 $this->discount_amount = null;
         }
-
-        $this->sale_price = $this->sale_price ? $this->calculateTax($this->sale_price) : null;
     }
 
     public function scopeAvailable($query)
