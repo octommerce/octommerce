@@ -96,6 +96,7 @@ class OrderManager
                 'state_id'     => $order->state ? $order->state->id : null,
                 'country_id'   => $order->state ? $order->state->country->id : null,
                 'due_at'       => $order->expired_at,
+				'related'      => $order,
             ]);
 
             foreach($cart->products as $product) {
@@ -123,7 +124,6 @@ class OrderManager
                 $invoice->items()->save($discountItem);
             }
 
-            $order->invoices()->add($invoice);
 
             /*
              * Extensibility
