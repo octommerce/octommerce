@@ -124,6 +124,17 @@ class OrderManager
                 $invoice->items()->save($discountItem);
             }
 
+			/*
+			* Extensibility
+			*/
+			$this->fireEvent('order.beforeAddInvoice', [$order, $invoice]);
+			Event::fire('order.beforeAddInvoice', [$order, $invoice]);
+
+			// If the transaction is free, mark as paid directly
+			if ($invoice->total == 0 && $invoice->markAsPaymentProcessed()) {
+				$invoice->updateInvoiceStatus('paid');
+			}
+
 
             /*
              * Extensibility
