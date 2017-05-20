@@ -43,7 +43,8 @@ class OrderManager
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'subtotal' => $cart->total_price,
+                'subtotal' => $cart->subtotal,
+				'discount' => $cart->discount,
                 'total_weight' => $cart->total_weight,
             ]);
 
@@ -130,11 +131,12 @@ class OrderManager
 			$this->fireEvent('order.beforeAddInvoice', [$order, $invoice]);
 			Event::fire('order.beforeAddInvoice', [$order, $invoice]);
 
+			$invoice->save();
+
 			// If the transaction is free, mark as paid directly
 			if ($invoice->total == 0 && $invoice->markAsPaymentProcessed()) {
 				$invoice->updateInvoiceStatus('paid');
 			}
-
 
             /*
              * Extensibility
@@ -142,7 +144,6 @@ class OrderManager
             $this->fireEvent('order.afterAddInvoice', [$order, $invoice]);
             Event::fire('order.afterAddInvoice', [$order, $invoice]);
 
-            $invoice->save();
 
             $order->save();
 
