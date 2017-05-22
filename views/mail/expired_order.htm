@@ -7,7 +7,7 @@ subject = "Your Order has been Expired [#{{ order.order_no }}]"
     Hi {{ order.name }},
 </p>
 <p>
-    Your order #:order_no is expired. If you want to buy again these items, please purchase again on our website.'|_({order_no: order.order_no}) }}
+Your order #{{ order.order_no }} is expired. If you want to buy again these items, please purchase again on our website.
 </p>
 <table class="table-information-order">
     <tr>

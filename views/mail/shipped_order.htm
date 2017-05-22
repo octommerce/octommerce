@@ -7,7 +7,7 @@ subject = "Your Order has been Shipped [#{{ order.order_no }}]"
     Hi {{ order.name }},
 </p>
 <p>
-    We\'ve shipped your order #:order_no to your address:'|_({order_no: order.order_no}) }}
+We\'ve shipped your order #:order_no to your address: {{ order.order_no }}
 </p>
 <p>
     <strong>

@@ -43,7 +43,8 @@ class OrderManager
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'subtotal' => $cart->total_price,
+                'subtotal' => $cart->subtotal,
+				'discount' => $cart->discount,
                 'total_weight' => $cart->total_weight,
             ]);
 
@@ -96,6 +97,7 @@ class OrderManager
                 'state_id'     => $order->state ? $order->state->id : null,
                 'country_id'   => $order->state ? $order->state->country->id : null,
                 'due_at'       => $order->expired_at,
+				'related'      => $order,
             ]);
 
             foreach($cart->products as $product) {
@@ -123,7 +125,18 @@ class OrderManager
                 $invoice->items()->save($discountItem);
             }
 
-            $order->invoices()->add($invoice);
+			/*
+			* Extensibility
+			*/
+			$this->fireEvent('order.beforeAddInvoice', [$order, $invoice]);
+			Event::fire('order.beforeAddInvoice', [$order, $invoice]);
+
+			$invoice->save();
+
+			// If the transaction is free, mark as paid directly
+			if ($invoice->total == 0 && $invoice->markAsPaymentProcessed()) {
+				$invoice->updateInvoiceStatus('paid');
+			}
 
             /*
              * Extensibility
@@ -131,7 +144,6 @@ class OrderManager
             $this->fireEvent('order.afterAddInvoice', [$order, $invoice]);
             Event::fire('order.afterAddInvoice', [$order, $invoice]);
 
-            $invoice->save();
 
             $order->save();
 
