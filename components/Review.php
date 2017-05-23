@@ -13,6 +13,9 @@ use Octommerce\Octommerce\Models\ReviewItem;
 
 class Review extends ComponentBase
 {
+
+    public $review;
+
     public function componentDetails()
     {
         return [
@@ -61,7 +64,6 @@ class Review extends ComponentBase
         $ratings    = Input::get('ratings');
         $contents   = Input::get('contents');
         $reviewTypeIds = Input::get('review_type_ids');
-
             foreach ($productIds as $productId) {
             
                 $review = new ReviewModel();
@@ -74,12 +76,12 @@ class Review extends ComponentBase
                 $review->save();
 
 
-                foreach ($ratings[$productId] as $rating) {
+                foreach ($reviewTypeIds[$productId] as $reviewTypeId) {
              
                     $item = new ReviewItem();
                     $item->review_id = $review->id;
-                    $item->rating = $rating;
-                    $item->review_type_id = $reviewTypeIds[$productId];
+                    $item->rating = $ratings[$reviewTypeId][$productId];
+                    $item->review_type_id = $reviewTypeId;
                     $item->save();
                      }
             }
