@@ -59,7 +59,9 @@ class Review extends ComponentBase
 
     public function onSave()
     {
-        
+
+        Flash::success('Review successfully added');
+
         $productIds = Input::get('product_ids');
         $ratings    = Input::get('ratings');
         $contents   = Input::get('contents');
@@ -86,5 +88,6 @@ class Review extends ComponentBase
                      }
             }
         
+
     }
 }
