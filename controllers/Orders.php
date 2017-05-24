@@ -25,6 +25,7 @@ class Orders extends Controller
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
     public $importExportConfig = 'config_import_export.yaml';
+    public $partialButtons = [];
 
     public function __construct()
     {
@@ -100,6 +101,15 @@ class Orders extends Controller
 
         Flash::success('Successfully regenerated PDF.');
         return Backend::redirect(sprintf('octommerce/octommerce/orders/preview/%s', $order->id));
+    }
+
+    protected function renderPartialButtons($context)
+    {
+        return array_reduce(array_filter($this->partialButtons, function($partialContext) use ($context) {
+            return $partialContext == $context;
+        }, ARRAY_FILTER_USE_KEY)[$context], function($partials, $partial) {
+            return $partials . $this->makePartial($partial);
+        });
     }
 
     protected function makeStatusFormWidget($orderStatusCode)
