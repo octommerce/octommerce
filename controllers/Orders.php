@@ -105,6 +105,8 @@ class Orders extends Controller
 
     protected function renderPartialButtons($context)
     {
+        if ( ! array_get($this->partialButtons, $context, null)) return;
+
         return array_reduce(array_filter($this->partialButtons, function($partialContext) use ($context) {
             return $partialContext == $context;
         }, ARRAY_FILTER_USE_KEY)[$context], function($partials, $partial) {
