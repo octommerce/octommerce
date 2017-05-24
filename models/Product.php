@@ -284,19 +284,6 @@ class Product extends Model
         return ProductAttribute::lists('name', 'id');
     }
 
-    public function getPrice($userId = null)
-    {
-        // TODO:
-        // if price is attached to user
-
-        return is_null($this->sale_price) ? $this->price : $this->sale_price;
-    }
-
-    public function getPriceAttribute($value)
-    {
-        return $this->calculateTax($value);
-    }
-
     public function beforeSave()
     {
         // Set the sale price based on discount type
@@ -318,8 +305,6 @@ class Product extends Model
                 $this->sale_price = null;
                 $this->discount_amount = null;
         }
-
-        $this->sale_price = $this->sale_price ? $this->calculateTax($this->sale_price) : null;
     }
 
     public function scopeAvailable($query)
@@ -407,7 +392,13 @@ class Product extends Model
 
     public function getFinalPriceAttribute()
     {
-        return $this->sale_price ?: $this->price;
+        // TODO:
+        // if price is attached to user
+
+        $price = is_null($this->sale_price) ? $this->price : $this->sale_price;
+
+        // Calculate tax
+        return $price * (1 + $this->tax / 100);
     }
 
     public function getIsDiscountedAttribute()
@@ -609,10 +600,5 @@ class Product extends Model
         $url = CmsPage::url($page->getBaseFileName(), [$paramName => $product->slug]);
 
         return $url;
-    }
-
-    protected function calculateTax($price)
-    {
-        return $price * (1 + $this->tax / 100);
     }
 }

@@ -240,6 +240,7 @@ class Plugin extends PluginBase
             'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
             'Octommerce\Octommerce\Components\OrderTracking' => 'orderTracking',
             'Octommerce\Octommerce\Components\Wishlist'      => 'wishlist',
+            'Octommerce\Octommerce\Components\Review'      => 'review',
         ];
     }
 
