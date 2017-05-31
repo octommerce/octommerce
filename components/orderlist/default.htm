@@ -1,3 +1,43 @@
-<p>This is the default markup for component orderList</p>
+{% set orders = __SELF__.orders %}
 
-<small>You can delete this file if you want</small>
+{% if orders|length %}
+
+    {% set paginator = orders.toArray() %}
+
+    <p>
+        <em>Showing {{ paginator.from }} - {{ paginator.to }} of {{ paginator.total }} total</em>
+    </p>
+
+    <table class="table table-hover">
+        <thead class="thead-default">
+            <tr>
+                <th>Date</th>
+                <th>Order No</th>
+                <th class="text-right">Total</th>
+                <th class="text-center">Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.created_at }}</td>
+                <td>#{{ order.order_no }}</td>
+                <td class="text-right">{{ order.total|currency({format: 'short'}) }}</td>
+                <td class="text-center" style="color: {{ order.status.color }}">{{ order.status.name }}</td>
+                <td><a href="#">Detail</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="btn-group" role="group">
+        <a href="{{ paginator.prev_page_url ?: '#' }}" class="btn btn-default" {{ not paginator.prev_page_url ? 'disabled' : '' }}>Previous</a>
+        <a href="{{ paginator.next_page_url ?: '#' }}" class="btn btn-default" {{ not paginator.next_page_url ? 'disabled' : '' }}>Next</a>
+    </div>
+
+{% else %}
+<p class="text-center text-muted">
+    You don't have any order yet.
+</p>
+{% endif %}
