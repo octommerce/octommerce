@@ -17,6 +17,7 @@ use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Product;
 use Octommerce\Octommerce\Models\OrderStatusLog;
+use Octommerce\Octommerce\Models\Order;
 
 /**
  * Octommerce Plugin Information File
@@ -57,16 +58,27 @@ class Plugin extends PluginBase
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
             $model->belongsTo['state'] = 'RainLab\Location\Models\State';
 
-            $model->addDynamicMethod('getSpendAttribute', function($value) {
-                return Currency::format($value);
+            $model->addDynamicMethod('getSpendAttribute', function($value) use ($model) {
+                $total = Order::where('user_id', $model->id)
+                    ->whereIn('status_code', ['paid', 'shipped', 'packing', 'delivered'])
+                    ->get()
+                    ->sum('total');
+
+                return Currency::format($total);
             });
 
-            $model->addDynamicMethod('getTransactionsAttribute', function($value) {
-                return $value;
+            $model->addDynamicMethod('getTransactionsAttribute', function($value) use ($model) {
+                return Order::where('user_id', $model->id)
+                    ->whereIn('status_code', ['paid', 'shipped', 'packing', 'delivered'])
+                    ->get()
+                    ->count();
             });
 
-            $model->addDynamicMethod('getLastTransactionAttribute', function($value) {
-                return \Carbon\Carbon::parse($value)->diffForHumans();
+            $model->addDynamicMethod('getLastTransactionAttribute', function($value) use ($model) {
+                $order = Order::where('user_id', $model->id)->orderBy('created_at', 'desc')->first();
+
+                if ($order)
+                    return $order->created_at->diffForHumans();
             });
 
         });
