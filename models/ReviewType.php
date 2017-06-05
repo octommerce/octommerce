@@ -25,7 +25,7 @@ class ReviewType extends Model
     protected $fillable = [];
 
 
-    protected $jsonable = ['product_type_classes'];
+    protected $jsonable = ['product_type_codes'];
     /**
      * @var array Relations
      */
@@ -49,7 +49,7 @@ class ReviewType extends Model
         $this->manager = ProductManager::instance();
     }
 
-    public function getProductTypeClassesOptions()
+    public function getProductTypeCodesOptions()
     {
         // $list = [];
 
