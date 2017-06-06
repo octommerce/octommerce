@@ -1,0 +1,43 @@
+<table class="table data">
+    <thead>
+        <tr>
+            <th><span>SKU</span></th>
+            <th><span>Product Name</span></th>
+            <th class="text-center"><span>Quantity</span></th>
+            <th class="text-center"><span>Discount</span></th>
+            <th class="text-center"><span>Price</span></th>
+            <th class="text-right"><span>Subtotal</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php  ?>
+        <?php foreach($model->products as $i => $product): ?>
+        <tr>
+            <td class="text-left"><?= $product->sku ?></td>
+            <td class="text-left"><?= $product->pivot->name ?></td>
+            <td class="text-center"><?= number_format($product->pivot->qty) ?></td>
+            <td class="text-center"><?= number_format($product->pivot->discount) ?></td>
+            <td class="text-right"><?= number_format($product->pivot->price) ?></td>
+            <td class="text-right"><?= number_format(($product->pivot->price - $product->pivot->discount) * $product->pivot->qty) ?></td>
+        </tr>
+
+        <?php endforeach ?>
+    </tbody>  <tfoot>
+        <tr>
+            <th colspan="5">Subtotal</th>
+            <th class="text-right"><?= number_format($model->subtotal) ?></th>
+        </tr>
+        <!--<tr>-->
+            <!--<th colspan="4">Shipping Cost</th>-->
+            <!--<th class="text-right"><?= number_format($model->shipping_cost) ?></th>-->
+        <!--</tr>-->
+        <tr>
+            <th colspan="5">Discount</th>
+            <th class="text-right"><?= number_format($model->discount) ?></th>
+        </tr>
+        <tr>
+            <th colspan="5">Total</th>
+            <th class="text-right">Rp. <?= number_format($model->subtotal - $model->discount) ?></th>
+        </tr>
+    </tfoot>
+</table>

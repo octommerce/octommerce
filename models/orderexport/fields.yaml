@@ -1,0 +1,33 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    start_date:
+        label: Start Date
+        type: datepicker
+        mode: date
+        span: auto
+    end_date:
+        label: End Date
+        type: datepicker
+        mode: date
+        span: auto
+    status:
+        label: Status Filter
+        type: checkboxlist
+        options:
+            closed: Closed
+            delivered: Delivered
+            expired: Expired
+            paid: Paid
+            refunded: Refunded
+            shipped: Shipped
+            void: Void
+            packing: Packing
+            waiting: Waiting
+    is_expand_product:
+        label: Expand Products ?
+        type: checkbox
+        comment: Expand Product Like Old MTOS report?
+        default: 0

@@ -1,6 +1,7 @@
 <?php namespace Octommerce\Octommerce\Helpers;
 
 use Auth;
+use Event;
 use Session;
 use Octommerce\Octommerce\Models\Cart as CartModel;
 use Octommerce\Octommerce\Models\Product as ProductModel;
@@ -11,6 +12,7 @@ use RainLab\User\Models\User as UserModel;
  */
 class Cart
 {
+    use \October\Rain\Support\Traits\Emitter;
 
     public $cart;
 
@@ -24,26 +26,50 @@ class Cart
         $product = $this->getItem($productId);
         $cart = $this->get();
 
+        /*
+         * Extensibility
+         */
+        if (
+            ($this->fireEvent('cart.beforeAddItem', [$product, $cart, $qty, $data], true) === false) ||
+            (Event::fire('cart.beforeAddItem', [$this, $product, $cart, $qty, $data], true) === false)
+        ) {
+            return;
+        }
+
         $existingProduct = $this->findExistingItem($productId);
 
         if ($existingProduct) {
             $qty += $existingProduct->pivot->qty;
-            $cart->products()->detach($productId);
         }
+
+        if (!$product->isAvailable($qty)) {
+            throw new \ApplicationException('No more stock.');
+        }
+
+        $cart->products()->detach($productId);
 
         if ($qty > 0) {
             $cart->products()->attach([
                 $product->id => [
                     'qty' => $qty,
                     'discount' => 0, // temporary
-                    'price' => $product->price,
+                    'price' => $product->final_price,
                     'data' => $data ? json_encode($data) : null,
                 ]
             ]);
         }
 
+        // Reload the products relation
+        $cart->reloadRelations('products');
+
+        /*
+         * Extensibility
+         */
+        $this->fireEvent('cart.afterAddItem', [$product, $cart, $qty, $data]);
+        Event::fire('cart.afterAddItem', [$this, $product, $cart, $qty, $data]);
+
         // Get the latest update
-        $cart = $this->get();
+        $cart->reload()->reloadRelations();
 
         return $cart;
     }
@@ -53,26 +79,50 @@ class Cart
         $product = $this->getItem($productId);
         $cart = $this->get();
 
+        /*
+         * Extensibility
+         */
+        if (
+            ($this->fireEvent('cart.beforeUpdateItem', [$product, $cart, $qty, $data], true) === false) ||
+            (Event::fire('cart.beforeUpdateItem', [$this, $product, $cart, $qty, $data], true) === false)
+        ) {
+            return;
+        }
+
         $existingProduct = $this->findExistingItem($productId);
 
         if ($existingProduct) {
             $qty = $qty !== null ? $qty : $existingProduct->qty;
-            $cart->products()->detach($productId);
         }
+
+        if (!$product->isAvailable($qty)) {
+            throw new \ApplicationException('No more stock.');
+        }
+
+        $cart->products()->detach($productId);
 
         if ($qty > 0) {
             $cart->products()->attach([
                 $product->id => [
                     'qty' => $qty,
                     'discount' => 0, // temporary
-                    'price' => $product->price,
+                    'price' => $product->final_price,
                     'data' => $data ? json_encode($data) : null,
                 ]
             ]);
         }
 
+        // Reload the products relation
+        $cart->reloadRelations('products');
+
+        /*
+         * Extensibility
+         */
+        $this->fireEvent('cart.afterUpdateItem', [$product, $cart, $qty, $data]);
+        Event::fire('cart.afterUpdateItem', [$this, $product, $cart, $qty, $data]);
+
         // Get the latest update
-        $cart = $this->get();
+        $cart->reload()->reloadRelations();
 
         return $cart;
     }
@@ -82,9 +132,29 @@ class Cart
         $product = $this->getItem($productId);
         $cart = $this->get();
 
+        /*
+         * Extensibility
+         */
+        if (
+            ($this->fireEvent('cart.beforeRemoveItem', [$product, $cart, $qty], true) === false) ||
+            (Event::fire('cart.beforeRemoveItem', [$this, $product, $cart, $qty], true) === false)
+        ) {
+            return;
+        }
+
         $cart->products()->detach([$product->id]);
 
-        $cart = $this->get();
+        // Reload the products relation
+        $cart->reloadRelations('products');
+
+        /*
+         * Extensibility
+         */
+        $this->fireEvent('cart.afterRemoveItem', [$product, $cart, $qty]); //, $data
+        Event::fire('cart.afterRemoveItem', [$this, $product, $cart, $qty]); //, $data
+
+        // Get the latest update
+        $cart->reload()->reloadRelations();
 
         return $cart;
     }
@@ -95,25 +165,63 @@ class Cart
 
         $cart->products()->detach();
 
-        $cart = $this->get();
+        // Reload the products relation
+        $cart->reloadRelations('products');
 
         return $cart;
     }
 
+    public function destroy()
+    {
+        $cart = $this->get();
+
+        $cart->delete();
+    }
+
     public function get($cartId = null)
     {
+        // If cart id
         if ($cartId) {
             return CartModel::find($cartId);
         }
 
-        $cart = $this->cart = CartModel::firstOrCreate([
-            'session_id' => Session::getId(),
-        ]);
-
-        // Attach user_id when user is logged in
+        // If logged in, check by user_id
         if (Auth::check()) {
-            $cart->user_id = Auth::getUser()->id;
-            $cart->save();
+            $cart = CartModel::whereUserId(Auth::getUser()->id)->first();
+        }
+
+        // If not found, find by session_id
+        if (!isset($cart) || !$cart) {
+            $cart = CartModel::whereSessionId(Session::getId())->first();
+        }
+
+        if (isset($cart) && $cart) {
+            // Attach user_id to cart
+            if (Auth::check() && !$cart->user_id) {
+                $cart->user_id = Auth::getUser()->id;
+                $cart->save();
+            }
+            // Remove session id if user_id is already attached
+            if ($cart->session_id && $cart->user_id) {
+                $cart->session_id = null;
+                $cart->save();
+            }
+        }
+        // If not found, create a new one
+        else {
+            // If logged in, attach to user_id
+            if (Auth::check()) {
+                $cart = CartModel::create([
+                    'user_id' => Auth::getUser()->id,
+                    'session_id' => '',
+                ]);
+            }
+            // If not logged in, attach to session_id
+            else {
+                $cart = CartModel::create([
+                    'session_id' => Session::getId(),
+                ]);
+            }
         }
 
         return $cart;
@@ -121,7 +229,7 @@ class Cart
 
     protected function prepareVars()
     {
-        $this->get();
+        $this->cart = $this->get();
     }
 
     // protected function getUser($userId = null)

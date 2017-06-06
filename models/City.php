@@ -14,6 +14,12 @@ class City extends Model
     public $table = 'octommerce_octommerce_cities';
 
     /**
+     * Implement the CityModel behavior.
+     */
+    public $implement = ['Octommerce.Octommerce.Behaviors.CityModel'];
+
+    public $timestamps = false;
+    /**
      * @var array Guarded fields
      */
     protected $guarded = ['*'];
@@ -28,7 +34,9 @@ class City extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'state' => 'RainLab\Location\Models\State',
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];

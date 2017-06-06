@@ -8,11 +8,14 @@ use Redirect;
 use Cms\Classes\Page;
 use Cms\Classes\CodeBase;
 use Cms\Classes\ComponentBase;
+use RainLab\Location\Models\State;
 use Octommerce\Octommerce\Classes\OrderManager;
 
 class Checkout extends ComponentBase
 {
     public $orderManager;
+
+    public $states;
 
     public function componentDetails()
     {
@@ -54,19 +57,34 @@ class Checkout extends ComponentBase
             $this->setStatusCode(404);
             return $this->controller->run('404');
         }
+
+        $this->states = State::get();
+
+        $this->addJs('assets/js/checkout.js');
     }
 
     public function onSubmit()
     {
         $data = post();
 
+        if (isset($data['is_same_address'])) {
+            $data['is_same_address'] = $data['is_same_address'] ? true : false;
+        }
+
         try {
             $order = $this->orderManager->create($data);
         }
         catch(Exception $e) {
+            trace_log($e);
             throw new \ApplicationException($e->getMessage());
         }
 
         return Redirect::to(Page::url($this->property('redirectPage'), ['hash' => $order->invoices->last()->hash]));
+    }
+
+    public function onSelectState()
+    {
+        $this->page['cities'] = State::find(post(post('param_name')))->cities;
+        $this->page['is_shipping'] = post('is_shipping');
     }
 }

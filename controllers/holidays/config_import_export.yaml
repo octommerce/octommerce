@@ -1,0 +1,14 @@
+# ===================================
+#  Import/Export Behavior Config
+# ===================================
+
+import:
+    title: Import holidays
+    modelClass: Octommerce\Octommerce\Models\HolidayImport
+    list: $/octommerce/octommerce/models/holiday/columns.yaml
+
+export:
+    title: Export holidays
+    modelClass: Octommerce\Octommerce\Models\HolidayExport
+    list: $/octommerce/octommerce/models/holiday/columns.yaml
+    fileName: holidays.csv

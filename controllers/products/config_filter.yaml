@@ -23,6 +23,13 @@ scopes:
         scope: FilterLists
 
     published:
-        label: Hide published
+        label: Published?
+        type: switch
+        conditions:
+            - is_published <> 1
+            - is_published = 1
+
+    available:
+        label: Only available products
         type: checkbox
-        conditions: is_published <> 1
+        scope: available

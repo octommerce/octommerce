@@ -3,7 +3,72 @@
 # ===================================
 
 fields:
-    status:
-        label: Status
-        type: relation
+    detail@preview:
+        type: partial
+        path: $/octommerce/octommerce/controllers/orders/_order_detail.htm
+    items:
+        type: partial
+        path: $/octommerce/octommerce/controllers/orders/_order_items.htm
+    status_logs:
+        label: Status Logs
+        type: partial
+        path: $/octommerce/octommerce/controllers/orders/_relation_status_logs.htm
+    customer_section@update:
+        label: Customer
+        type: section
+    name@update:
+        label: Name
+        span: auto
+    user@update:
+        label: User
+        type: recordfinder
+        list: $/rainlab/user/models/user/columns.yaml
+        prompt: Click the %s button to find a user
+        nameFrom: name
+        descriptionFrom: email
+        span: auto
+    email@update:
+        label: Email
+        span: left
+    phone@update:
+        label: Phone
+        span: auto
+    address@update:
+        label: Address
+        type: textarea
+        size: small
+        span: auto
+    postcode@update:
+        label: Postal Code
+        span: auto
+    city@update:
+        label: City
+        type: recordfinder
+        list: $/octommerce/octommerce/models/city/columns.yaml
+        prompt: Click the %s button to find a city
+        nameFrom: name
+        span: auto
+    shipping_section@update:
+        label: Shipping Address
+        type: section
+    shipping_name@update:
+        label: Name
+        span: auto
+    shipping_phone@update:
+        label: Phone
+        span: auto
+    shipping_address@update:
+        label: Address
+        type: textarea
+        size: small
+        span: auto
+    shipping_postcode@update:
+        label: Postal Code
+        span: auto
+    shipping_city@update:
+        label: City
+        type: recordfinder
+        list: $/octommerce/octommerce/models/city/columns.yaml
+        prompt: Click the %s button to find a city
+        nameFrom: name
         span: auto

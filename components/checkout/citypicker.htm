@@ -1,0 +1,11 @@
+{% set name = is_shipping ? 'shipping_city_id' : 'city_id' %}
+<div class="form-group">
+    <label for="{{ name }}_select">City</label>
+    <select name="{{ name }}" class="form-control select2" id="{{ name }}_select">
+        <option value="">- Select City -</option>
+        {% for city in cities %}
+        <option {% if(city.id == user.city_id) %}selected{% endif %}
+        value="{{ city.id }}">{{ city.name }}</option>
+        {% endfor %}
+    </select>
+</div>

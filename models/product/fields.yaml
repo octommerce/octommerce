@@ -1,4 +1,7 @@
 fields:
+    page_url@update:
+        type: partial
+        path: $/octommerce/octommerce/controllers/products/_preview_link.htm
     name:
         label: Name
         span: auto
@@ -18,6 +21,14 @@ fields:
         span: auto
         type: relation
         emptyOption: -- None --
+    tags:
+        label: Tags
+        type: taglist
+        mode: relation
+    priority:
+        label: Priority
+        type: number
+        span: left
 tabs:
     fields:
         price:
@@ -26,28 +37,56 @@ tabs:
             label: Price
             span: left
             placeholder: '0.00'
+        discount_type:
+            tab: Information
+            label: 'Discount Type'
+            type: radio
+            span: right
+            options:
+                '': [No Discount]
+                sale_price: [Sale Price, Set the discounted price directly.]
+                percentage: [Percentage, Set the percentage of discount.]
+                fixed: [Fixed Amount, Set the fixed amount of discount.]
         sale_price:
             tab: Information
             type: number
             label: 'Sale Price'
-            span: right
-        discount_type:
-            tab: Information
-            label: 'Discount Type'
-            type: dropdown
             span: left
-            options:
-                '': 'No discount'
-                price: Price
-                percentage: Percentage
-                shipping_price: 'Shipping Price'
-                shipping_percentage: 'Shipping Percentage'
+            comment: The normal price will be overriden by this value
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[sale_price]
         discount_amount:
             tab: Information
             type: number
             label: 'Discount Amount'
-            span: right
+            span: left
             placeholder: '0.00'
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[percentage] or value[fixed]
+        discount_start_at:
+            tab: Information
+            type: datepicker
+            mode: datetime
+            label: 'Discount Start at'
+            span: left
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[sale_price], value[percentage], value[fixed]
+        discount_end_at:
+            tab: Information
+            type: datepicker
+            mode: datetime
+            label: 'Discount End at'
+            span: left
+            trigger:
+                action: show
+                field: discount_type
+                condition: value[sale_price], value[percentage], value[fixed]
         description:
             tab: Information
             label: Description
@@ -57,27 +96,23 @@ tabs:
             oc.commentPosition: ''
             nameFrom: name
             descriptionFrom: description
+            emptyOption: 'No Tax'
+            span: auto
+            type: dropdown
+            tab: Information
+        currency:
+            label: Currency
+            oc.commentPosition: ''
+            nameFrom: currency_code
+            descriptionFrom: name
+            emptyOption: '-- Default --'
             span: auto
             type: relation
             tab: Information
-        # attributes:
-        #     type: partial
-        #     path: $/octommerce/octommerce/controllers/products/_relation_attributes.htm
-        #     tab: Attributes
-        # attributes:
-        #     type: repeater
-        #     # form: $/octommerce/octommerce/models/productattribute/fields_relation_product.yaml
-        #     form:
-        #         fields:
-        #             attribute_id:
-        #                 label: Attribute
-        #                 type: dropdown
-        #                 span: auto
-        #             value:
-        #                 label: Value
-        #                 type: text
-        #                 span: auto
-        #     tab: Attributes
+        product_attributes:
+            type: partial
+            path: $/octommerce/octommerce/controllers/products/_relation_attributes.htm
+            tab: Attributes
         categories:
             tab: Categories & Lists
             type: relation

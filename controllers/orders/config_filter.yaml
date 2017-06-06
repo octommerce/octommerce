@@ -1,0 +1,19 @@
+scopes:
+    status:
+        label: Status
+        modelClass: Octommerce\Octommerce\Models\OrderStatus
+        nameFrom: name
+        conditions: status_code in (:filtered)
+    payment_method:
+        label: Payment Method
+        modelClass: Responsiv\Pay\Models\PaymentMethod
+        nameFrom: name
+        scope: FilterPaymentMethods
+    created_at:
+        label: Date
+        type: daterange
+        conditions: created_at >= ':after' AND created_at <= ':before'
+    sales:
+        label: Only sales
+        type: checkbox
+        scope: sales

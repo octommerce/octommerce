@@ -1,0 +1,11 @@
+{% set name = name ?: 'state_id' %}
+<div class="form-group">
+    <label for="{{ name }}_select">State</label>
+    <select data-request-data="param_name: '{{ name }}', is_shipping: '{{ is_shipping }}'" data-request="onSelectState" data-request-update="'{{ __SELF__ ~ "::citypicker"}}': '{{ citySelectTarget ?: '#citySelectForm' }}'" name="{{ name }}" class="form-control select2" id="{{ name }}_select">
+        <option value="">- Select State -</option>
+        {% for state in states %}
+        <option
+        value="{{ state.id }}">{{ state.name }}</option>
+        {% endfor %}
+    </select>
+</div>

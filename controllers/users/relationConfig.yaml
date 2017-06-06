@@ -1,0 +1,14 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+orders:
+    label: Order history
+    readOnly: true
+    view:
+        list: $/octommerce/octommerce/models/order/columns.yaml
+        recordsPerPage: 5
+    manage:
+        list: $/octommerce/octommerce/models/order/columns.yaml
+        form: $/octommerce/octommerce/models/order/fields.yaml
+        recordsPerPage: 10

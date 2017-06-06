@@ -1,0 +1,49 @@
+subject = "Wait, We Saved Your Selected Items"
+==
+
+==
+<p>
+	Hi {{ cart.user.name }},
+</p>
+<p>
+	Forget something? You left some great items in your shopping bag. Don\'t miss out, complete your order now.
+</p>
+<table class="table-summary">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Subtotal
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in cart.products %}
+        <tr>
+            <td>
+                {{ product.pivot.qty }} x {{ product.name }}
+            </td>
+            <td>
+                {{ product.pivot.price|currency({format: 'short'}) }}
+            </td>
+            <td>
+                {{ (product.pivot.qty * product.pivot.price)|currency({format: 'short'}) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">Subtotal</td>
+            <td class="text-right"><b>{{ cart.total_price|currency({format: 'short'}) }}</b></td>
+        </tr>
+    </tfoot>
+</table>
+<p>
+	<a href="#" class="button button-primary">Check Now</a>
+</p>

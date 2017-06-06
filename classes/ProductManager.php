@@ -68,11 +68,11 @@ class ProductManager
     	}
     }
 
-    public function findTypeByCode($code)
+    public function findTypeByCode($code, $product = null)
     {
     	foreach($this->types as $className => $type) {
     		if($type['code'] == $code) {
-    			return new $className;
+    			return new $className($product);
     		}
     	}
     }

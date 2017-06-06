@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: Name
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    product_type_codes:
+        label: Prtoduct Type codes
+        oc.commentPosition: ''
+        span: left
+        type: checkboxlist

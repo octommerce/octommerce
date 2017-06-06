@@ -1,19 +1,24 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Db;
 use Mail;
+use Event;
 use Model;
+use Exception;
 use BackendAuth;
 use Carbon\Carbon;
 use ApplicationException;
 use System\Models\MailTemplate;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\OrderStatus;
+use Octommerce\Octommerce\Models\Settings;
 
 /**
  * OrderStatusLog Model
  */
 class OrderStatusLog extends Model
 {
+    protected $previousStatus;
 
     /**
      * @var string The database table used by the model.
@@ -43,7 +48,10 @@ class OrderStatusLog extends Model
     public $hasMany = [];
     public $belongsTo = [
         'order' => 'Octommerce\Octommerce\Models\Order',
-        'status' => 'Octommerce\Octommerce\Models\OrderStatus',
+        'status' => [
+            'Octommerce\Octommerce\Models\OrderStatus',
+            'key' => 'status_code',
+        ],
         'admin' => 'Backend\Models\User',
     ];
     public $belongsToMany = [];
@@ -56,6 +64,20 @@ class OrderStatusLog extends Model
     public function afterSave()
     {
         $this->checkOrderStatus();
+    }
+
+    public function setPreviousStatus($previousStatus)
+    {
+        $this->previousStatus = $previousStatus;
+    }
+
+    public function getStatusOptions()
+    {
+        if ($this->previousStatus) {
+            return OrderStatus::find($this->previousStatus)->children()->lists('name', 'code');
+        }
+
+        return OrderStatus::lists('name', 'code');
     }
 
     /**
@@ -79,6 +101,10 @@ class OrderStatusLog extends Model
             }
 
             $this->sendEmailToCustomer($orderStatus, $order);
+
+            if ($orderStatus->send_email_to_admin) {
+                $this->sendEmailToAdmin($orderStatus, $order);
+            }
         }
     }
 
@@ -89,16 +115,46 @@ class OrderStatusLog extends Model
      *
      * @return void
      */
-    public function sendEmailToCustomer($orderStatus, $order)
+    public function sendEmailToCustomer()
     {
-        $mailTemplate = MailTemplate::find($orderStatus->mail_template_id);
+        $order = $this->order;
+        $orderStatus = $order->status;
 
-        if (! $mailTemplate) {
-            throw new ApplicationException('Mail template not found!');
+        if (! $orderStatus->mail_template) {
+            return;
         }
 
-        Mail::send($mailTemplate->code, compact('order'), function($message) use ($order, $orderStatus) {
+        // Get newest status log
+        $statusLog = $this->where('order_id', '=', $order->id)
+            ->orderBy('timestamp', 'DESC')->first();
+
+        Mail::send($orderStatus->mail_template->code, compact('order', 'statusLog'), function($message) use ($order, $orderStatus) {
             $message->to($order->email, $order->name);
+
+            if($orderStatus->attach_pdf) {
+                // $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
+            }
+        });
+    }
+
+    /**
+     * Send an email to admin
+     * @param $orderStatus
+     * @param $order
+     *
+     * @return void
+     */
+    public function sendEmailToAdmin()
+    {
+        $order = $this->order;
+        $orderStatus = $order->status;
+
+        if (! $orderStatus->admin_mail_template) {
+            return;
+        }
+
+        Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
+            $message->to(Settings::get('admin_email'), 'Admin');
 
             if($orderStatus->attach_pdf) {
             //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
@@ -106,8 +162,11 @@ class OrderStatusLog extends Model
         });
     }
 
-    public static function createRecord($statusCode, $order, $note = null)
+    public static function createRecord($statusCode, $order, $note = null, $data = null)
     {
+        if (! $order instanceof \Octommerce\Octommerce\Models\Order)
+            return;
+
         if ($statusCode instanceof Model)
             $statusCode = $statusCode->getKey();
 
@@ -116,24 +175,48 @@ class OrderStatusLog extends Model
 
         $previousStatus = $order->status_code;
 
-        /*
-         * Create record
-         */
-        $record = new static;
-        $record->status_code = $statusCode;
-        $record->order_id = $order->id;
-        $record->admin_id = BackendAuth::getUser()->id;
-        $record->data = null;
-        $record->timestamp = Carbon::now();
-        $record->note = $note;
+        try {
 
-        $record->save();
+            Db::beginTransaction();
 
-        /*
-         * Update order status
-         */
-        $order->status_code = $statusCode;
-        $order->status_updated_at = Carbon::now();
-        $order->save();
+            /*
+             * Create record
+             */
+            $record = new static;
+            $record->status_code = $statusCode;
+            $record->order_id = $order->id;
+            // $record->admin_id = BackendAuth::getUser()->id;
+            $record->data = array_except($data, ['status', 'note']);
+            $record->timestamp = Carbon::now();
+            $record->note = $note;
+
+            /*
+             * Extensibility
+             */
+            if (Event::fire('octommerce.octommerce.beforeUpdateOrderStatus', [$record, $order, $statusCode, $previousStatus], true) === false)
+                return false;
+
+            if ($record->fireEvent('octommerce.beforeUpdateOrderStatus', [$record, $order, $statusCode, $previousStatus], true) === false)
+                return false;
+
+            /*
+             * Update order status
+             */
+            $order->status_code = $statusCode;
+            $order->status_updated_at = Carbon::now();
+            $order->save();
+
+            $record->save();
+
+            $order->onChangeStatus($statusCode, $previousStatus);
+
+            Db::commit();
+        }
+        catch (Exception $e) {
+            Db::rollBack();
+
+            throw $e;
+        }
+
     }
 }

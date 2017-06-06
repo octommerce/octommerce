@@ -27,10 +27,13 @@ class Review extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+        'review_items' => 'Octommerce\Octommerce\Models\ReviewItem'
+                ];
     public $belongsTo = [
         'product' => 'Octommerce\Octommerce\Models\Product',
         'user' => 'RainLab\User\Models\User',
+        'order' => 'Octommerce\Octommerce\Models\Order'
     ];
     public $belongsToMany = [];
     public $morphTo = [];

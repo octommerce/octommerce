@@ -1,13 +1,23 @@
 <?php namespace Octommerce\Octommerce;
 
 use Event;
+use Yaml;
+use File;
+use Backend;
+use Currency;
 use System\Classes\PluginBase;
-use Octommerce\Octommerce\Classes\ProductManager;
 use Illuminate\Foundation\AliasLoader;
-use Octommerce\Octommerce\Models\Category;
-use Octommerce\Octommerce\Models\Brand;
-use Rainlab\Location\Models\State;
 use Rainlab\User\Models\User;
+use Rainlab\User\Controllers\Users as UsersController;
+use Rainlab\Location\Models\State;
+use Responsiv\Pay\Models\InvoiceStatus;
+use Octommerce\Octommerce\Classes\OrderManager;
+use Octommerce\Octommerce\Classes\ProductManager;
+use Octommerce\Octommerce\Models\Brand;
+use Octommerce\Octommerce\Models\Category;
+use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\OrderStatusLog;
+use Octommerce\Octommerce\Models\Order;
 
 /**
  * Octommerce Plugin Information File
@@ -41,9 +51,52 @@ class Plugin extends PluginBase
                 'postcode',
             ]);
 
-            $model->hasMany['orders'] = ['Octommerce\Octommerce\Models\Order'];
+            $model->hasMany['orders'] = [
+                'Octommerce\Octommerce\Models\Order',
+                'order' => 'created_at desc',
+            ];
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
-            $model->belongsTo['state'] = 'Rainlab\Location\Models\State';
+            $model->belongsTo['state'] = 'RainLab\Location\Models\State';
+
+            $model->addDynamicMethod('getSpendAttribute', function($value) use ($model) {
+                $total = Order::where('user_id', $model->id)
+                    ->whereIn('status_code', ['paid', 'shipped', 'packing', 'delivered'])
+                    ->get()
+                    ->sum('total');
+
+                return Currency::format($total);
+            });
+
+            $model->addDynamicMethod('getTransactionsAttribute', function($value) use ($model) {
+                return Order::where('user_id', $model->id)
+                    ->whereIn('status_code', ['paid', 'shipped', 'packing', 'delivered'])
+                    ->get()
+                    ->count();
+            });
+
+            $model->addDynamicMethod('getLastTransactionAttribute', function($value) use ($model) {
+                $order = Order::where('user_id', $model->id)->orderBy('created_at', 'desc')->first();
+
+                if ($order)
+                    return $order->created_at->diffForHumans();
+            });
+
+        });
+
+        /**
+         * Add profile fields to backend users
+         */
+        UsersController::extendFormFields(function($form, $model, $context) {
+            if(!$model instanceof User) return;
+            $configFile = __DIR__ .'/config/profile_fields.yaml';
+            $config = Yaml::parse(File::get($configFile));
+            $form->addTabFields($config);
+            $form->removeField('surname');
+        });
+
+        UsersController::extend(function($users) {
+            $users->implement[] = 'Backend.Behaviors.RelationController';
+            $users->relationConfig = '$/octommerce/octommerce/controllers/users/relationConfig.yaml';
         });
 
         State::extend(function($model) {
@@ -55,6 +108,50 @@ class Plugin extends PluginBase
                 'Octommerce\Octommerce\Models\City'
             ];
         });
+
+        Event::listen('backend.list.extendColumns', function($widget) {
+
+			// Only for the User controller
+			if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
+				return;
+			}
+
+			// Only for the User model
+			if (!$widget->model instanceof \RainLab\User\Models\User) {
+				return;
+			}
+
+			// Add an extra birthday column
+			$widget->addColumns([
+                'spend' => [
+                    'label'  => 'Spend',
+                    'select' => '(select SUM(total) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    and (
+                        `octommerce_octommerce_orders`.`status_code` = "paid"
+                        or `octommerce_octommerce_orders`.`status_code` = "shipped"
+                        or `octommerce_octommerce_orders`.`status_code` = "packing"
+                        or `octommerce_octommerce_orders`.`status_code` = "delivered"
+                    ))'
+                ],
+                'transactions' => [
+                    'label'  => 'Transactions',
+                    'select' => '(select count(*) from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    and (
+                        `octommerce_octommerce_orders`.`status_code` = "paid"
+                        or `octommerce_octommerce_orders`.`status_code` = "shipped"
+                        or `octommerce_octommerce_orders`.`status_code` = "packing"
+                        or `octommerce_octommerce_orders`.`status_code` = "delivered"
+                    ))'
+                ],
+                'last_transaction' => [
+                    'label'  => 'Last Transaction',
+                    'select' => '(select created_at from `octommerce_octommerce_orders` where `octommerce_octommerce_orders`.`user_id` = `users`.`id`
+                    order by created_at desc limit 1
+                    )'
+                ]
+			]);
+        });
+
 
         //
         // Built in Types
@@ -79,9 +176,10 @@ class Plugin extends PluginBase
          */
         Event::listen('pages.menuitem.listTypes', function() {
             return [
-                'product-category' => 'Product Category',
+                'product-category'       => 'Product Category',
                 'all-product-categories' => 'All Product Categories',
-                'all-brands' => 'All Brands',
+                'all-brands'             => 'All Brands',
+                'all-products'           => 'All Products',
             ];
         });
 
@@ -91,6 +189,9 @@ class Plugin extends PluginBase
 
             if ($type == 'all-brands')
                 return Brand::getMenuTypeInfo($type);
+
+            if ($type == 'all-products')
+                return Product::getMenuTypeInfo($type);
         });
 
         Event::listen('pages.menuitem.resolveItem', function($type, $item, $url, $theme) {
@@ -99,6 +200,33 @@ class Plugin extends PluginBase
 
             if ($type == 'all-brands')
                 return Brand::resolveMenuItem($item, $url, $theme);
+
+            if ($type == 'all-products')
+                return Product::resolveMenuItem($item, $url, $theme);
+        });
+
+        // Update order status
+        Event::listen('responsiv.pay.beforeUpdateInvoiceStatus', function($record, $invoice, $statusId, $previousStatus) {
+
+            $newStatusCode = null;
+
+            $oldStatusCode = InvoiceStatus::find($statusId)->code;
+
+            switch($oldStatusCode) {
+                case 'paid':
+                case 'approved':
+                    $newStatusCode = 'paid';
+                    break;
+                case 'void':
+                    $newStatusCode = 'void';
+                    break;
+            }
+
+            if ($newStatusCode) {
+                //TODO: Check is $invoice->related Order model.
+
+                $invoice->related->updateStatus($newStatusCode, $record->comment);
+            }
         });
     }
 
@@ -116,10 +244,15 @@ class Plugin extends PluginBase
         return [
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
-            'Octommerce\Octommerce\Components\ProductSearch' => 'productSearch',
+            'Octommerce\Octommerce\Components\CategoryList'  => 'categoryList',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
-            'Octommerce\Octommerce\Components\Account'      => 'OctommerceAccount',
+            'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
+            'Octommerce\Octommerce\Components\OrderDetail'   => 'orderDetail',
+            'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
+            'Octommerce\Octommerce\Components\OrderTracking' => 'orderTracking',
+            'Octommerce\Octommerce\Components\Wishlist'      => 'wishlist',
+            'Octommerce\Octommerce\Components\Review'      => 'review',
         ];
     }
 
@@ -131,6 +264,14 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-shopping-cart',
                 'description' => 'Configure Octommerce plugins.',
                 'class'       => 'Octommerce\Octommerce\Models\Settings',
+                'permissions' => ['octommerce.octommerce.manage_plugins'],
+                'order'       => 60
+            ],
+            'holidays' => [
+                'label'       => 'Holidays',
+                'icon'        => 'icon-calendar',
+                'description' => 'Configure holidays.',
+                'url'         => Backend::url('octommerce/octommerce/holidays'),
                 'permissions' => ['octommerce.octommerce.manage_plugins'],
                 'order'       => 60
             ]
@@ -187,10 +328,8 @@ class Plugin extends PluginBase
         })->hourly();
 
         // Check expired orders every minute
-	/*
-	$schedule->call(function() use($orderManager) {
+        $schedule->call(function() use($orderManager) {
             $orderManager->checkExpiredOrders();
         })->everyMinute();
-	*/
-   }
-}
+    }
+

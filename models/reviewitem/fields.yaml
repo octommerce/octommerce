@@ -1,0 +1,16 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id:
+        label: ID
+        disabled: true
+    review:
+        label: Review
+        oc.commentPosition: ''
+        nameFrom: id
+        descriptionFrom: sku
+        list: $/octommerce/octommerce/models/review/columns.yaml
+        span: auto
+        type: recordfinder

@@ -1,6 +1,8 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Model;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
 
 /**
  * Settings Model
@@ -11,7 +13,7 @@ class Settings extends Model
 
     public $implement = ['System.Behaviors.SettingsModel'];
 
-    public $settingsCode = 'rainlab_googleanalytics_settings';
+    public $settingsCode = 'octommerce_octommerce_settings';
 
     public $settingsFields = 'fields.yaml';
 
@@ -24,7 +26,7 @@ class Settings extends Model
     public $hasMany = [];
     public $belongsTo = [
         'base_location' => 'Octommerce\Octommerce\Models\City',
-        'default_currency' => 'Octommerce\Octommerce\Models\Currency',
+        'default_currency' => 'Responsiv\Currency\Models\Currency',
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -32,5 +34,26 @@ class Settings extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+
+    public function getProductsPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getCategoryPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getProductDetailPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getCartPageOptions() {
+        return Page::getNameList();
+    }
+
+    public function getCheckoutPageOptions() {
+        return Page::getNameList();
+    }
 
 }

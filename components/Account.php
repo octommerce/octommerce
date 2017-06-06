@@ -34,7 +34,20 @@ class Account extends AccountModel
 
     public function defineProperties()
     {
-        return [];
+        return [
+            'forgotToken' => [
+                'title'       => 'Forgot Password Token',
+                'description' => 'Forgot password code token of user',
+                'default'     => '{{ :token }}',
+                'type'        => 'text',
+            ],
+        ];
+    }
+
+
+    public function onRun()
+    {
+        $this->getProfileRegion();
     }
 
     public function getAllStates() {
@@ -44,6 +57,8 @@ class Account extends AccountModel
         })->get();
 
     }
+
+
 
     /**
      * Retrieve all cities.
@@ -83,7 +98,7 @@ class Account extends AccountModel
 
     public function onUpdateForgotPassword() {
         $data = post();
-        $user = UserModel::whereResetPasswordCode($this->property('paramCode'))->first();
+        $user = UserModel::whereResetPasswordCode($this->property('forgotToken'))->first();
         $user->fill($data);
         $user->reset_password_code = "";
         $user->save();
@@ -129,7 +144,7 @@ class Account extends AccountModel
                 'code' =>  $user->reset_password_code
             ];
 
-            Mail::send('vhiearch.user::mail.forgot_password', $data, function($message) use ($user) {
+            Mail::send('octommerce.octommerce::mail.forgot_password', $data, function($message) use ($user) {
                 $message->to($user->email, $user->name);
             });
 
@@ -178,10 +193,14 @@ class Account extends AccountModel
         $this->page['cities'] = State::find(post('state_id'))->cities;
     }
 
+    function onSelectShippingState() {
+        $this->page['shippingCities'] = State::find(post('shipping_state_id'))->cities;
+    }
+
     function getProfileRegion() {
         if(Auth::check() == true && $this->page['states'] == null && $this->page['cities'] == null) {
-            $this->page['states'] = StateModel::all();
-            $this->page['cities'] = StateModel::find($this->user()->state_id)?StateModel::find($this->user()->state_id)->cities:null;
+            $this->page['states'] = State::all();
+            $this->page['cities'] = State::find($this->user()->state_id)?State::find($this->user()->state_id)->cities:null;
         }
     }
 

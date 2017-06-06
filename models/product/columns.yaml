@@ -12,6 +12,8 @@ columns:
         sortable: false
     sku:
         label: SKU
+        type: text
+        searchable: true
     name:
         label: Name
         type: text
@@ -33,6 +35,9 @@ columns:
     qty:
         label: Qty
         type: number
+    is_published:
+        label: Is Published
+        type: switch
     categories:
         label: Categories
         relation: categories

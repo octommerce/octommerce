@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Review Type
+
+# Model Form Field configuration
+form: $/octommerce/octommerce/models/reviewtype/fields.yaml
+
+# Model Class name
+modelClass: Octommerce\Octommerce\Models\ReviewType
+
+# Default redirect location
+defaultRedirect: octommerce/octommerce/reviewtypes
+
+# Create page
+create:
+    title: Create Review Type
+    redirect: octommerce/octommerce/reviewtypes/update/:id
+    redirectClose: octommerce/octommerce/reviewtypes
+
+# Update page
+update:
+    title: Edit Review Type
+    redirect: octommerce/octommerce/reviewtypes
+    redirectClose: octommerce/octommerce/reviewtypes
+
+# Preview page
+preview:
+    title: Preview Review Type

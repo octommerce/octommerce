@@ -54,8 +54,18 @@ class Category extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
-    public $belongsTo = [];
+    public $hasMany = [
+        'children' => [
+            'Octommerce\Octommerce\Models\Category',
+            'key' => 'parent_id'
+        ]
+    ];
+    public $belongsTo = [
+        'parent' => [
+            'Octommerce\Octommerce\Models\Category',
+            'key' => 'parent_id'
+        ],
+    ];
 
     public $belongsToMany = [
         'products' => [
@@ -284,5 +294,20 @@ class Category extends Model
         $url = CmsPage::url($page->getBaseFileName(), [$paramName => $category->slug]);
 
         return $url;
+    }
+
+    /**
+     * Sets the "url" attribute with a URL to this object
+     * @param string $pageName
+     * @param Cms\Classes\Controller $controller
+     */
+    public function setUrl($pageName, $controller)
+    {
+        $params = [
+            'id' => $this->id,
+            'slug' => $this->slug,
+        ];
+
+        return $this->url = $controller->pageUrl($pageName, $params);
     }
 }

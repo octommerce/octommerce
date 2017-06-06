@@ -1,9 +1,5 @@
 fields:
-    attribute_id:
-        label: Attribute
-        type: dropdown
-        span: auto
-    value:
+    pivot[value]:
         label: Value
         type: text
         span: auto

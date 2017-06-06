@@ -1,6 +1,5 @@
 1.0.1:
     - First version of Octommerce
-    - create_currencies_table.php
     - create_taxes_table.php
     - create_categories_table.php
     - create_products_table.php
@@ -13,7 +12,6 @@
     - create_order_statuses_table.php
     - create_order_status_logs_table.php
     - seed_categories_table.php
-    - seed_currencies_table.php
     - seed_order_statuses_table.php
     - seed_product_lists_table.php
 1.0.2:
@@ -27,3 +25,55 @@
 1.0.4:
     - Add profile columns to users table
     - add_profile_columns_to_users_table.php
+1.0.5:
+    - Add shipping columns to orders table
+    - add_shipping_columns_to_orders_table.php
+1.0.6:
+    - Change shipping name column type
+    - change_shipping_name_column_type.php
+1.0.7:
+    - Add send_email_to_admin and admin_mail_template_id columns to order statuses table
+    - add_send_email_to_admin_and_admin_mail_template_id_columns_to_order_statuses_table.php
+1.0.8:
+    - Add expired_at to orders table
+    - add_expired_at_to_orders_table.php
+1.0.9:
+    - Add parent_id to order statuses table
+    - add_parent_id_to_order_statuses_table.php
+1.0.10:
+    - Add holidays feature
+    - create_holidays_table.php
+1.0.11:
+    - Add new columns (content, excerpt, keywords) to product_lists table.
+    - add_new_columns_to_product_lists_table.php
+1.0.12:
+    - Add tax, shipping cost, misc fee, and total columns to orders table
+    - add_tax_shippingcost_miscfee_total_columns_to_orders_table.php
+1.0.13:
+    - Create wishlist table
+    - create_wish_lists_table.php
+1.0.14:
+    - Add Fulltext Index to Products Table
+    - add_fulltext_index_to_products_table.php
+1.0.15:
+    - Create tags table
+    - create_tags_table.php
+1.0.16:
+    - Add discount_start_at and discount_end_at to products table
+    - add_discount_start_at_and_discount_end_at_to_products_table.php
+1.0.17:
+    - Add priority to products table
+    - add_priority_to_products_table.php
+1.0.18:
+    - Add tax to products table
+    - add_tax_to_products_table.php
+1.0.19:
+    - Add total_weight column to orders table
+    - add_total_weight_column_to_orders_table.php
+1.0.20:
+    - Add discount column on carts table
+    - add_discount_column_on_carts_table.php
+1.0.21:
+    - create review item and review type
+    - create_review_items_table.php
+    - create_review_types_table.php

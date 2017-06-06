@@ -1,6 +1,7 @@
 fields: {  }
 tabs:
     fields:
+        ##### GENERAL #####
         default_currency:
             label: 'Default Currency'
             oc.commentPosition: ''
@@ -13,6 +14,45 @@ tabs:
             span: auto
             type: relation
             tab: General
+        admin_email:
+            label: 'Admin Email'
+            oc.commentPosition: ''
+            span: auto
+            tab: General
+
+        ##### CMS #####
+        products_page:
+            label: Products Page
+            span: auto
+            type: dropdown
+            emptyOption: '- None -'
+            tab: CMS
+        category_page:
+            label: Category Page
+            span: auto
+            type: dropdown
+            emptyOption: '- None -'
+            tab: CMS
+        product_detail_page:
+            label: Product Detail Page
+            span: auto
+            type: dropdown
+            emptyOption: '- None -'
+            tab: CMS
+        cart_page:
+            label: Cart Page
+            span: auto
+            type: dropdown
+            emptyOption: '- None -'
+            tab: CMS
+        checkout_page:
+            label: Checkout Page
+            span: auto
+            type: dropdown
+            emptyOption: '- None -'
+            tab: CMS
+
+        ##### PRODUCTS #####
         low_stock_treshold:
             label: 'Low Stock Treshold'
             span: auto
@@ -23,6 +63,28 @@ tabs:
             span: auto
             type: switch
             tab: Products
+        default_tax:
+            label: 'Default tax'
+            span: auto
+            type: number
+            tab: Products
+        taxes:
+            label: 'Taxes'
+            span: auto
+            type: repeater
+            prompt: 'Add new tax'
+            tab: Products
+            form:
+                fields:
+                    name:
+                        label: 'Name'
+                        span: auto
+                    tax:
+                        label: 'Tax amount'
+                        span: auto
+                        type: number
+
+        ##### CHECKOUT #####
         checkout_min_subtotal:
             label: 'Minimum Subtotal'
             span: auto

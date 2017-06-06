@@ -1,9 +1,9 @@
 plugin:
     name: 'octommerce.octommerce::lang.plugin.name'
     description: 'octommerce.octommerce::lang.plugin.description'
-    author: 'Trias Nur Rahman'
+    author: 'Octommerce'
     icon: icon-shopping-cart
-    homepage: ''
+    homepage: 'http://octommerce.com'
 navigation:
     products:
         label: Products
@@ -11,6 +11,7 @@ navigation:
         icon: icon-tags
         permissions:
             - octommerce.octommerce.access_products
+        order: '300'
         sideMenu:
             products:
                 label: 'All Products'
@@ -36,32 +37,37 @@ navigation:
                 label: Reviews
                 url: octommerce/octommerce/reviews
                 icon: icon-comments
+            wishlists:
+                label: Wishlist
+                url: octommerce/octommerce/wishlists
+                icon: icon-heart
     commerce:
         label: Commerce
         url: octommerce/octommerce/orders
         icon: icon-shopping-cart
         permissions:
             - octommerce.octommerce.access_orders
+        order: '310'
         sideMenu:
             orders:
                 label: Orders
                 url: octommerce/octommerce/orders
                 icon: icon-shopping-cart
-            payments:
-                label: Payments
-                url: octommerce/octommerce/payments
-                icon: icon-credit-card
+                permissions:
+                    - octommerce.octommerce.access_orders
             orderstatuses:
-                label: Order Statuses
+                label: 'Order Statuses'
                 url: octommerce/octommerce/orderstatuses
                 icon: icon-tasks
+                permissions:
+                    - octommerce.octommerce.manage_order_statuses
 permissions:
     octommerce.octommerce.access_products:
         tab: Products
         label: 'Access Products'
     octommerce.octommerce.access_orders:
-        tab: Orders
+        tab: Commerce
         label: 'Access Orders'
-    octommerce.octommerce.access_order_statuses:
-        tab: Orders
-        label: 'Access Order Statuses'
+    octommerce.octommerce.manage_order_statuses:
+        tab: Commerce
+        label: 'Manage Order Statuses'

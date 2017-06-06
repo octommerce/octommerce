@@ -24,7 +24,7 @@ class CreateProductAttributesTable extends Migration
         {
             $table->engine = 'InnoDB';
 
-            $table->integer('product_id')->unsigned();
+            $table->integer('product_id')->unsigned()->nullable();
             $table->integer('attribute_id')->unsigned();
 
             $table->json('value')->nullable();

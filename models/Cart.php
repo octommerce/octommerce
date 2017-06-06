@@ -1,5 +1,6 @@
 <?php namespace Octommerce\Octommerce\Models;
 
+use Mail;
 use Model;
 use Octommerce\Octommerce\Models\Settings;
 
@@ -48,12 +49,41 @@ class Cart extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function getCountQtyAttribute()
+    {
+        $count = 0;
+
+        foreach($this->products as $product) {
+            $count += $product->pivot->qty;
+        }
+
+        return $count;
+    }
+
+    public function getSubtotalAttribute()
+    {
+        $subtotal = 0;
+
+        foreach($this->products as $product) {
+            $subtotal += ($product->pivot->qty * ($product->final_price - $product->pivot->discount));
+        }
+
+        return $subtotal;
+    }
+
     public function getTotalPriceAttribute()
+    {
+        return $this->subtotal - $this->discount;
+    }
+
+
+    public function getTotalWeightAttribute()
     {
         $total = 0;
 
         foreach($this->products as $product) {
-            $total += ($product->pivot->qty * ($product->pivot->price - $product->pivot->discount));
+
+            $total += $product->pivot->qty * $product->weight;
         }
 
         return $total;
@@ -61,6 +91,22 @@ class Cart extends Model
 
     public function getIsAllowedCheckoutAttribute()
     {
-        return $this->total_price >= Settings::get('checkout_min_subtotal', 0);
+        if (! $this->count_qty)
+            return false;
+
+        return $this->subtotal >= Settings::get('checkout_min_subtotal', 0);
+    }
+
+    public function sendReminder()
+    {
+        if (!$this->user) {
+            return;
+        }
+
+        $cart = $this;
+
+        Mail::send('octommerce.octommerce::mail.abandoned_cart', compact('cart'), function($message) use ($cart) {
+            $message->to($cart->user->email);
+        });
     }
 }

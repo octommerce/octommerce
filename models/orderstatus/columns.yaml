@@ -3,20 +3,46 @@
 # ===================================
 
 columns:
-    name: 
-        label: Name
+    sort_order:
+        label: '#'
 
-    is_active: 
+    name:
+        label: Name
+        searchable: true
+        type: partial
+        path: $/octommerce/octommerce/controllers/orderstatuses/_name_column.htm
+
+    description:
+        label: Description
+        searchable: true
+
+    is_active:
         label: Active
         type: switch
 
-    send_email: 
-        label: Email customer
+    send_email:
+        label: Email Cust.
         type: switch
 
-    attach_pdf: 
-        label: Attach invoice pdf
+    send_email_to_admin:
+        label: Email Admin
         type: switch
 
-    template_code: 
-        label: Mail template
+    attach_pdf:
+        label: Attach PDF
+        type: switch
+
+    mail_template:
+        label: Cust. Mail Tmpl
+        relation: mail_template
+        select: code
+
+    admin_mail_template:
+        label: Admin Mail Tmpl
+        relation: admin_mail_template
+        select: code
+
+    parent:
+        label: Parent
+        relation: parent
+        select: name

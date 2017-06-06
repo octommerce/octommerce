@@ -1,4 +1,4 @@
-<?php namespace Marthatilaar\User\Updates;
+<?php namespace Octommerce\Octommerce\Updates;
 
 use Schema;
 use October\Rain\Database\Updates\Migration;
@@ -8,6 +8,10 @@ class AddProfileColumnsToUsersTable extends Migration
 
     public function up()
     {
+        if (Schema::hasColumns('users', ['state_id', 'city_id'])) {
+            return;
+        }
+
         Schema::table('users', function($table)
         {
             $table->integer('state_id')->unsigned()->nullable();

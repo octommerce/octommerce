@@ -15,6 +15,27 @@ fields:
         label: Description
         type: textarea
         size: tiny
+        commentAbove: What is this product lists purpose?
+    content:
+        label: Content
+        type: textarea
+        size: tiny
+        commentAbove: Description for front end user.
+    excerpt:
+        label: Excerpt
+        type: textarea
+        size: tiny
+        commentAbove: Good for SEO (meta-description)
+    keywords:
+        label: Keywords
+        type: text
+    images:
+        label: Images
+        type: fileupload
+        mode: image
+        imageHeight: 260
+        imageWidth: 260
+        commentAbove: Any images?
     products:
         label: Products
         type: partial

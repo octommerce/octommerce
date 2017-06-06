@@ -5,6 +5,7 @@ use Octommerce\Octommerce\Models\Product as ProductModel;
 
 class ProductDetail extends ComponentBase
 {
+    public $product;
 
     public function componentDetails()
     {
@@ -41,6 +42,11 @@ class ProductDetail extends ComponentBase
         $this->page->description = $product->description;
     }
 
+    public function onChangeVariation()
+    {
+
+    }
+
     protected function loadProduct()
     {
         $slug = $this->property('slug');
@@ -49,8 +55,13 @@ class ProductDetail extends ComponentBase
             ->whereIsPublished(1)
             ->with('categories')
             ->with('lists')
+            ->with('cross_sells')
             ->with('reviews')
             ->first();
+
+        // if ($product->type == 'variable') {
+        //
+        // }
 
         return $product;
     }

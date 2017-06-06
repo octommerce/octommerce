@@ -1,0 +1,69 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    order_no:
+        label: Order No*
+    name:
+        label: Name*
+    email:
+        label: Email
+    phone:
+        label: Phone
+    postal_code:
+        label: Postal Code
+    address:
+        label: Address
+    city_name:
+        label: City
+    state_name:
+        label: State
+    shipping_name:
+        label: Shipping Name
+    shipping_phone:
+        label: Shipping Phone
+    shipping_address:
+        label: Shipping Address
+    shipping_postal_code:
+        label: Shipping Postal Code
+    shipping_city_name:
+        label: Shipping City
+    shipping_state_name:
+        label: Shipping State
+    shipping_cost:
+        label: Shipping Cost
+    product_skus:
+        label: Product SKUs*
+    product_names:
+        label: Product Names*
+    product_qty:
+        label: Product Quantity*
+    product_price:
+        label: Product Price*
+    subtotal:
+        label: Subtotal*
+    tax:
+        label: Tax
+    discount:
+        label: Discount
+    total:
+        label: Total*
+    misc_fee:
+        label: Misc Fee
+    payment_method:
+        label: Payment Method
+    status_name:
+        label: Status
+    unique_code:
+        label: Unique Code
+    coupon_code:
+        label: Coupon Code
+    due_at:
+        label: Due At
+    message:
+        label: Message
+    notes:
+        label: Notes
+    created_at:
+        label: Created At*

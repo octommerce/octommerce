@@ -1,0 +1,125 @@
+subject = "We are Waiting for Your Payment [#{{ order.order_no }}]"
+==
+
+==
+{% set invoice = order.invoices.first() %}
+<p>
+    Hi {{ order.name }},
+</p>
+<p>
+    We want to inform you that we haven\'t receive your payment yet. If you don\'t make the payment, your order will be expired on {{ order.expired_at }}.
+</p>
+<p>
+    Please let us know if you have already paid the order or you have any difficulties.
+</p>
+<table class="table-information-order">
+    <tr>
+        <td>
+            <div class="information-head">
+                Order No
+            </div>
+            <div class="information-body info-order">
+                {{ order.order_no }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                Total
+            </div>
+            <div class="information-body">
+                {{ order.total|currency({format: 'short'}) }}
+            </div>
+        </td>
+        <td>
+            <div class="information-head">
+                Status
+            </div>
+            <div class="information-body info-status">
+                <span class="text-success">
+                    {{ order.status.name }}
+                </span>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<table class="table-summary">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Subtotal
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in order.products %}
+        <tr>
+            <td>
+                {{ product.pivot.qty }} x {{ product.pivot.name }}
+            </td>
+            <td>
+                {{ product.pivot.price|currency({format: 'short'}) }}
+            </td>
+            <td>
+                {{ (product.pivot.qty * product.pivot.price)|currency({format: 'short'}) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2">Subtotal</td>
+            <td class="text-right"><b>{{ order.subtotal|currency({format: 'short'}) }}</b></td>
+        </tr>
+        {% if order.tax > 0 %}
+        <tr>
+            <td colspan="2">Tax</td>
+            <td class="text-right text-success">{{ order.tax|currency({format: 'short'}) }}</td>
+        </tr>
+        {% endif %}
+        {% if order.shipping_cost > 0 %}
+        <tr>
+            <td colspan="2">Shipping Cost</td>
+            <td class="text-right text-success">{{ order.shipping_cost|currency({format: 'short'}) }}</td>
+        </tr>
+        {% endif %}
+        {% if order.discount > 0 %}
+        <tr>
+            <td colspan="2">Discount</td>
+            <td class="text-right">-{{ order.discount|currency({format: 'short'}) }}</td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td colspan="2"><b>Total</b></td>
+            <td class="text-right"><b>{{ order.total|currency({format: 'short'}) }}</b></td>
+        </tr>
+    </tfoot>
+</table>
+<table class="table-information-shipping">
+    <tr>
+        <td>
+            <div class="muted">
+                Shipping Address
+            </div>
+            <div class="shipping-content">
+                <b>
+                    {{ order.shipping_name }}
+                </b>
+                <br/>
+                {{ order.shipping_address }}
+                <br>
+                    {{ order.shipping_city.name }}, {{ order.shipping_state.name }} {{ order.shipping_postcode }}
+                </br>
+            </div>
+        </td>
+        <td>
+            <a href="{{ invoice.url }}" class="button button-primary">Pay Now</a>
+        </td>
+    </tr>
+</table>

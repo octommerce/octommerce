@@ -2,13 +2,16 @@
 
 use Model;
 use System\Models\MailTemplate;
+// use Octommerce\Octommerce\Models\Order;
 
 /**
  * OrderStatus Model
  */
 class OrderStatus extends Model
 {
-    // use \October\Rain\Database\Traits\Sortable;
+    use \October\Rain\Database\Traits\SimpleTree;
+
+    const PARENT_ID = 'parent_code';
 
     /**
      * @var string The database table used by the model.
@@ -33,12 +36,16 @@ class OrderStatus extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+        'orders' => [
+            'Octommerce\Octommerce\Models\Order',
+            'key' => 'status_code',
+            'otherKey' => 'code'
+        ]
+    ];
     public $belongsTo = [
-        'mail_template' => [
-            'System\Models\MailTemplate',
-            'key' => 'code',
-        ],
+        'mail_template'       => 'System\Models\MailTemplate',
+        'admin_mail_template' => 'System\Models\MailTemplate',
     ];
     public $belongsToMany = [];
     public $morphTo = [];
@@ -47,23 +54,4 @@ class OrderStatus extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    /**
-     * Returns an array of template codes and ids.
-     * @return array
-     */
-    public static function listAllTemplates()
-    {
-        $templates = (array) MailTemplate::lists('code', 'id');
-
-        return $templates;
-    }
-
-    public function getTemplateCodeAttribute()
-    {
-        $template = MailTemplate::find($this->mail_template_id);
-
-        if ($template) {
-            return $template->code;
-        }
-    }
 }

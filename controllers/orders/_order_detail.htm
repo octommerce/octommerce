@@ -1,0 +1,40 @@
+<div class="scoreboard">
+    <div data-control="toolbar">
+        <div class="scoreboard-item title-value">
+            <h4><b>Shipping Name</b></h4>
+
+            <p class="text-left"><h5><?= $model->shipping_name ? $model->shipping_name : '' ?></h5></p>
+            <p> <h6><?= $model->shipping_phone ? $model->shipping_phone : '' ?></p></h6></p>
+        </div>
+        <div class="scoreboard-item title-value">
+            <h4><b>Shipping Address</b></h4>
+            <p><h5><?= $model->shipping_address?></h5></p>
+
+                <p class="text-center"><h6><?= $model->city ? $model->shipping_city_name : '' ?>, <?= $model->state ? $model->shipping_state_name : ''?> </h6></p>
+                <p class="text-center"><h6></h6></p>
+                <p class="text-center"><h6><?= $model->shipping_postcode ? $model->shipping_postcode : '' ?></h6></p>
+        </div>
+
+
+        <div class="scoreboard-item title-value">
+            <h4><b>Payment Method </b></h4>
+            <p class="text-center"><h6>
+                <?php foreach($model->invoices as $invoice): ?>
+                    <?= $invoice->payment_method ? $invoice->payment_method->name : '' ?><br><br>
+                    <?php if($invoice->unique_number > 0): ?>
+                        Unique Number : <?= $invoice->unique_number ?><br>
+                    <?php endif ?>
+                <?php endforeach ?>
+             </h6></p>
+        </div>
+
+        <div class="scoreboard-item title-value">
+            <h4><b>Due at</b></h4>
+            <p class="text-center"><h6>
+            <?php foreach($model->invoices as $invoice): ?>
+                <?= $invoice->due_at ?>
+            <?php endforeach ?>
+        </h6></p>
+        </div>
+    </div>
+</div>

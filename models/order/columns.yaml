@@ -15,11 +15,14 @@ columns:
     phone:
         label: Phone
         searchable: true
+        invisible: true
     products:
         label: Products
         relation: products
         valueFrom: name
         searchable: true
+        sortable: false
+        invisible: true
     subtotal:
         label: Subtotal
         searchable: true
@@ -29,20 +32,18 @@ columns:
         invisible: true
     tax:
         label: Tax
-        searchable: true
+        searchable: false
         invisible: true
         type: number
     total:
         label: Total
-#        searchable: true
-    paid_amount:
-        label: Paid
     status:
         label: Status
-        searchable: true
+        searchable: false
         type: partial
         path: $/octommerce/octommerce/controllers/orders/_status_column.htm
         width: 100px
+        sortable: false
     is_followed_up:
         label: Followed Up
         type: switch

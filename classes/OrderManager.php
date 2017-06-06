@@ -2,15 +2,20 @@
 
 use Db;
 use Auth;
+use Mail;
+use Event;
 use Carbon\Carbon;
+use RainLab\User\Models\User;
 use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Cart;
+use Octommerce\Octommerce\Models\City;
 use Responsiv\Pay\Models\Invoice;
 use Responsiv\Pay\Models\InvoiceItem;
 
 class OrderManager
 {
 	use \October\Rain\Support\Traits\Singleton;
+    use \October\Rain\Support\Traits\Emitter;
 
     public function create($data)
     {
@@ -26,13 +31,36 @@ class OrderManager
 
             $user = $this->getOrRegisterUser($data);
 
-            $order = new Order([
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.beforeCreate', [$cart, $data]);
+            Event::fire('order.beforeCreate', [$cart, $data]);
+
+            $order = new Order($data);
+
+            $order->fill([
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'user_id' => $user->id,
-                'subtotal' => $cart->total_price,
+                'subtotal' => $cart->subtotal,
+				'discount' => $cart->discount,
+                'total_weight' => $cart->total_weight,
             ]);
+
+            if (isset($data['city_id']) && $cityId = $data['city_id']) {
+                $city = City::find($cityId);
+
+                if ($city) {
+                    $order->city()->add($city);
+                }
+
+                if ($city->state) {
+                    $order->state()->add($city->state);
+                }
+            }
+
+            $order->user()->add($user);
 
             $order->save();
 
@@ -47,31 +75,79 @@ class OrderManager
                 ]);
             }
 
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.afterCreate', [$order, $data, $cart]);
+            Event::fire('order.afterCreate', [$order, $data, $cart]);
+
+            Db::commit();
+
+            $order = $order->reload();
+
             $invoice = Invoice::create([
-                'user_id' => $user->id,
-                'first_name' => $order->name,
-                'email' => $order->email,
-                'phone' => $order->phone,
+                'user_id'      => $user->id,
+                'first_name'   => $order->name,
+                'email'        => $order->email,
+                'phone'        => $order->phone,
+                'company'      => $order->company,
+                'street_addr'  => $order->address,
+                'city'         => $order->city ? $order->city->name : null,
+                'zip'          => $order->postcode,
+                'state_id'     => $order->state ? $order->state->id : null,
+                'country_id'   => $order->state ? $order->state->country->id : null,
+                'due_at'       => $order->expired_at,
+				'related'      => $order,
             ]);
 
             foreach($cart->products as $product) {
                 $invoiceItem = new InvoiceItem([
                     'description' => $product->name,
                     'quantity' => $product->pivot->qty,
-                    'price' => $product->pivot->price,
-                    'discount' => $product->pivot->discount,
+                    // To prevent Responsiv.Pay wrong calculation
+                    'price' => $product->pivot->price - $product->pivot->discount,
+                    // 'price' => $product->pivot->price,
+                    // 'discount' => $product->pivot->discount / $product->pivot->price,
                 ]);
 
                 $invoice->items()->save($invoiceItem);
             }
 
-            $order->invoices()->add($invoice);
+            // If have a discount, put to invoice items
+            if ($order->discount > 0) {
+                $discountItem = new InvoiceItem([
+                    'description' => 'Discount',
+                    'quantity' => 1,
+                    'price' => 0,
+                    'discount' => $order->discount,
+                ]);
 
-            $invoice->save();
+                $invoice->items()->save($discountItem);
+            }
 
-            \Cart::clear();
+			/*
+			* Extensibility
+			*/
+			$this->fireEvent('order.beforeAddInvoice', [$order, $invoice]);
+			Event::fire('order.beforeAddInvoice', [$order, $invoice]);
 
-            Db::commit();
+			$invoice->save();
+
+			// If the transaction is free, mark as paid directly
+			if ($invoice->total == 0 && $invoice->markAsPaymentProcessed()) {
+				$invoice->updateInvoiceStatus('paid');
+			}
+
+            /*
+             * Extensibility
+             */
+            $this->fireEvent('order.afterAddInvoice', [$order, $invoice]);
+            Event::fire('order.afterAddInvoice', [$order, $invoice]);
+
+
+            $order->save();
+
+            \Cart::destroy();
 
             return $order;
         }
@@ -86,6 +162,10 @@ class OrderManager
     {
         if (! Auth::check()) {
 
+            if (User::whereEmail($data['email'])->count()) {
+                throw new \ApplicationException('This email is already exist. Please login first.');
+            }
+
             $data['password_confirmation'] = $data['password'] = $this->generateUserPassword();
 
             // Register, no need activation
@@ -94,7 +174,7 @@ class OrderManager
             // Logged in directly
             Auth::login($user);
 
-            // $this->sendPasswordUser($user, $dataUser['password']);
+            $this->sendPasswordUser($user, $data['password']);
 
         } else {
             $user = Auth::getUser();
@@ -111,23 +191,48 @@ class OrderManager
 
     public function checkExpiredOrders()
     {
-        Order::whereStatus('pending')
+        Order::whereStatusCode('waiting')
             ->where('expired_at', '<=', Carbon::now())
             ->get()
             ->each(function($order) {
 
                 // Set the order status to expired
-                $order->status = 'expired';
-                $order->save();
+                $order->updateStatus('expired');
 
-                // Get the redemption
-                // $redemption = $order->coupon_redemption;
+                /*
+                 * Extensibility
+                 */
+                $this->fireEvent('order.afterExpired', [$order]);
+                Event::fire('order.afterExpired', [$order]);
+            });
+    }
 
-                // if($redemption) {
-                //     // Release the coupon
-                //     $redemption->release();
-                // }
+    public function remindWaitingPayments()
+    {
+        $hours = 24; // A day before expired
 
+        Order::whereStatusCode('waiting')
+            ->where('expired_at', '>=', Carbon::now()->addHours($hours))
+            ->where('expired_at', '<', Carbon::now()->addHours($hours + 1))
+            ->get()
+            ->each(function($order) {
+                // Set payment reminder
+                $order->sendPaymentReminder();
+            });
+    }
+
+    public function remindAbandonedCarts()
+    {
+        $hours = 3 * 24; // After 3 days no update
+
+        Cart::has('user')
+            ->has('products')
+            ->where('updated_at', '>=', Carbon::now()->subHours($hours))
+            ->where('updated_at', '<', Carbon::now()->subHours($hours - 1))
+            ->get()
+            ->each(function($cart) {
+                // Send reminder
+                $cart->sendReminder();
             });
     }
 
@@ -144,4 +249,15 @@ class OrderManager
         return $randomString;
     }
 
+    protected function sendPasswordUser($user, $password) {
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $password,
+        ];
+
+        Mail::send('octommerce.octommerce::mail.password_user', $data, function ($message) use ($user) {
+            $message->to($user->email, $user->name);
+        });
+    }
 }
