@@ -107,9 +107,7 @@ class Orders extends Controller
     {
         if ( ! array_get($this->partialButtons, $context, null)) return;
 
-        return array_reduce(array_filter($this->partialButtons, function($partialContext) use ($context) {
-            return $partialContext == $context;
-        }, ARRAY_FILTER_USE_KEY)[$context], function($partials, $partial) {
+        return array_reduce($this->partialButtons[$context], function($partials, $partial) {
             return $partials . $this->makePartial($partial);
         });
     }
