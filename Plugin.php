@@ -332,4 +332,4 @@ class Plugin extends PluginBase
             $orderManager->checkExpiredOrders();
         })->everyMinute();
     }
-
+}
