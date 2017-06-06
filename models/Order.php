@@ -25,7 +25,7 @@ class Order extends Model
      * Validation rules
      */
     public $rules = [
-        'name' => 'required|between:6,255',
+        'name' => 'required|between:2,255',
         'email' => 'required|between:6,255|email',
         'phone' => 'required',
     ];
