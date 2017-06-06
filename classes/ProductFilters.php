@@ -24,7 +24,7 @@ class ProductFilters extends QueryFilters
      * @param  string $slug
      * @return Builder
      */
-    public function list($slug)
+    public function lists($slug)
     {
         return $this->builder->whereHas('lists', function($q) use ($slug) {
             $q->where('octommerce_octommerce_product_lists.slug', '=', $slug);
