@@ -36,24 +36,78 @@ class Settings extends Model
     public $attachMany = [];
 
 
-    public function getProductsPageOptions() {
+    public function getCmsProductsPageOptions()
+    {
+        return $this->getAvailablePages('productList');
+    }
+
+    public function getCmsCategoryPageOptions()
+    {
+        return $this->getAvailablePages('productList');
+    }
+
+    public function getCmsBrandPageOptions()
+    {
+        return $this->getAvailablePages('productList');
+    }
+
+    public function getCmsListPageOptions()
+    {
+        return $this->getAvailablePages('productList');
+    }
+
+    public function getCmsProductDetailPageOptions()
+    {
+        return $this->getAvailablePages('productDetail');
+    }
+
+    public function getCmsCartPageOptions()
+    {
         return Page::getNameList();
     }
 
-    public function getCategoryPageOptions() {
-        return Page::getNameList();
+    public function getCmsCheckoutPageOptions()
+    {
+        return $this->getAvailablePages('checkout');
     }
 
-    public function getProductDetailPageOptions() {
-        return Page::getNameList();
+    public function getCmsPaymentPageOptions()
+    {
+        return $this->getAvailablePages('payment');
     }
 
-    public function getCartPageOptions() {
-        return Page::getNameList();
+    public function getCmsFinishPageOptions()
+    {
+        return $this->getAvailablePages('invoice');
     }
 
-    public function getCheckoutPageOptions() {
-        return Page::getNameList();
+    public function getCmsOrdersPageOptions()
+    {
+        return $this->getAvailablePages('orderList');
     }
 
+    public function getCmsOrderDetailPageOptions()
+    {
+        return $this->getAvailablePages('orderDetail');
+    }
+
+    protected function getAvailablePages($component)
+    {
+        $pages = Page::all();
+
+        $result = [];
+
+        foreach ($pages as $page) {
+            if (! $page->hasComponent($component))
+                continue;
+
+            $result[$page->baseFileName] = $page->title . ' (' . $page->baseFileName .')';
+        }
+
+        if (! count($result)) {
+            return array_merge(['- None -'], Page::getNameList());
+        }
+
+        return $result;
+    }
 }

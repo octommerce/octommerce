@@ -8,17 +8,18 @@ use Currency;
 use System\Classes\PluginBase;
 use Illuminate\Foundation\AliasLoader;
 use Rainlab\User\Models\User;
-use Rainlab\User\Controllers\Users as UsersController;
 use Rainlab\Location\Models\State;
+use Rainlab\User\Controllers\Users as UsersController;
 use Responsiv\Pay\Models\InvoiceStatus;
+use Octommerce\Octommerce\Helpers\Cms;
 use Octommerce\Octommerce\Classes\OrderManager;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Models\Brand;
+use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Product;
 use Octommerce\Octommerce\Models\Settings;
 use Octommerce\Octommerce\Models\OrderStatusLog;
-use Octommerce\Octommerce\Models\Order;
 
 /**
  * Octommerce Plugin Information File
@@ -108,6 +109,14 @@ class Plugin extends PluginBase
             $model->hasMany['cities'] = [
                 'Octommerce\Octommerce\Models\City'
             ];
+        });
+
+        \System\Controllers\Settings::extend(function($controller) {
+            // Install CMS pages
+            $controller->addDynamicMethod('onOctommerceCmsInstallPages', function() {
+                $cms = Cms::instance();
+                $cms->install();
+            });
         });
 
         Event::listen('backend.list.extendColumns', function($widget) {

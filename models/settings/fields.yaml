@@ -21,35 +21,65 @@ tabs:
             tab: General
 
         ##### CMS #####
-        products_page:
+        cms_hint:
+            type: hint
+            path: $/octommerce/octommerce/models/settings/_cms_hint.htm
+            tab: CMS
+        cms_products_page:
             label: Products Page
             span: auto
             type: dropdown
-            emptyOption: '- None -'
             tab: CMS
-        category_page:
+        cms_category_page:
             label: Category Page
             span: auto
             type: dropdown
-            emptyOption: '- None -'
             tab: CMS
-        product_detail_page:
+        cms_brand_page:
+            label: Brand Page
+            span: auto
+            type: dropdown
+            tab: CMS
+        cms_list_page:
+            label: Brand Page
+            span: auto
+            type: dropdown
+            tab: CMS
+        cms_product_detail_page:
             label: Product Detail Page
             span: auto
             type: dropdown
-            emptyOption: '- None -'
             tab: CMS
-        cart_page:
+        cms_cart_page:
             label: Cart Page
             span: auto
             type: dropdown
             emptyOption: '- None -'
             tab: CMS
-        checkout_page:
+        cms_checkout_page:
             label: Checkout Page
             span: auto
             type: dropdown
-            emptyOption: '- None -'
+            tab: CMS
+        cms_payment_page:
+            label: Payment Page
+            span: auto
+            type: dropdown
+            tab: CMS
+        cms_finish_page:
+            label: Finish Page
+            span: auto
+            type: dropdown
+            tab: CMS
+        cms_orders_page:
+            label: Orders Page
+            span: auto
+            type: dropdown
+            tab: CMS
+        cms_order_detail_page:
+            label: Order Detail Page
+            span: auto
+            type: dropdown
             tab: CMS
 
         ##### PRODUCTS #####

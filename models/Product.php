@@ -377,7 +377,7 @@ class Product extends Model
 
     public function getPageUrlAttribute()
     {
-        return Settings::get('product_detail_page') ? CmsPage::url(Settings::get('product_detail_page'), ['slug' => $this->slug]) : null;
+        return Settings::get('cms_product_detail_page') ? CmsPage::url(Settings::get('cms_product_detail_page'), ['slug' => $this->slug]) : null;
     }
 
     public function getSalePriceAttribute($value)
