@@ -9,6 +9,7 @@ use Cms\Classes\Page;
 use Cms\Classes\CodeBase;
 use Cms\Classes\ComponentBase;
 use RainLab\Location\Models\State;
+use Octommerce\Octommerce\Models\Settings;
 use Octommerce\Octommerce\Classes\OrderManager;
 
 class Checkout extends ComponentBase
@@ -79,7 +80,13 @@ class Checkout extends ComponentBase
             throw new \ApplicationException($e->getMessage());
         }
 
-        return Redirect::to(Page::url($this->property('redirectPage'), ['hash' => $order->invoices->last()->hash]));
+        $redirectPage = $this->property('redirectPage') ?: Settings::get('cms_payment_page');
+
+        if (! $redirectPage) {
+            throw new ApplicationException('No payment page applied.');
+        }
+
+        return Redirect::to(Page::url($redirectPage, ['hash' => $order->invoices->last()->hash]));
     }
 
     public function onSelectState()
