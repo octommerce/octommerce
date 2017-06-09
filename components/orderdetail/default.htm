@@ -1,3 +1,105 @@
-<p>This is the default markup for component orderDetail</p>
+{% set order = __SELF__.order %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order No</th>
+            <th>Total</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div class="lead">
+                    {{ order.order_no }}
+                </div>
+                <small class="text-muted">{{ order.created_at }}</small>
+            </td>
+            <td class="lead">{{ order.total|currency({format: 'short'}) }}</td>
+            <td class="lead">
+                <div style="color: {{ order.status.color }}">
+                    {{ order.status.name }}
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-<small>You can delete this file if you want</small>
+<h5>Billing Information</h5>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Name</th>
+            <td>{{ order.name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ order.email }}</td>
+        </tr>
+        <tr>
+            <th>Phone</th>
+            <td>{{ order.phone }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>Order Items</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th colspan="2">Item</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Qty</th>
+            <th class="text-right">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in order.products %}
+        <tr>
+            <td width="60">
+                <img src="{{ product.images.first.getThumb(60, 60, 'crop') }}" alt="" class="img-responsive pull-left">
+            </td>
+            <td>
+                {{ product.name }}
+            </td>
+            <td class="text-right">
+                {{ product.pivot.price|currency({format: 'short'}) }}
+            </td>
+            <td class="text-right">
+                {{ product.pivot.qty }}
+            </td>
+            <td class="text-right">
+                {{ (product.pivot.price * product.pivot.qty)|currency({format: 'short'}) }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="4">Subtotal</th>
+            <th class="text-right">{{ order.subtotal|currency({format: 'short'}) }}</th>
+        </tr>
+        {% if order.discount > 0 %}
+        <tr>
+            <th colspan="4">Discount</th>
+            <th class="text-right text-success">{{ (-order.discount)|currency({format: 'short'}) }}</th>
+        </tr>
+        {% endif %}
+        {% if order.tax > 0 %}
+        <tr>
+            <th colspan="4">Tax</th>
+            <th class="text-right text-success">{{ order.tax|currency({format: 'short'}) }}</th>
+        </tr>
+        {% endif %}
+        {% if order.misc_fee > 0 %}
+        <tr>
+            <th colspan="4">Misc Fee</th>
+            <th class="text-right text-success">{{ order.misc_fee|currency({format: 'short'}) }}</th>
+        </tr>
+        {% endif %}
+        <tr>
+            <th colspan="4">Total</th>
+            <th class="text-right">{{ order.total|currency({format: 'short'}) }}</th>
+        </tr>
+    </tfoot>
+</table>
