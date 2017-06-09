@@ -16,6 +16,7 @@ use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Models\Brand;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\Settings;
 use Octommerce\Octommerce\Models\OrderStatusLog;
 use Octommerce\Octommerce\Models\Order;
 
@@ -152,6 +153,10 @@ class Plugin extends PluginBase
 			]);
         });
 
+        // Global variable for settings
+        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
+            $controller->vars['octommerce_settings'] = Settings::instance();
+        });
 
         //
         // Built in Types
