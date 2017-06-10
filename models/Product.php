@@ -5,7 +5,6 @@ use Model;
 use Carbon\Carbon;
 use Cms\Classes\Theme;
 use Cms\Classes\Page as CmsPage;
-use Octommerce\Octommerce\Models\Settings;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Observers\Product as ProductObserver;
 
@@ -375,9 +374,24 @@ class Product extends Model
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
     }
 
+    public function setPage($page)
+    {
+        $this->page = $page;
+    }
+
     public function getPageUrlAttribute()
     {
-        return Settings::get('cms_product_detail_page') ? CmsPage::url(Settings::get('cms_product_detail_page'), ['slug' => $this->slug]) : null;
+        if (! $this->page) {
+            $this->page = Settings::get('cms_product_detail_page');
+        }
+
+        $params = [
+            'id'   => $this->id,
+            'sku'  => $this->sku,
+            'slug' => $this->slug,
+        ];
+
+        return CmsPage::url($this->page, $params);
     }
 
     public function getSalePriceAttribute($value)

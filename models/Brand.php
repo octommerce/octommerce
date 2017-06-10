@@ -62,6 +62,25 @@ class Brand extends Model
         'images' => ['System\Models\File'],
     ];
 
+    public function setPage($page)
+    {
+        $this->page = $page;
+    }
+
+    public function getPageUrlAttribute()
+    {
+        if (! $this->page) {
+            $this->page = Settings::get('cms_brand_page');
+        }
+
+        $params = [
+            'id'   => $this->id,
+            'slug' => $this->slug,
+        ];
+
+        return CmsPage::url($this->page, $params);
+    }
+
     /**
      * Handler for the pages.menuitem.getTypeInfo event.
      * Returns a menu item type information. The type information is returned as array
