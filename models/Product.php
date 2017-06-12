@@ -39,6 +39,7 @@ class Product extends Model
      */
     public $rules = [
         'name' => 'required',
+        'type' => 'required',
         'price' => 'required|regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'discount_price' => 'regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'priority' => 'numeric',
