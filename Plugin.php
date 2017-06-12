@@ -260,15 +260,18 @@ class Plugin extends PluginBase
         return [
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
+            'Octommerce\Octommerce\Components\BrandList'     => 'brandList',
             'Octommerce\Octommerce\Components\CategoryList'  => 'categoryList',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
-            'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
             'Octommerce\Octommerce\Components\OrderDetail'   => 'orderDetail',
-            'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
+            'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
             'Octommerce\Octommerce\Components\OrderTracking' => 'orderTracking',
+            'Octommerce\Octommerce\Components\Review'        => 'review',
             'Octommerce\Octommerce\Components\Wishlist'      => 'wishlist',
-            'Octommerce\Octommerce\Components\Review'      => 'review',
+
+            // Will be deprecated
+            'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
         ];
     }
 
