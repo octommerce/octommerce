@@ -251,6 +251,8 @@ class Plugin extends PluginBase
     {
         $alias = AliasLoader::getInstance();
         $alias->alias('Cart', 'Octommerce\Octommerce\Facades\Cart');
+
+        $this->registerConsoleCommand('octommerce:dummy-product', 'Octommerce\Octommerce\Console\DummyProduct');
     }
 
     public function registerComponents()
