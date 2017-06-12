@@ -5,6 +5,7 @@ $factory->define(\Octommerce\Octommerce\Models\Product::class, function (Faker\G
 
     return [
         'name' => $faker->text(25),
+        'sku' => $faker->ean8,
         'type' => 'simple',
         'price' => $faker->randomDigitNotNull,
         'currency_code' => 'USD',
