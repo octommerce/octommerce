@@ -110,11 +110,6 @@ class Account extends AccountModel
 
     public function onChangePassword() {
         if(Auth::check()) {
-            $oldPassword = $this->user()->password;
-            if(!Hash::check(post('oldPassword'), $oldPassword)) {
-                Flash::error("Password lama anda salah");
-            }
-            else {
                 $data = post();
                 $user = $this->user();
                 $user->fill($data);
@@ -122,7 +117,6 @@ class Account extends AccountModel
                     Flash::success("Password baru berhasil disimpan, silahkan masuk kembali dengan password baru");
                     return Redirect::to('login');
                 }
-            }
         }
     }
 
