@@ -11,7 +11,7 @@ fields:
         comment: Is this brand published?
     description:
         label: Description
-        type: textarea
+        type: markdown
     keywords:
         label: Keywords
         type: text
