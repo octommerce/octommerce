@@ -382,8 +382,8 @@ class Product extends Model
 
     public function getPageUrlAttribute()
     {
-        if (! $this->page) {
-            $this->page = Settings::get('cms_product_detail_page');
+        if (! $this->page && ! $this->page = Settings::get('cms_product_detail_page')) {
+            return null;
         }
 
         $params = [

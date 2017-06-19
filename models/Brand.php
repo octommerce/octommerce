@@ -69,8 +69,8 @@ class Brand extends Model
 
     public function getPageUrlAttribute()
     {
-        if (! $this->page) {
-            $this->page = Settings::get('cms_brand_page');
+        if (! $this->page && ! $this->page = Settings::get('cms_brand_page')) {
+            return null;
         }
 
         $params = [
