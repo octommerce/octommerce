@@ -41,6 +41,8 @@ columns:
         label: Product Quantity*
     product_price:
         label: Product Price*
+    product_discount:
+        label: Product Discount*
     subtotal:
         label: Subtotal*
     tax:
