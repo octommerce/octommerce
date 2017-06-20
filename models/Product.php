@@ -22,7 +22,7 @@ class Product extends Model
     use \Octommerce\Octommerce\Traits\Sortable;
     use \Octommerce\Octommerce\Traits\Filterable;
 
-    protected $manager;
+    protected $manager, $page;
 
     public $productsCount;
 
