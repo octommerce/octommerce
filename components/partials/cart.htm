@@ -62,7 +62,7 @@
 
 		{% if cart.is_allowed_checkout %}
 		<div class="form-group text-right">
-			<a href="{{ settings.checkout_page|page }}" class="btn btn-primary btn-lg">Continue Checkout</a>
+			<a href="{{ octommerce_settings.cms_checkout_page|page }}" class="btn btn-primary btn-lg">Continue Checkout</a>
 		</div>
 		{% else %}
 		<div class="alert alert-info">
@@ -75,7 +75,7 @@
 	{% else %}
 	<div>
 		<p class="lead text-muted">Seems you haven't pick any product yet.</p>
-		<a href="{{ settings.products_page|page }}" class="btn btn-default">Browse products</a>
+		<a href="{{ octommerce_settings.cms_products_page|page }}" class="btn btn-default">Browse products</a>
 	</div>
 	{% endif %}
 </div>

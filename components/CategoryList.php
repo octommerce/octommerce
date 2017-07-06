@@ -33,23 +33,23 @@ class CategoryList extends ComponentBase
     public function defineProperties()
     {
         return [
-            /* 'slug' => [ */
-            /*     'title'       => 'octommerce.octommerce::lang.component.category_list.param.slug', */
-            /*     'description' => 'octommerce.octommerce::lang.component.category_list.param.slug_description', */
-            /*     'default'     => '{{ :slug }}', */
-            /*     'type'        => 'string' */
-            /* ], */
+            'slug' => [
+                'title'       => 'octommerce.octommerce::lang.component.category_list.param.slug',
+                'description' => 'octommerce.octommerce::lang.component.category_list.param.slug_description',
+                'default'     => '{{ :slug }}',
+                'type'        => 'string',
+            ],
             'displayEmpty' => [
                 'title'       => 'octommerce.octommerce::lang.component.category_list.param.display_empty',
                 'description' => 'octommerce.octommerce::lang.component.category_list.param.display_empty_description',
                 'type'        => 'checkbox',
-                'default'     => 0
+                'default'     => 0,
             ],
             'categoryPage' => [
                 'title'       => 'octommerce.octommerce::lang.component.category_list.param.category_page',
                 'description' => 'octommerce.octommerce::lang.component.category_list.param.category_page_description',
                 'type'        => 'dropdown',
-                'default'     => 'blog/category',
+                'emptyOption' => '- Default -',
                 'group'       => 'Links',
             ],
         ];
@@ -57,7 +57,7 @@ class CategoryList extends ComponentBase
 
     public function getCategoryPageOptions()
     {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+        return array_merge([null => '- Default -'], Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName'));
     }
 
     public function onRun()
@@ -98,6 +98,8 @@ class CategoryList extends ComponentBase
     {
         return $categories->each(function($category) {
             $category->setUrl($this->categoryPage, $this->controller);
+
+            $category->setPage($this->categoryPage);
 
             if ($category->children) {
                 $this->linkCategories($category->children);

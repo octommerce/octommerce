@@ -8,14 +8,17 @@ use Currency;
 use System\Classes\PluginBase;
 use Illuminate\Foundation\AliasLoader;
 use Rainlab\User\Models\User;
-use Rainlab\User\Controllers\Users as UsersController;
 use Rainlab\Location\Models\State;
+use Rainlab\User\Controllers\Users as UsersController;
 use Responsiv\Pay\Models\InvoiceStatus;
+use Octommerce\Octommerce\Helpers\Cms;
 use Octommerce\Octommerce\Classes\OrderManager;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Models\Brand;
+use Octommerce\Octommerce\Models\Order;
 use Octommerce\Octommerce\Models\Category;
 use Octommerce\Octommerce\Models\Product;
+use Octommerce\Octommerce\Models\Settings;
 use Octommerce\Octommerce\Models\OrderStatusLog;
 
 /**
@@ -57,16 +60,27 @@ class Plugin extends PluginBase
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
             $model->belongsTo['state'] = 'RainLab\Location\Models\State';
 
-            $model->addDynamicMethod('getSpendAttribute', function($value) {
-                return Currency::format($value);
+            $model->addDynamicMethod('getSpendAttribute', function($value) use ($model) {
+                $total = Order::where('user_id', $model->id)
+                    ->whereIn('status_code', ['paid', 'shipped', 'packing', 'delivered'])
+                    ->get()
+                    ->sum('total');
+
+                return Currency::format($total);
             });
 
-            $model->addDynamicMethod('getTransactionsAttribute', function($value) {
-                return $value;
+            $model->addDynamicMethod('getTransactionsAttribute', function($value) use ($model) {
+                return Order::where('user_id', $model->id)
+                    ->whereIn('status_code', ['paid', 'shipped', 'packing', 'delivered'])
+                    ->get()
+                    ->count();
             });
 
-            $model->addDynamicMethod('getLastTransactionAttribute', function($value) {
-                return \Carbon\Carbon::parse($value)->diffForHumans();
+            $model->addDynamicMethod('getLastTransactionAttribute', function($value) use ($model) {
+                $order = Order::where('user_id', $model->id)->orderBy('created_at', 'desc')->first();
+
+                if ($order)
+                    return $order->created_at->diffForHumans();
             });
 
         });
@@ -95,6 +109,14 @@ class Plugin extends PluginBase
             $model->hasMany['cities'] = [
                 'Octommerce\Octommerce\Models\City'
             ];
+        });
+
+        \System\Controllers\Settings::extend(function($controller) {
+            // Install CMS pages
+            $controller->addDynamicMethod('onOctommerceCmsInstallPages', function() {
+                $cms = Cms::instance();
+                $cms->install();
+            });
         });
 
         Event::listen('backend.list.extendColumns', function($widget) {
@@ -140,6 +162,10 @@ class Plugin extends PluginBase
 			]);
         });
 
+        // Global variable for settings
+        Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) {
+            $controller->vars['octommerce_settings'] = Settings::instance();
+        });
 
         //
         // Built in Types
@@ -225,6 +251,8 @@ class Plugin extends PluginBase
     {
         $alias = AliasLoader::getInstance();
         $alias->alias('Cart', 'Octommerce\Octommerce\Facades\Cart');
+
+        $this->registerConsoleCommand('octommerce:dummy-product', 'Octommerce\Octommerce\Console\DummyProduct');
     }
 
     public function registerComponents()
@@ -232,15 +260,18 @@ class Plugin extends PluginBase
         return [
             'Octommerce\Octommerce\Components\ProductList'   => 'productList',
             'Octommerce\Octommerce\Components\ProductDetail' => 'productDetail',
+            'Octommerce\Octommerce\Components\BrandList'     => 'brandList',
             'Octommerce\Octommerce\Components\CategoryList'  => 'categoryList',
             'Octommerce\Octommerce\Components\Cart'          => 'cart',
             'Octommerce\Octommerce\Components\Checkout'      => 'checkout',
-            'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
             'Octommerce\Octommerce\Components\OrderDetail'   => 'orderDetail',
-            'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
+            'Octommerce\Octommerce\Components\OrderList'     => 'orderList',
             'Octommerce\Octommerce\Components\OrderTracking' => 'orderTracking',
+            'Octommerce\Octommerce\Components\Review'        => 'review',
             'Octommerce\Octommerce\Components\Wishlist'      => 'wishlist',
-            'Octommerce\Octommerce\Components\Review'      => 'review',
+
+            // Will be deprecated
+            'Octommerce\Octommerce\Components\Account'       => 'OctommerceAccount',
         ];
     }
 

@@ -44,11 +44,24 @@
             'param' => [
                 'isplay_empty_description' => 'Show categories that do not have any products.',
                 'slug' => 'Category slug',
-                'slug_description' => "Look up the blog category using the supplied slug value. This property is used by the default component partial for marking the currently active category.",
+                'slug_description' => "Look up the category using the supplied slug value. This property is used by the default component partial for marking the currently active category.",
                 'display_empty' => 'Display empty categories',
                 'display_empty_description' => 'Show categories that do not have any posts.',
                 'category_page' => 'Category page',
                 'category_page_description' => 'Name of the category page file for the category links. This property is used by the default component partial.',
+            ],
+        ],
+        'brand_list' => [
+            'name' => 'Brand List',
+            'description' => 'Display a list of brands',
+            'param' => [
+                'isplay_empty_description' => 'Show brands that do not have any products.',
+                'slug' => 'Brand slug',
+                'slug_description' => "Look up the brand using the supplied slug value. This property is used by the default component partial for marking the currently active category.",
+                'display_empty' => 'Display empty brands',
+                'display_empty_description' => 'Show brands that do not have any posts.',
+                'brand_page' => 'Brand page',
+                'brand_page_description' => 'Name of the brand page file for the category links. This property is used by the default component partial.',
             ],
         ],
     	'order_list' => [

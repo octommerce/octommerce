@@ -11,3 +11,7 @@
 		</div>
 	</div>
 </form>
+
+{% if not user %}
+    {% partial __SELF__ ~ '::modal-login' %}
+{% endif %}

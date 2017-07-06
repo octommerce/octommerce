@@ -1,0 +1,61 @@
+products:
+    title: Products
+    settigns:
+        components:
+            payment:
+                hash: '{{ :hash }}'
+                invoicePage: 404
+    fileName: products/index3.htm
+    url: /products
+category:
+    title: Category
+    component: productList
+    fileName: products/category.htm
+    url: /products/category/:slug
+brand:
+    title: Brand
+    component: productList
+    fileName: products/brand.htm
+    url: /products/brand/:slug
+list:
+    title: List
+    component: productList
+    fileName: products/list.htm
+    url: /products/list/:slug
+product_detail:
+    title: Product Detail
+    component: productDetail
+    fileName: products/detail.htm
+    url: /produts/detail/:slug
+cart:
+    title: Cart
+    fileName: cart.htm
+    url: /cart
+checkout:
+    title: Checkout
+    component:
+    fileName: checkout/shipping
+    url: /checkout/shipping
+payment:
+    title: Payment
+    components:
+        payment:
+            hash: '{{ :hash }}'
+            invoicePage: 404
+    fileName: checkout/payment
+    url: /checkout/payment
+finish:
+    title: Finish
+    component:
+    fileName: checkout/finish
+    url: /checkout/finish
+orders:
+    title: My Orders
+    component:
+    fileName: orders/index.htm
+    url: /orders
+order_detail:
+    title: Order Detail
+    component:
+    fileName: orders/detail.htm
+    url: /orders/detail/:order_no
