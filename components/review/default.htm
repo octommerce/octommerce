@@ -1,3 +1,42 @@
-<p>This is the default markup for component review</p>
+{% if order.status.name == 'Delivered' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <table class="cart-table hidden-xs">
+                <thead>
+                    <tr>
+                        <th colspan="2">Produk</th>
+                        <th>Content</th>
+                        <th>Review</th>
+                        
+                    </tr>
+                    <form data-request="onSave" data-request-flash data-attach-loading>
 
-<small>You can delete this file if you want</small>
+                    
+                        {% for product in order.products %}
+                            {% partial 'account/form-review' product=product %}
+                        {% endfor %}
+                 
+
+                    <tr align="right">
+                        <td colspan="3">
+                        <label>tampilkan sebagai: </label>
+                    <select class="form-control" id="sel1" name="is_masked">
+                        <option value="0">{{ order.user.name }}</option>
+                        <option value="1">{{ str_limit(order.user.name, 1, '*****') }}</option>
+                      </select>
+                        </td>
+                            <input type="hidden" name="user_id" value="{{ order.user_id }}">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <td><button type="submit" class="btn btn-info">Save</button></td>
+
+                    </tr>
+                </thead>
+                </form>
+
+                </table>
+            </div>
+        </div>
+    </div> 
+
+   {% endif %}
