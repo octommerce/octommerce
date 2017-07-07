@@ -25,9 +25,9 @@ class DummyProduct extends Command
     public function fire()
     {
         $this->generateProductFactory();
-        $count = (integer) $this->option('count');
+        $amount = (integer) $this->option('amount');
 
-        factory(\Octommerce\Octommerce\Models\Product::class, $count)->create();
+        factory(\Octommerce\Octommerce\Models\Product::class, $amount)->create();
     }
 
     /**
@@ -46,7 +46,7 @@ class DummyProduct extends Command
     protected function getOptions()
     {
         return [
-            ['count', null, InputOption::VALUE_OPTIONAL, 'Number of dummy product', 1]
+            ['amount', null, InputOption::VALUE_OPTIONAL, 'Amount of dummy product', 1]
         ];
     }
 
