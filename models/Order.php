@@ -50,7 +50,6 @@ class Order extends Model
         'shipping_city_id',
         'shipping_state_id',
         'shipping_postcode',
-        'shipping_cost',
         'message',
         'subtotal',
         'total_weight',
