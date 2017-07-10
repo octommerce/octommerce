@@ -327,7 +327,13 @@ class Product extends Model
 
     public function scopeApplyPriority($query, $direction = 'desc')
     {
-        return $query->orderBy('priority', $direction);
+        if ($direction == 'asc') {
+            $column = '-priority';
+        } else {
+            $column = 'priority';
+        }
+
+        return $query->orderBy('priority', 'desc');
     }
 
     public function isAvailable($qty = 1)
