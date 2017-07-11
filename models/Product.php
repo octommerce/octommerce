@@ -333,7 +333,7 @@ class Product extends Model
             $column = 'priority';
         }
 
-        return $query->orderBy($column, 'desc');
+        return $query->orderBy(DB::raw($column), 'desc');
     }
 
     public function isAvailable($qty = 1)
