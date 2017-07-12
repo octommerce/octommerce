@@ -10,3 +10,4 @@ Event::listen('cart.afterAddItem', 'Octommerce\Octommerce\Listeners\TriggerProdu
  * Resonsiv.pay
  **/
 Event::listen('responsiv.pay.invoicePaid', 'Octommerce\Octommerce\Listeners\TriggerProductType@invoicePaid');
+Event::listen('responsiv.pay.beforeUpdateInvoiceStatus', 'Octommerce\Octommerce\Listeners\UpdateOrderStatus@filterStatus');
