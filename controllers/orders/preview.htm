@@ -21,7 +21,7 @@
             </div>
             <div class="scoreboard-item title-value">
                 <h4>Total</h4>
-                <p><small>IDR</small> <?= number_format($order->total) ?></p>
+                <p><?= Currency::format($order->total) ?></p>
                 <?php if($order->discount > 0): ?>
                 <p class="description">Disc: <?= number_format($order->discount) ?></p>
                 <?php endif ?>
