@@ -34,7 +34,7 @@ class OrderDetail extends ComponentBase
             return $this->controller->run('404');
         }
 
-        $this->order = $order = $this->getOrder();
+        $this->order = $this->page['order'] = $order = $this->getOrder();
 
         if (! $order) {
             return $this->controller->run('404');
