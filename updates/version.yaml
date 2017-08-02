@@ -77,3 +77,6 @@
     - create review item and review type
     - create_review_items_table.php
     - create_review_types_table.php
+1.0.22:
+    - Add preorder_shipping_date to products table
+    - add_preorder_shipping_date_to_products_table.php

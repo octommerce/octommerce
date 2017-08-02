@@ -153,6 +153,14 @@ tabs:
                 field: manage_stock
                 condition: checked
             tab: Inventory
+        pre_order_period_section:
+            label: Pre-order period
+            type: section
+            trigger:
+                action: show
+                field: stock_status
+                condition: value[pre-order]
+            tab: Inventory
         available_from:
             label: 'Available From'
             oc.commentPosition: ''
@@ -175,6 +183,19 @@ tabs:
                 field: manage_stock
                 condition: checked
             tab: Inventory
+        preorder_shipping_date:
+            label: 'Will be ship on'
+            span: auto
+            type: datepicker
+            mode: date
+            oc.commentPosition: ''
+            comment: ''
+            trigger:
+                action: show
+                field: stock_status
+                condition: value[pre-order]
+            tab: Inventory
+
         is_virtual:
             label: 'It''s a virtual product'
             span: full

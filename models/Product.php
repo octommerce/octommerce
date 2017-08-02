@@ -96,7 +96,7 @@ class Product extends Model
     /**
      * @var array Soft deletes.
      */
-    protected $dates = ['deleted_at', 'available_from', 'available_to', 'discount_start_at', 'discount_end_at'];
+    protected $dates = ['deleted_at', 'available_from', 'available_to', 'discount_start_at', 'discount_end_at', 'preorder_shipping_date'];
 
     /**
      * @var array Guarded fields
@@ -496,6 +496,11 @@ class Product extends Model
     public function getTypeAttribute($value)
     {
         return ProductManager::instance()->findTypeByCode($value, $this);
+    }
+
+    public function getIsPreOrderAttribute()
+    {
+        return $this->stock_status == 'pre-order';
     }
 
     /**
