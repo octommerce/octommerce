@@ -109,6 +109,11 @@ class Order extends Model
         });
     }
 
+    public function isPaid()
+    {
+        return in_array($this->status_code, ['paid', 'shipped', 'packing', 'delivered']);
+    }
+
     public function updateStatus($statusCode, $note = '', $data = [])
     {
         if ($status = OrderStatus::find($statusCode)) {
