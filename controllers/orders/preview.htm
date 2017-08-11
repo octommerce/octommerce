@@ -80,11 +80,13 @@
                             title="Regenerate..."
                             target="_blank">
                         </a>
-                        <!-- <a
+                        <?php if ($order->invoices): ?>
+                        <a
                             href="<?= Backend::url('responsiv/pay/invoices/preview/' . $order->invoices->last()->id) ?>"
                             class="btn btn-default">
                             Invoice
-                        </a> -->
+                        </a>
+                        <?php endif ?>
                     </div>
                     <a
                         href="#"
