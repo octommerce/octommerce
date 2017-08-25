@@ -52,6 +52,7 @@ class Order extends Model
         'shipping_postcode',
         'shipping_cost',
         'message',
+        'notes',
         'subtotal',
         'total_weight',
     ];
