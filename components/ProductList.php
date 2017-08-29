@@ -89,7 +89,7 @@ class ProductList extends ComponentBase
                 'title'       => 'octommerce.octommerce::lang.component.product_list.param.sort_order_title',
                 'description' => 'octommerce.octommerce::lang.component.product_list.param.sort_order_desc',
                 'type'        => 'dropdown',
-                'default'     => 'published_at desc'
+                'default'     => 'created_at desc'
             ],
             'productsPerPage' => [
                 'title'             => 'octommerce.octommerce::lang.component.product_list.param.products_per_page_title',

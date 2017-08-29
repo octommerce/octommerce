@@ -1,0 +1,5 @@
+<div class="list-group">
+    {% for brand in __SELF__.brands %}
+    <a href="{{ brand.page_url }}" class="list-group-item">{{ brand.name }}</a>
+    {% endfor %}
+</div>

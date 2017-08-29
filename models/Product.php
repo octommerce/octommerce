@@ -5,7 +5,6 @@ use Model;
 use Carbon\Carbon;
 use Cms\Classes\Theme;
 use Cms\Classes\Page as CmsPage;
-use Octommerce\Octommerce\Models\Settings;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Observers\Product as ProductObserver;
 
@@ -23,7 +22,7 @@ class Product extends Model
     use \Octommerce\Octommerce\Traits\Sortable;
     use \Octommerce\Octommerce\Traits\Filterable;
 
-    protected $manager;
+    protected $manager, $page;
 
     public $productsCount;
 
@@ -39,6 +38,7 @@ class Product extends Model
      */
     public $rules = [
         'name' => 'required',
+        'type' => 'required',
         'price' => 'required|regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'discount_price' => 'regex:/^(0+)?\d{0,10}(\.\d{0,2})?$/',
         'priority' => 'numeric',
@@ -96,7 +96,7 @@ class Product extends Model
     /**
      * @var array Soft deletes.
      */
-    protected $dates = ['deleted_at', 'available_from', 'available_to', 'discount_start_at', 'discount_end_at'];
+    protected $dates = ['deleted_at', 'available_from', 'available_to', 'discount_start_at', 'discount_end_at', 'preorder_shipping_date'];
 
     /**
      * @var array Guarded fields
@@ -327,7 +327,13 @@ class Product extends Model
 
     public function scopeApplyPriority($query, $direction = 'desc')
     {
-        return $query->orderBy('priority', $direction);
+        if ($direction == 'asc') {
+            $column = '-priority';
+        } else {
+            $column = 'priority';
+        }
+
+        return $query->orderBy(DB::raw($column), 'desc');
     }
 
     public function isAvailable($qty = 1)
@@ -375,9 +381,24 @@ class Product extends Model
         return in_array($listSlug, $this->lists->pluck('slug')->toArray());
     }
 
+    public function setPage($page)
+    {
+        $this->page = $page;
+    }
+
     public function getPageUrlAttribute()
     {
-        return Settings::get('product_detail_page') ? CmsPage::url(Settings::get('product_detail_page'), ['slug' => $this->slug]) : null;
+        if (! $this->page && ! $this->page = Settings::get('cms_product_detail_page')) {
+            return null;
+        }
+
+        $params = [
+            'id'   => $this->id,
+            'sku'  => $this->sku,
+            'slug' => $this->slug,
+        ];
+
+        return CmsPage::url($this->page, $params);
     }
 
     public function getSalePriceAttribute($value)
@@ -475,6 +496,11 @@ class Product extends Model
     public function getTypeAttribute($value)
     {
         return ProductManager::instance()->findTypeByCode($value, $this);
+    }
+
+    public function getIsPreOrderAttribute()
+    {
+        return $this->stock_status == 'pre-order';
     }
 
     /**

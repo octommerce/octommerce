@@ -1,11 +1,11 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use Str;
-use Model;
 use URL;
-use October\Rain\Router\Helper as RouterHelper;
+use Model;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
+use October\Rain\Router\Helper as RouterHelper;
 
 /**
  * Category Model
@@ -87,6 +87,25 @@ class Category extends Model
     public $attachMany = [
         'images' => ['System\Models\File'],
     ];
+
+    public function setPage($page)
+    {
+        $this->page = $page;
+    }
+
+    public function getPageUrlAttribute()
+    {
+        if (! $this->page && ! $this->page = Settings::get('cms_category_page')) {
+            return null;
+        }
+
+        $params = [
+            'id'   => $this->id,
+            'slug' => $this->slug,
+        ];
+
+        return CmsPage::url($this->page, $params);
+    }
 
     public function afterDelete()
     {

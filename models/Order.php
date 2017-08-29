@@ -25,7 +25,7 @@ class Order extends Model
      * Validation rules
      */
     public $rules = [
-        'name' => 'required|between:6,255',
+        'name' => 'required|between:2,255',
         'email' => 'required|between:6,255|email',
         'phone' => 'required',
     ];
@@ -50,7 +50,6 @@ class Order extends Model
         'shipping_city_id',
         'shipping_state_id',
         'shipping_postcode',
-        'shipping_cost',
         'message',
         'notes',
         'subtotal',
@@ -109,6 +108,11 @@ class Order extends Model
                 ->orWhere('status_code', 'packing')
                 ->orWhere('status_code', 'delivered');
         });
+    }
+
+    public function isPaid()
+    {
+        return in_array($this->status_code, ['paid', 'shipped', 'packing', 'delivered']);
     }
 
     public function updateStatus($statusCode, $note = '', $data = [])
@@ -208,10 +212,7 @@ class Order extends Model
         } else {
             $this->rules['shipping_name']     = 'required';
             $this->rules['shipping_phone']    = 'required';
-            $this->rules['shipping_company']  = '';
             $this->rules['shipping_address']  = 'required';
-            $this->rules['shipping_city_id']  = 'required';
-            $this->rules['shipping_state_id'] = 'required';
         }
     }
 

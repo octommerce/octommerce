@@ -25,7 +25,7 @@
                 <td>#{{ order.order_no }}</td>
                 <td class="text-right">{{ order.total|currency({format: 'short'}) }}</td>
                 <td class="text-center" style="color: {{ order.status.color }}">{{ order.status.name }}</td>
-                <td><a href="#">Detail</a></td>
+                <td><a href="{{ octommerce_settings.cms_order_detail_page|page({id: order.id, order_no: order.order_no}) }}">Detail</a></td>
             </tr>
             {% endfor %}
         </tbody>

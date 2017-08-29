@@ -97,6 +97,21 @@ class Cart extends Model
         return $this->subtotal >= Settings::get('checkout_min_subtotal', 0);
     }
 
+    public function getPreOrderProductsAttribute()
+    {
+        return $this->products->filter(function($product) {
+            return $product->is_pre_order;
+        });
+    }
+
+    public function getPreOrderShippingDateAttribute()
+    {
+        return $this->pre_order_products
+            ->sortByDesc('preorder_shipping_date')
+            ->first()
+            ->preorder_shipping_date;
+    }
+
     public function sendReminder()
     {
         if (!$this->user) {

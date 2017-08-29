@@ -125,6 +125,28 @@ class OrderManager
                 $invoice->items()->save($discountItem);
             }
 
+			// If have a tax, put to invoice items
+            if ($order->tax > 0) {
+                $taxItem = new InvoiceItem([
+                    'description' => 'Tax',
+                    'quantity' => 1,
+                    'price' => $order->tax,
+                ]);
+
+                $invoice->items()->save($taxItem);
+            }
+
+			// If have a misc fee, put to invoice items
+            if ($order->misc_fee > 0) {
+                $miscFeeItem = new InvoiceItem([
+                    'description' => 'Misc. Fee',
+                    'quantity' => 1,
+                    'price' => $order->misc_fee,
+                ]);
+
+                $invoice->items()->save($miscFeeItem);
+            }
+
 			/*
 			* Extensibility
 			*/

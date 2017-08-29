@@ -80,6 +80,7 @@
 				</div>
 			</div>
 
+
             <div class="mg-t-20">
 
                 {% if product.isAvailable() %}
@@ -94,6 +95,40 @@
 
                 {% else %}
                 <button type="submit" class="btn btn-primary" disabled>Out of Stock</button>
+                {% endif %}
+            </div>
+
+            <div>
+              <hr>
+              {% if product.reviews.count < 1 %}
+                <h2>Tidak Ada Review</h2>
+              {% else %}
+              <h2>Review</h2>  
+                {% set ratings = 0 %}
+                            {% for review in product.reviews %}
+                                {% if review.is_masked  %}
+                                    <b>{{ str_limit(review.user.name, 1, '*****') }}</b> 
+                                {% else %}
+                                    <b>{{ review.user.name }} </b> 
+                                {% endif %}
+                               
+
+                                <br>
+                                
+                                    {% for item in review.review_items %}
+
+                                            {% if item.reviewType.id =='2' %}
+                                               {% set ratings =ratings + item.rating %}                       
+                                            {% endif %}
+                                        
+                                    {% endfor %}
+                               
+                                {{ review.content }}
+                                <hr>
+                            {% endfor %}
+                            {% if ratings > 0 %}
+                            <b>Rata-rata: </b>  {{ ratings / product.reviews|length }}
+                            {% endif %}
                 {% endif %}
             </div>
 
