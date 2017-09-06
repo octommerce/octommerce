@@ -187,7 +187,7 @@ class Cart
 
         // If logged in, check by user_id
         if (Auth::check()) {
-            $cart = CartModel::whereUserId(Auth::getUser()->id)->first();
+            $cart = $this->mergeBeforeLoginCart();
         }
 
         // If not found, find by session_id
@@ -260,5 +260,26 @@ class Cart
         })->first();
     }
 
+    /**
+     * Merge before login and after login cart
+     *
+     * @return model $cart
+     */
+    protected function mergeBeforeLoginCart()
+    {
+        $cart = CartModel::whereUserId(Auth::getUser()->id)->first();
+        $beforeLoginCart = CartModel::whereSessionId(Session::getId())->first();
 
+        if ($beforeLoginCart && $beforeLoginCart->products()->count()) {
+            $products = $beforeLoginCart->products;
+            //Destroy beforeLoginCart to avoid infinite loop
+            $beforeLoginCart->delete();
+
+            $products->each(function($product) use ($cart) {
+                \Cart::addItem($product->id, $product->pivot->qty);
+            });
+        }
+
+        return $cart;
+    }
 }
