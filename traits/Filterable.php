@@ -11,7 +11,7 @@ trait Filterable
      * @param  QueryFilters $filters
      * @return Builder
      */
-    public function scopeFilter($query, QueryFilters $filters)
+    public function scopeFilters($query, QueryFilters $filters)
     {
         return $filters->apply($query);
     }

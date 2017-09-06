@@ -180,7 +180,7 @@ class ProductList extends ComponentBase
             ->sort(
                 new ProductSort(Request::get('sort'))
             )
-            ->filter(
+            ->filters(
                 new ProductFilters(
                     array_diff(Request::all(), ['']) // Exclude params without value
                 )
