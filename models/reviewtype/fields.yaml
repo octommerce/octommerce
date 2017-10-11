@@ -5,7 +5,7 @@ fields:
         span: auto
         type: text
     product_type_codes:
-        label: Prtoduct Type codes
+        label: Product Type codes
         oc.commentPosition: ''
         span: left
         type: checkboxlist
