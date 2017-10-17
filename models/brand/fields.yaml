@@ -11,6 +11,8 @@ fields:
         mode: image
         imageWidth: 160
         imageHeight: 160
+        thumbOptions:
+            mode: auto
     is_published:
         label: Published?
         span: left
