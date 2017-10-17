@@ -1,11 +1,19 @@
 fields:
     name:
         label: Name
+        span: left
         type: text
-        span: auto
         required: true
+    logo:
+        label: Logo
+        span: right
+        type: fileupload
+        mode: image
+        imageWidth: 160
+        imageHeight: 160
     is_published:
         label: Published?
+        span: left
         type: switch
         default: true
         comment: Is this brand published?

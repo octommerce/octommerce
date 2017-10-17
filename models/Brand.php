@@ -57,7 +57,9 @@ class Brand extends Model
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];
-    public $attachOne = [];
+    public $attachOne = [
+        'logo' => 'System\Models\File'
+    ];
     public $attachMany = [
         'images' => ['System\Models\File'],
     ];
