@@ -2,6 +2,7 @@
 
 use Db;
 use Mail;
+use Queue;
 use Event;
 use Model;
 use Exception;
@@ -128,13 +129,26 @@ class OrderStatusLog extends Model
         $statusLog = $this->where('order_id', '=', $order->id)
             ->orderBy('timestamp', 'DESC')->first();
 
-        Mail::send($orderStatus->mail_template->code, compact('order', 'statusLog'), function($message) use ($order, $orderStatus) {
-            $message->to($order->email, $order->name);
+        $orderId = $order->id;
+        $orderStatusCode = $orderStatus->code;
+        $statusLogId = $statusLog->id;
 
-            if($orderStatus->attach_pdf) {
-                // $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
-            }
+        Queue::later(60, function($job) use ($orderId, $orderStatusCode, $statusLogId) {
+            $order = Order::find($orderId);
+            $statusLog = OrderStatusLog::find($statusLogId);
+            $orderStatus = OrderStatus::find($orderStatusCode);
+
+            Mail::send($orderStatus->mail_template->code, compact('order', 'statusLog'), function($message) use ($order, $orderStatus) {
+                $message->to($order->email, $order->name);
+
+                if($orderStatus->attach_pdf) {
+                    $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->order_no . '.pdf']); 
+                }
+            });
+
+            $job->delete();
         });
+
     }
 
     /**
@@ -153,12 +167,22 @@ class OrderStatusLog extends Model
             return;
         }
 
-        Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
-            $message->to(Settings::get('admin_email'), 'Admin');
+        $orderId = $order->id;
+        $orderStatusCode = $orderStatus->code;
 
-            if($orderStatus->attach_pdf) {
-            //     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->invoice_no . '.pdf']);
-            }
+        Queue::later(60, function($job) use ($orderId, $orderStatusCode) {
+            $order = Order::find($orderId);
+            $orderStatus = OrderStatus::find($orderStatusCode);
+
+            Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
+                $message->to(Settings::get('admin_email'), 'Admin');
+
+                if($orderStatus->attach_pdf) {
+                    $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->order_no . '.pdf']);
+                }
+            });
+
+            $job->delete();
         });
     }
 
