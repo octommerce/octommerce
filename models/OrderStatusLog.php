@@ -235,6 +235,15 @@ class OrderStatusLog extends Model
             $order->onChangeStatus($statusCode, $previousStatus);
 
             Db::commit();
+
+            /*
+             * Extensibility
+             */
+            if (Event::fire('octommerce.octommerce.afterUpdateOrderStatus', [$record, $order, $statusCode, $previousStatus], true) === false)
+                return false;
+
+            if ($record->fireEvent('octommerce.afterUpdateOrderStatus', [$record, $order, $statusCode, $previousStatus], true) === false)
+                return false;
         }
         catch (Exception $e) {
             Db::rollBack();
