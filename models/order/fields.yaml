@@ -6,7 +6,9 @@ fields:
     detail@preview:
         type: partial
         path: $/octommerce/octommerce/controllers/orders/_order_detail.htm
-    items:
+    order_product_lists@update:
+        type: oc_productlist
+    items@preview:
         type: partial
         path: $/octommerce/octommerce/controllers/orders/_order_items.htm
     status_logs:

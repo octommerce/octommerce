@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Octommerce\Octommerce\Models\City;
 use Rainlab\Location\Models\State;
 use Responsiv\Pay\Models\Invoice;
+use Responsiv\Pay\Models\InvoiceItem;
 
 /**
  * Order Model
@@ -80,7 +81,7 @@ class Order extends Model
         'products' => [
             'Octommerce\Octommerce\Models\Product',
             'table'      => 'octommerce_octommerce_order_product',
-            'pivot'      => ['qty', 'price', 'discount', 'name', 'data'],
+            'pivot'      => ['qty', 'qty_before', 'price', 'discount', 'name', 'data'],
             'pivotModel' => 'Octommerce\Octommerce\Models\OrderProductPivot'
         ],
     ];
@@ -156,6 +157,11 @@ class Order extends Model
     public function afterDelete()
     {
         $this->invoices->first()->delete();
+    }
+
+    public function afterSave()
+    {
+        $this->updateItemsOnInvoice();
     }
 
     public function sendEmailToCustomer()
@@ -243,5 +249,23 @@ class Order extends Model
         }
 
         return $string;
+    }
+
+    private function updateItemsOnInvoice()
+    {
+        if ($this->invoice->items()->exists()) return;
+
+        $this->products()->get()->each(function($product) {
+            $invoiceItem = new InvoiceItem([
+                'description' => $product->name,
+                'quantity'    => $product->pivot->qty,
+                'price'       => $product->pivot->price - $product->pivot->discount,
+            ]);
+
+            $this->invoice->items()->save($invoiceItem);
+        });
+
+        //Save invoice to recalculate the price
+        $this->invoice->save();
     }
 }

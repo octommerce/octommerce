@@ -314,6 +314,13 @@ class Plugin extends PluginBase
         ];
     }
 
+	public function registerFormWidgets()
+	{
+		return [
+			'Octommerce\Octommerce\FormWidgets\ProductList' => 'oc_productlist',
+		];
+	}
+
     public function registerMailTemplates()
     {
         return [

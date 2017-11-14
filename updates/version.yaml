@@ -83,3 +83,6 @@
 1.0.23:
     - Add indexing to category_product table
     - add_index_to_category_product_table.php
+1.0.24:
+    - Add qty_before to order_product table
+    - add_qty_before_to_order_product_table.php
