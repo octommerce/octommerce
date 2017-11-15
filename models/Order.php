@@ -253,7 +253,7 @@ class Order extends Model
 
     private function updateItemsOnInvoice()
     {
-        if ($this->invoice->items()->exists()) return;
+        if (!isset($this->invoice) or $this->invoice->items()->exists()) return;
 
         $this->products()->get()->each(function($product) {
             $invoiceItem = new InvoiceItem([
