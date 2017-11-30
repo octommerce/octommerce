@@ -253,6 +253,7 @@ class Plugin extends PluginBase
         $alias->alias('Cart', 'Octommerce\Octommerce\Facades\Cart');
 
         $this->registerConsoleCommand('octommerce:dummy-product', 'Octommerce\Octommerce\Console\DummyProduct');
+        $this->registerConsoleCommand('octommerce:delete-cart', 'Octommerce\Octommerce\Console\DeleteCart');
     }
 
     public function registerComponents()
@@ -357,5 +358,8 @@ class Plugin extends PluginBase
         $schedule->call(function() use($orderManager) {
             $orderManager->checkExpiredOrders();
         })->everyMinute();
+
+        // Delete unused carts in a few days
+        $schedule->command('octommerce:delete-cart')->daily();
     }
 }

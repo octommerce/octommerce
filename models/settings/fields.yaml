@@ -19,6 +19,13 @@ tabs:
             oc.commentPosition: ''
             span: auto
             tab: General
+        delete_cart_in_days:
+            label: 'Delete Cart in Days'
+            comment: 'The default will delete cart in 30 days'
+            oc.commentPosition: ''
+            type: number
+            span: auto
+            tab: General
 
         ##### CMS #####
         cms_hint:
