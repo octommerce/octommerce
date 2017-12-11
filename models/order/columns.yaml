@@ -26,6 +26,8 @@ columns:
     subtotal:
         label: Subtotal
         searchable: true
+    shipping_cost:
+        label: Shipping cost
     discount:
         label: Discount
         searchable: true
