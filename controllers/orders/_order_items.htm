@@ -28,17 +28,17 @@
             <th colspan="5">Subtotal</th>
             <th class="text-right"><?= Currency::format($model->subtotal) ?></th>
         </tr>
-        <!--<tr>-->
-            <!--<th colspan="4">Shipping Cost</th>-->
-            <!--<th class="text-right"><?= Currency::format($model->shipping_cost) ?></th>-->
-        <!--</tr>-->
+        <tr>
+            <th colspan="5">Shipping Cost</th>
+            <th class="text-right"><?= Currency::format($model->shipping_cost) ?></th>
+        </tr>
         <tr>
             <th colspan="5">Discount</th>
             <th class="text-right"><?= Currency::format($model->discount) ?></th>
         </tr>
         <tr>
             <th colspan="5">Total</th>
-            <th class="text-right"><?= Currency::format($model->subtotal - $model->discount) ?></th>
+            <th class="text-right"><?= Currency::format($model->total) ?></th>
         </tr>
     </tfoot>
 </table>
