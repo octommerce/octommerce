@@ -59,6 +59,10 @@ class Plugin extends PluginBase
             ];
             $model->belongsTo['city'] = 'Octommerce\Octommerce\Models\City';
             $model->belongsTo['state'] = 'RainLab\Location\Models\State';
+            $model->belongsToMany['expect_products'] = [
+                'Octommerce\Octommerce\Models\Product',
+                'table' => 'octommerce_octommerce_product_user'
+            ];
 
             $model->addDynamicMethod('getSpendAttribute', function($value) use ($model) {
                 $total = Order::where('user_id', $model->id)
@@ -67,6 +71,15 @@ class Plugin extends PluginBase
                     ->sum('total');
 
                 return Currency::format($total);
+            });
+
+            $model->addDynamicMethod('hasExpectProduct', function($productId) use ($model) {
+                $user = User::where('id', $model->id)
+                    ->whereHas('expect_products', function($query) use ($productId) {
+                        return $query->where('product_id', $productId);
+                    })->first();
+
+                return !is_null($user);
             });
 
             $model->addDynamicMethod('getTransactionsAttribute', function($value) use ($model) {
@@ -339,6 +352,7 @@ class Plugin extends PluginBase
             'octommerce.octommerce::mail.backend_order'        => 'Order notification to backend users.',
             'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
             'octommerce.octommerce::mail.forgot_password'      => 'Forgot password link',
+            'octommerce.octommerce::mail.stock_ready'          => 'Notify user if product stock ready',
         ];
     }
 

@@ -1,0 +1,28 @@
+subject = "{{ product.name }} Now Is Ready"
+==
+
+==
+<p>
+    Hi {{ user.name }},
+</p>
+<p>
+    We want to inform you the product below is now in stock.
+</p>
+<table class="table-summary">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {{ product.name }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<a href="{{ url_to('/products/detail') ~ '/' ~ product.slug }}">Buy Now</a>

@@ -86,3 +86,6 @@
 1.0.24:
     - Add qty_before to order_product table
     - add_qty_before_to_order_product_table.php
+1.0.25:
+    - Create pivot product user table
+    - create_product_user_table.php

@@ -1,9 +1,11 @@
 <?php namespace Octommerce\Octommerce\Models;
 
 use DB;
+use Mail;
 use Model;
 use Carbon\Carbon;
 use Cms\Classes\Theme;
+use ApplicationException;
 use Cms\Classes\Page as CmsPage;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Observers\Product as ProductObserver;
@@ -192,6 +194,10 @@ class Product extends Model
         'tags' => [
             'Octommerce\Octommerce\Models\Tag',
             'table' => 'octommerce_octommerce_product_tag'
+        ],
+        'prospective_buyers' => [
+            'RainLab\User\Models\User',
+            'table' => 'octommerce_octommerce_product_user',
         ]
     ];
 
@@ -305,6 +311,11 @@ class Product extends Model
                 $this->sale_price = null;
                 $this->discount_amount = null;
         }
+    }
+
+    public function afterSave()
+    {
+        $this->notifyProspectiveBuyers();
     }
 
     public function scopeAvailable($query)
@@ -462,11 +473,16 @@ class Product extends Model
 
     public function getIsLowStockAttribute()
     {
-        if ($this->manage_stock && $this->stock_status == 'in-stock' && $this->qty != null) {
+        if ($this->isProductInStock()) {
             return $this->qty <= Settings::get('low_stock_treshold');
         }
 
         return false;
+    }
+
+    protected function isProductInStock()
+    {
+        return $this->manage_stock && $this->stock_status == 'in-stock' && $this->qty != null;
     }
 
     public function isOutOfStockAttribute()
@@ -599,6 +615,61 @@ class Product extends Model
         }
 
         return $result;
+    }
+
+    /**
+     * Set reminder to user when user want to get notification when product available
+     *
+     * @param RainLab\User\Models\User $user
+     */
+    public function setReminderToUser($user)
+    {
+        if (is_null($user)) 
+            throw new ApplicationException('You are not logged in');
+
+        if ($this->userAlreadyInList($user)) 
+            throw new ApplicationException('You are already in the list');
+
+        try {
+            $this->prospective_buyers()->save($user);
+        } catch(\Exception $e) {
+            trace_log($e->getMessage());
+            throw new ApplicationException('Oopss. Something went wrong.');
+        }
+    }
+
+    /**
+     * Check if user already in the list of prospective buyers
+     *
+     * @param RainLab\User\Models\User $user
+     * @return Boolean
+     */
+    protected function userAlreadyInList($user)
+    {
+        if ($this->whereHas('prospective_buyers', function($query) use ($user) {
+            return $query->where('user_id', $user->id);
+        })->first()) return true;
+
+        return false;
+    }
+
+    protected function notifyProspectiveBuyers()
+    {
+        if ( ! $this->isProductInStock()) return;
+
+        $this->prospective_buyers->each(function($prospective_buyer) {
+            $this->remindProductToUser($prospective_buyer);
+        });
+    }
+
+    private function remindProductToUser($user)
+    {
+        $product = $this;
+
+        Mail::sendTo($user->email, 'octommerce.octommerce::mail.stock_ready', compact('product', 'user'));
+
+        // Delete user from list
+        $this->prospective_buyers()->detach($user->id);
     }
 
     /**

@@ -95,6 +95,13 @@
 
                 {% else %}
                 <button type="submit" class="btn btn-primary" disabled>Out of Stock</button>
+                <button class="btn btn-default btn-block"
+                        data-request="onRemindMe"
+                        data-requst-data="product_id: {{ product.id }}"
+                        data-request-flash
+                        >
+                        Remind me when ready
+                </button>
                 {% endif %}
             </div>
 

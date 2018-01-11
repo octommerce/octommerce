@@ -1,5 +1,8 @@
 <?php namespace Octommerce\Octommerce\Components;
 
+use Auth;
+use Flash;
+use ApplicationException;
 use Cms\Classes\ComponentBase;
 use Octommerce\Octommerce\Models\Product as ProductModel;
 
@@ -47,6 +50,17 @@ class ProductDetail extends ComponentBase
 
     }
 
+    public function onRemindMe()
+    {
+        $product = ProductModel::find(post('product_id'));
+
+        if (is_null($product)) throw new ApplicationException('Product not found');
+
+        $product->setReminderToUser(Auth::getUser());
+
+        Flash::success('We will notify you when the stock is ready');
+    }
+
     protected function loadProduct()
     {
         $slug = $this->property('slug');
@@ -65,5 +79,4 @@ class ProductDetail extends ComponentBase
 
         return $product;
     }
-
 }
