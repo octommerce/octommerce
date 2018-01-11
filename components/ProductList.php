@@ -366,7 +366,7 @@ class ProductList extends ComponentBase
                     ) op
                     "), 'octommerce_octommerce_products.id', '=', 'op.product_id');
 
-            } else {
+            } else if ($sortOrder != 'default') {
                 $query->orderBy($sortOrderArray[0], $sortOrderArray[1]);
             }
         }

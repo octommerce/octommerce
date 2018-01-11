@@ -59,6 +59,7 @@ class Product extends Model
      * @var array
      */
     public static $allowedSortingOptions = array(
+        'default'         => 'Default order',
         'name asc'        => 'Name (ascending)',
         'name desc'       => 'Name (descending)',
         'created_at asc'  => 'Created (ascending)',
