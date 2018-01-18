@@ -182,7 +182,7 @@ class ProductList extends ComponentBase
             )
             ->filters(
                 new ProductFilters(
-                    array_diff(Request::all(), ['']) // Exclude params without value
+                    array_filter(Request::all()) // Exclude params without value
                 )
             );
 
