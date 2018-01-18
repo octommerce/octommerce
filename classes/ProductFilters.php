@@ -54,4 +54,17 @@ class ProductFilters extends QueryFilters
             $q->whereIn('octommerce_octommerce_brands.slug', $slugs);
         });
     }
+
+    /**
+     * Filter price by between value
+     *
+     * @param string $value (Separate value using comma)
+     * @return Builder
+     */
+    public function price_between($value)
+    {
+        $values = explode(',', $value);
+
+        return $this->builder->whereBetween('price', $values);
+    }
 }
