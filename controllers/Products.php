@@ -20,6 +20,7 @@ class Products extends Controller
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
     public $importExportConfig = 'config_import_export.yaml';
+    public $partialButtons = [];
 
     public function __construct()
     {
@@ -47,4 +48,12 @@ class Products extends Controller
         return $this->asExtension('FormController')->update($recordId, $context);
     }
 
+    protected function renderPartialButtons($context)
+    {
+        if ( ! array_get($this->partialButtons, $context, null)) return;
+
+        return array_reduce($this->partialButtons[$context], function($partials, $partial) {
+            return $partials . $this->makePartial($partial);
+        });
+    }
 }

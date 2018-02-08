@@ -39,8 +39,32 @@ class ProductFilters extends QueryFilters
      */
     public function brand($slug)
     {
-        return $this->builder->whereHas('brand', function($q) use ($slug) {
-            $q->where('octommerce_octommerce_brands.slug', '=', $slug);
+        return $this->brands((array) $slug);
+    }
+
+    /**
+     * Filter by brands
+     *
+     * @param  array $slug
+     * @return Builder
+     */
+    public function brands($slugs)
+    {
+        return $this->builder->whereHas('brand', function($q) use ($slugs) {
+            $q->whereIn('octommerce_octommerce_brands.slug', $slugs);
         });
+    }
+
+    /**
+     * Filter price by between value
+     *
+     * @param string $value (Separate value using comma)
+     * @return Builder
+     */
+    public function price_between($value)
+    {
+        $values = explode(',', $value);
+
+        return $this->builder->whereBetween('price', $values);
     }
 }

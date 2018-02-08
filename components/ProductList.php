@@ -165,7 +165,7 @@ class ProductList extends ComponentBase
 
     public function onFilter()
     {
-        $url = Request::url() . '?' . http_build_query(array_diff(post(), ['']));
+        $url = Request::url() . '?' . http_build_query(array_filter(post()));
 
         return Redirect::to($url);
     }
@@ -182,7 +182,7 @@ class ProductList extends ComponentBase
             )
             ->filters(
                 new ProductFilters(
-                    array_diff(Request::all(), ['']) // Exclude params without value
+                    array_filter(Request::all()) // Exclude params without value
                 )
             );
 
