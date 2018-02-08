@@ -89,3 +89,6 @@
 1.0.25:
     - Create pivot product user table
     - create_product_user_table.php
+1.0.26:
+    - Add admin_email to order_statuses table
+    - add_admin_email_to_order_statuses_table.php

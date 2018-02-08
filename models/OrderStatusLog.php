@@ -174,8 +174,18 @@ class OrderStatusLog extends Model
             $order = Order::find($orderId);
             $orderStatus = OrderStatus::find($orderStatusCode);
 
-            Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus) {
-                $message->to(Settings::get('admin_email'), 'Admin');
+            if (is_null($orderStatus->admin_email) or empty($orderStatus->admin_email)) {
+                trace_log('Admin\'s mail not set on ' . $orderStatusCode . ' status code');
+
+                $job->delete();
+
+                return false;
+            }
+
+            $adminMails = explode(',', $orderStatus->admin_email);
+
+            Mail::send($orderStatus->admin_mail_template->code, compact('order'), function($message) use ($order, $orderStatus, $adminMails) {
+                $message->to($adminMails, 'Admin');
 
                 if($orderStatus->attach_pdf) {
                     $message->attach($order->pdf->getLocalPath(), ['as' => 'order-' . $order->order_no . '.pdf']);

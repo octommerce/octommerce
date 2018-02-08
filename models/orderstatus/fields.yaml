@@ -59,6 +59,16 @@ secondaryTabs:
             span: auto
             tab: Admin
 
+        admin_email:
+            label: Admin Email
+            tab: Admin
+            comment: Separate email recipients with commas
+            trigger:
+                action: enable
+                field: send_email_to_admin
+                condition: checked
+
+
         admin_mail_template:
             label: Mail template
             tab: Admin
