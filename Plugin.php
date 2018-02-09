@@ -353,6 +353,8 @@ class Plugin extends PluginBase
             'octommerce.octommerce::mail.backend_low_stock'    => 'Low stock notification to backend users.',
             'octommerce.octommerce::mail.forgot_password'      => 'Forgot password link',
             'octommerce.octommerce::mail.stock_ready'          => 'Notify user if product stock ready',
+            'octommerce.octommerce::mail.admin_new_order'      => 'Notify admin there is new order',
+            'octommerce.octommerce::mail.admin_paid_order'     => 'Notify admin if user has been paid the order',
         ];
     }
 
