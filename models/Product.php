@@ -312,6 +312,10 @@ class Product extends Model
                 $this->sale_price = null;
                 $this->discount_amount = null;
         }
+
+        if (empty($this->tax)) {
+            $this->tax = 0;
+        }
     }
 
     public function afterSave()
