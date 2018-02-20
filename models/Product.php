@@ -632,7 +632,7 @@ class Product extends Model
         if (is_null($user)) 
             throw new ApplicationException('You are not logged in');
 
-        if ($this->userAlreadyInList($user)) 
+        if ($this->isUserOnReminderList($user)) 
             throw new ApplicationException('You are already in the list');
 
         try {
@@ -649,7 +649,7 @@ class Product extends Model
      * @param RainLab\User\Models\User $user
      * @return Boolean
      */
-    protected function userAlreadyInList($user)
+    public function isUserOnReminderList($user)
     {
         if ($this->whereHas('prospective_buyers', function($query) use ($user) {
             return $query->where('user_id', $user->id);
