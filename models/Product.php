@@ -651,6 +651,8 @@ class Product extends Model
      */
     public function isUserOnReminderList($user)
     {
+        if (is_null($user)) return false;
+
         if ($this->whereHas('prospective_buyers', function($query) use ($user) {
             return $query->where('user_id', $user->id);
         })->first()) return true;
