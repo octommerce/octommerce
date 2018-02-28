@@ -26,6 +26,13 @@ tabs:
             type: number
             span: auto
             tab: General
+        expired_in_days:
+            label: 'Expired in Days'
+            comment: 'Set an expiry time of payment (Default 2 day)'
+            oc.commentPosition: ''
+            type: number
+            span: auto
+            tab: General
 
         ##### CMS #####
         cms_hint:
