@@ -5,6 +5,7 @@ use Faker\Factory as Faker;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class DummyProduct extends Command
 {
@@ -27,7 +28,19 @@ class DummyProduct extends Command
         $this->generateProductFactory();
         $amount = (integer) $this->option('amount');
 
-        factory(\Octommerce\Octommerce\Models\Product::class, $amount)->create();
+        $this->info('Creating dummy product(s)...');
+        
+        $progressBar = new ProgressBar($this->output, $amount);
+        $progressBar->setFormat('debug');
+        $progressBar->start();
+
+        for ($n = 1; $n <= $amount; $n++) {
+            factory(\Octommerce\Octommerce\Models\Product::class)->create();
+
+            $progressBar->advance();
+        }
+
+        $this->line('');
     }
 
     /**
