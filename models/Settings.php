@@ -66,9 +66,19 @@ class Settings extends Model
         return Page::getNameList();
     }
 
+    public function getCmsCheckoutPageAttribute($value)
+    {
+        return $value ?: array_get(array_keys($this->getCmsCheckoutPageOptions()), 1);
+    }
+
     public function getCmsCheckoutPageOptions()
     {
         return $this->getAvailablePages('checkout');
+    }
+
+    public function getCmsPaymentPageAttribute($value)
+    {
+        return $value ?: array_get(array_keys($this->getCmsPaymentPageOptions()), 1);
     }
 
     public function getCmsPaymentPageOptions()
@@ -95,7 +105,7 @@ class Settings extends Model
     {
         $pages = Page::all();
 
-        $result = [];
+        $result = ['' => '- Default - '];
 
         foreach ($pages as $page) {
             if (! $page->hasComponent($component))
@@ -105,7 +115,7 @@ class Settings extends Model
         }
 
         if (! count($result)) {
-            return array_merge(['- None -'], Page::getNameList());
+            return array_merge($result, Page::getNameList());
         }
 
         return $result;
