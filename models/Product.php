@@ -312,6 +312,10 @@ class Product extends Model
                 $this->sale_price = null;
                 $this->discount_amount = null;
         }
+
+        if (empty($this->tax)) {
+            $this->tax = 0;
+        }
     }
 
     public function afterSave()
@@ -628,7 +632,7 @@ class Product extends Model
         if (is_null($user)) 
             throw new ApplicationException('You are not logged in');
 
-        if ($this->userAlreadyInList($user)) 
+        if ($this->isUserOnReminderList($user)) 
             throw new ApplicationException('You are already in the list');
 
         try {
@@ -645,8 +649,10 @@ class Product extends Model
      * @param RainLab\User\Models\User $user
      * @return Boolean
      */
-    protected function userAlreadyInList($user)
+    public function isUserOnReminderList($user)
     {
+        if (is_null($user)) return false;
+
         if ($this->whereHas('prospective_buyers', function($query) use ($user) {
             return $query->where('user_id', $user->id);
         })->first()) return true;

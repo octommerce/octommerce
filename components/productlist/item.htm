@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+    <a href="{{ product.page_url }}">
+        <div>
+        {% if product.images|length > 0 %}
+            <img class="img-responsive" src="{{ product.images[0].getThumb(320, 320) }}" alt=""/>
+        {% else %}
+            <img class="img-responsive" src="{{ 'assets/images/placeholder-default.png'|theme }}" alt=""/>
+        {% endif %}
+        </div>
+    </a>
+    <div class="panel-body">
+        <h4>
+            <a href="{{ product.page_url }}">
+            {{ product.name }}
+            </a>
+            {% if product.is_discounted %}
+            <span class="label label-danger">{{ product.discount_percentage }}%</span>
+            {% endif %}
+        </h4>
+        {% if product.sale_price %}
+        <span class="text-muted"><del><small>{{ product.price|currency({format: 'short'}) }}</small></del></span>
+        {% endif %}
+        <span><strong>{{ (product.sale_price ?: product.price)|currency({format: 'short'}) }}</strong></span>
+    </div>
+    <div class="panel-footer">
+        {% if product.isAvailable() %}
+        <button data-request="cart::onAdd" data-request-data="product_id: {{ product.id }}" class="btn btn-primary btn-block" data-request-flash data-attach-loading>Add to Cart</button>
+        {% else %}
+        <button class="btn btn-danger btn-block" disabled>Out of Stock</button>
+        {% endif %}
+    </div>
+</div>

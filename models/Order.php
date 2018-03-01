@@ -135,10 +135,10 @@ class Order extends Model
         $now = Carbon::parse($this->created_at);
 
         $this->expired_at = Carbon::now()
-            ->addWeekdays(2)
-            ->addHours($now->format('H'))
-            ->addMinutes($now->format('i'))
-            ->addSeconds($now->format('s'));
+            ->addWeekdays($this->getExpiryDays());
+            /* ->addHours($now->format('H')) */
+            /* ->addMinutes($now->format('i')) */
+            /* ->addSeconds($now->format('s')); */
 
         // TODO: Check holidays
     }
@@ -267,5 +267,10 @@ class Order extends Model
 
         //Save invoice to recalculate the price
         $this->invoice->save();
+    }
+
+    protected function getExpiryDays()
+    {
+        return Settings::get('expired_in_days') ?: 2;
     }
 }
