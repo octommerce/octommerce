@@ -52,6 +52,18 @@ class CategoryList extends ComponentBase
                 'emptyOption' => '- Default -',
                 'group'       => 'Links',
             ],
+            'sortOrder' => [
+                'title'       => 'octommerce.octommerce::lang.component.category_list.param.sort_order_title',
+                'description' => 'octommerce.octommerce::lang.component.category_list.param.sort_order_desc',
+                'type'        => 'dropdown',
+                'default'     => null,
+            ],
+            'categoriesLimit' => [
+                'title'             => 'Limit',
+                'type'              => 'string',
+                'validationPattern' => '^[0-9]+$',
+                'default'           => null,
+            ],
         ];
     }
 
@@ -69,7 +81,7 @@ class CategoryList extends ComponentBase
 
     protected function loadCategories()
     {
-        $categories = Category::orderBy('name');
+        $categories = Category::query();
 
         if (!$this->property('displayEmpty')) {
             $categories->whereExists(function($query) {
@@ -87,6 +99,10 @@ class CategoryList extends ComponentBase
         }
 
         $categories = $categories->getNested();
+        
+        if ($limit = $this->property('categoriesLimit')) {
+            $categories = $categories->take($limit);
+        }
 
         /*
          * Add a "url" helper attribute for linking to each category

@@ -49,6 +49,8 @@
                 'display_empty_description' => 'Show categories that do not have any posts.',
                 'category_page' => 'Category page',
                 'category_page_description' => 'Name of the category page file for the category links. This property is used by the default component partial.',
+                'sort_order_title' => 'Sort order',
+                'sort_order_desc' => 'Which the order method.',
             ],
         ],
         'brand_list' => [
