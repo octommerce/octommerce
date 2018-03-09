@@ -7,6 +7,8 @@ class UpdateOrderStatus
 
     public function filterStatus($record, $invoice, $statusId, $previousStatus)
     {
+        if ( ! $invoice->related instanceof \Octommerce\Octommerce\Models\Order) return;
+
         $orderStatus = OrderStatus::whereCode($record->status->code)->first();
 
         /**
