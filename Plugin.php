@@ -250,7 +250,7 @@ class Plugin extends PluginBase
             }
 
             if ($newStatusCode) {
-                if ( ! $order instanceof \Octommerce\Octommerce\Models\Order) return;
+                if ( ! $invoice->related instanceof \Octommerce\Octommerce\Models\Order) return;
 
                 $invoice->related->updateStatus($newStatusCode, $record->comment);
             }
