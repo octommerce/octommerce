@@ -250,7 +250,7 @@ class Plugin extends PluginBase
             }
 
             if ($newStatusCode) {
-                //TODO: Check is $invoice->related Order model.
+                if ( ! $invoice->related instanceof \Octommerce\Octommerce\Models\Order) return;
 
                 $invoice->related->updateStatus($newStatusCode, $record->comment);
             }

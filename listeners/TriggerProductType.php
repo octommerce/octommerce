@@ -19,6 +19,8 @@ class TriggerProductType
     {
         $order = $invoice->related;
 
+        if ( ! $order instanceof \Octommerce\Octommerce\Models\Order) return;
+
         $order->products->each(function($product) use ($invoice) {
             return $product->type->invoicePaid($invoice);
         });
