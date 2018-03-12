@@ -114,8 +114,9 @@ class Account extends AccountModel
                 $user = $this->user();
                 $user->fill($data);
                 if($user->save()) {
-                    Flash::success("Password baru berhasil disimpan, silahkan masuk kembali dengan password baru");
-                    return Redirect::to('login');
+                    Flash::success("Password baru berhasil disimpan");
+                    Auth::login($user->reload(), true);
+                    return Redirect::refresh();
                 }
         }
     }
