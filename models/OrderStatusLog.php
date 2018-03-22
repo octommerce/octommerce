@@ -220,7 +220,9 @@ class OrderStatusLog extends Model
             $record->status_code = $statusCode;
             $record->order_id = $order->id;
             // $record->admin_id = BackendAuth::getUser()->id;
-            $record->data = array_except($data, ['status', 'note']);
+            if (is_array($data)) {
+                $record->data = array_except($data, ['status', 'note']);
+            }
             $record->timestamp = Carbon::now();
             $record->note = $note;
 
@@ -256,6 +258,7 @@ class OrderStatusLog extends Model
                 return false;
         }
         catch (Exception $e) {
+            trace_log($e);
             Db::rollBack();
 
             throw $e;
