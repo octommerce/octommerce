@@ -92,3 +92,6 @@
 1.0.26:
     - Add admin_email to order_statuses table
     - add_admin_email_to_order_statuses_table.php
+1.0.27:
+    - Modify session_id column to nullable on carts table
+    - modify_session_id_column_to_nullable_on_carts_table.php
