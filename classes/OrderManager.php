@@ -166,7 +166,6 @@ class OrderManager
             $this->fireEvent('order.afterAddInvoice', [$order, $invoice]);
             Event::fire('order.afterAddInvoice', [$order, $invoice]);
 
-            $order->invoice = $invoice;
 
             $order->save();
 
