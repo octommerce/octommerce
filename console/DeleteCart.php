@@ -33,7 +33,7 @@ class DeleteCart extends Command
             ->whereDate('updated_at', '<', $maxDate)
             ->get()
             ->each(function($cart) {
-                $cart->products()->delete();
+                $cart->products()->detach();
                 $cart->delete();
             });
     }
