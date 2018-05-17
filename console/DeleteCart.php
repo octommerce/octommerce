@@ -5,6 +5,7 @@ use Illuminate\Console\Command;
 use Octommerce\Octommerce\Models\Cart;
 use Octommerce\Octommerce\Models\Settings;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 
 class DeleteCart extends Command
@@ -29,13 +30,29 @@ class DeleteCart extends Command
         $inDays = Settings::get('delete_cart_in_days') ?: 30;
         $maxDate = Carbon::now()->subDays($inDays);
 
-        Cart::with('products')
-            ->whereDate('updated_at', '<', $maxDate)
-            ->get()
-            ->each(function($cart) {
-                $cart->products()->detach();
-                $cart->delete();
-            });
+        $cartBuilder = Cart::with('products')->whereDate('updated_at', '<', $maxDate);
+
+        $total = $cartBuilder->count();
+        $perPage = 1000;
+        $totalPage = ceil($total / $perPage);
+
+        $this->info('Deleting old cart...');
+
+        $progressBar = new ProgressBar($this->output, $total);
+        $progressBar->setFormat('debug');
+        $progressBar->start();
+
+        for ($page = 1; $page <= $totalPage; $page++) {
+            $cartBuilder->paginate($page, 1000)
+                ->each(function($cart) use ($progressBar) {
+                    $cart->products()->detach();
+                    $cart->delete();
+
+                    $progressBar->advance();
+                });
+        }
+
+        $this->line('Finish');
     }
 
     /**
