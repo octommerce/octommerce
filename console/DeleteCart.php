@@ -43,7 +43,7 @@ class DeleteCart extends Command
         $progressBar->start();
 
         for ($page = 1; $page <= $totalPage; $page++) {
-            $cartBuilder->paginate($page, 1000)
+            $cartBuilder->paginate(1000)
                 ->each(function($cart) use ($progressBar) {
                     $cart->products()->detach();
                     $cart->delete();
