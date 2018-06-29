@@ -20,7 +20,9 @@ class OrderStatus extends Model
 
     public $timestamps = false;
 
-    public $primaryKey = 'code';
+    public $incrementing = false;
+
+    protected $primaryKey = 'code';
 
     /**
      * @var array Guarded fields
