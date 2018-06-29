@@ -86,7 +86,9 @@ class Checkout extends ComponentBase
             throw new ApplicationException('No payment page applied.');
         }
 
-        return Redirect::to(Page::url($redirectPage, ['hash' => $order->invoice->hash]));
+        $invoice = $order->invoices()->first();
+
+        return Redirect::to(Page::url($redirectPage, ['hash' => $invoice->hash]));
     }
 
     public function onSelectState()
