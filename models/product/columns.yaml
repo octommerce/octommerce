@@ -29,7 +29,7 @@ columns:
     sale_price:
         label: 'Sale Price'
         type: number
-    manage_Stock:
+    manage_stock:
         label: 'Manage Stock'
         type: switch
     qty:
