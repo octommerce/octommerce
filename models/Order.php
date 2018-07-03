@@ -116,6 +116,16 @@ class Order extends Model
         return $this->invoices()->first();
     }
 
+    public function getShippingCityNameAttribute()
+    {
+        return $this->city ? $this->city->name : '';
+    }
+
+    public function getShippingStateNameAttribute()
+    {
+        return $this->state ? $this->state->name : '';
+    }
+
     public function updateStatus($statusCode, $note = '', $data = [])
     {
         if ($status = OrderStatus::find($statusCode)) {
