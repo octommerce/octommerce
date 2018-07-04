@@ -86,7 +86,12 @@ class Order extends Model
         ],
     ];
     public $morphTo = [];
-    public $morphOne = [];
+    public $morphOne = [
+        'invoice' => [
+            'Responsiv\Pay\Models\Invoice',
+            'name' => 'related',
+        ],
+    ];
     public $morphMany = [
         'invoices' => [
             'Responsiv\Pay\Models\Invoice',
@@ -109,11 +114,6 @@ class Order extends Model
     public function isPaid()
     {
         return in_array($this->status_code, ['paid', 'shipped', 'packing', 'delivered']);
-    }
-
-    public function getInvoiceAttribute()
-    {
-        return $this->invoices()->first();
     }
 
     public function getShippingCityNameAttribute()
