@@ -39,6 +39,7 @@ columns:
         type: number
     total:
         label: Total
+        searchable: true
     status:
         label: Status
         searchable: false
