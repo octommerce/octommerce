@@ -18,6 +18,8 @@
                 'brandfilter_param_desc' => 'Select a brand to filter the product list by. Leave empty to show all products.',
                 'hide_out_of_stock_title' => 'Hide out of stock',
                 'hide_out_of_stock_desc' => 'Don\'t show products that out of stock.',
+                'display_unpublished_title' => 'Display unpublished',
+                'display_unpublished_desc' => 'Display unpublished products.',
                 'no_product_title' => 'No products message',
                 'no_product_desc' => 'Message to display in the product list in case if there are no products. This property is used by the default component partial.',
                 'priority_direction_title' => 'Priority sort direction',

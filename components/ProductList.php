@@ -68,6 +68,12 @@ class ProductList extends ComponentBase
                 'default'      => false,
                 'group'        => 'Filter'
             ],
+            'is_DisplayUnpublished' => [
+                'title'        => 'octommerce.octommerce::lang.component.product_list.param.display_unpublished_title',
+                'description'  => 'octommerce.octommerce::lang.component.product_list.param.display_unpublished_desc',
+                'type'         => 'checkbox',
+                'default'      => false
+            ],
             'noProductsMessage' => [
                 'title'        => 'octommerce.octommerce::lang.component.product_list.param.no_product_title',
                 'description'  => 'octommerce.octommerce::lang.component.product_list.param.no_product_desc',
@@ -173,7 +179,6 @@ class ProductList extends ComponentBase
     public function listProducts()
     {
         $query = Product::with(['categories', 'brand', 'lists', 'images'])
-            ->published()
             ->applyPriority(
                 $this->property('priorityDirection')
             )
@@ -205,6 +210,12 @@ class ProductList extends ComponentBase
 
         if ($this->property('hideOutOfStock')) {
             $query->available();
+        }
+
+        if ($this->property('is_DisplayUnpublished')) {
+            $query->unpublished();
+        } else if (!$this->property('is_DisplayUnpublished')) {
+            $query->published();
         }
 
         if ($this->property('showFilterList')) {

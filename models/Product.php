@@ -341,6 +341,11 @@ class Product extends Model
         return $query->where('octommerce_octommerce_products.is_published', true);
     }
 
+    public function scopeUnpublished($query)
+    {
+        return $query->where('octommerce_octommerce_products.is_published', false);
+    }
+
     public function scopeApplyPriority($query, $direction = 'desc')
     {
         if ($direction == 'asc') {
@@ -629,10 +634,10 @@ class Product extends Model
      */
     public function setReminderToUser($user)
     {
-        if (is_null($user)) 
+        if (is_null($user))
             throw new ApplicationException('You are not logged in');
 
-        if ($this->isUserOnReminderList($user)) 
+        if ($this->isUserOnReminderList($user))
             throw new ApplicationException('You are already in the list');
 
         try {
