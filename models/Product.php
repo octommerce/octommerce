@@ -128,6 +128,10 @@ class Product extends Model
             'key' => 'parent_id',
         ],
         'reviews' => 'Octommerce\Octommerce\Models\Review',
+        'product_variations' => [
+            'Octommerce\Octommerce\Models\Variation',
+            'table' => 'octommerce_octommerce_products_variations',
+        ],
     ];
 
     public $belongsTo = [
@@ -200,7 +204,8 @@ class Product extends Model
         'prospective_buyers' => [
             'RainLab\User\Models\User',
             'table' => 'octommerce_octommerce_product_user',
-        ]
+        ],
+        
     ];
 
     public $morphTo = [];

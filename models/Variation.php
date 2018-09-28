@@ -27,16 +27,18 @@ class Variation extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
-    public $belongsToMany = [
-        'products' => [
+    public $belongsTo = ['product' => [
             'Octommerce\Octommerce\Models\Product',
-            'table'    => 'octommerce_octommerce_products_variations',
-        ],
-    ];
+        ],];
+    public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    public function getSize()
+    {
+        return ['xxxl'=>'XXXL','xxl'=>'XXL','xl'=>'XL','l'=>'L','m'=>'M','s'=>'S'];
+    }
 }

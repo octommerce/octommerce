@@ -33,3 +33,11 @@ cross_sells:
     view:
         toolbarButtons: link|unlink
         showCheckboxes: true
+
+product_variations:
+    label: Product Variations
+    list: ~/plugins/octommerce/octommerce/models/variation/columns.yaml
+    form: ~/plugins/octommerce/octommerce/models/variation/fields.yaml
+    view:
+        toolbarButtons: create|delete
+        showCheckboxes: true

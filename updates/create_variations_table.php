@@ -11,19 +11,17 @@ class CreateVariationsTable extends Migration
         Schema::create('octommerce_octommerce_variations', function(Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('size',8)->nullable();
+            $table->integer('product_id')->unsigned()->nullable();
+            $table->string('attribute')->nullable();
+            $table->string('size')->nullable();
+            $table->longtext('value')->nullable();
             $table->string('color')->nullable();
             $table->timestamps();
-        });
-        Schema::create('octommerce_octommerce_products_variations', function(Blueprint $table) {
-            $table->integer('variation_id')->nullable();
-            $table->integer('product_id')->nullable();
         });
     }
 
     public function down()
     {
         Schema::dropIfExists('octommerce_octommerce_variations');
-        Schema::dropIfExists('octommerce_octommerce_products_variations');
     }
 }
