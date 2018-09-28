@@ -9,6 +9,7 @@ use ApplicationException;
 use Cms\Classes\Page as CmsPage;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Observers\Product as ProductObserver;
+use Octommerce\Octommerce\Models\Settings;
 
 /**
  * Product Model
@@ -709,5 +710,12 @@ class Product extends Model
         $url = CmsPage::url($page->getBaseFileName(), [$paramName => $product->slug]);
 
         return $url;
+    }
+
+    public function getProductByListsAttribute()
+    {
+        return self::published()->whereHas('lists',function($query){
+            $query->where('id', Settings::get('show_products_lists'));
+        })->get();
     }
 }

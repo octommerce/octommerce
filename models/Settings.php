@@ -120,4 +120,8 @@ class Settings extends Model
 
         return $result;
     }
+    public function getProductLists()
+    {
+        return ProductList::lists('name','id');
+    }
 }

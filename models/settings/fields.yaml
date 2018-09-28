@@ -135,3 +135,10 @@ tabs:
             type: number
             default: 0
             tab: Checkout
+        show_products_lists:
+            label: Product Lists
+            type: dropdown
+            tab: Home Page
+            options: getProductLists
+            comment: show product depend by lists group.
+
