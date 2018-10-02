@@ -726,18 +726,21 @@ class Product extends Model
         return \DB::table('octommerce_octommerce_product_product_attribute')->where('value', $value)->first()->product_id;
     }
 
-    public function getSizesProperty($parentId)
+    public function getAttributesProperty($parentId,$attributeType)
     {
-        $sizes = self::whereParentId($parentId)->with('product_attributes')->has('product_attributes')->get();
+        $sizes = self::whereParentId($parentId)->has('product_attributes')->get();
 
-        return $sizes->map(function($item){
-            if (isset($item->product_attributes->where('type','text')->first()->pivot)) {
+        $orderSizes = $sizes->sortByDesc(function($item)use($attributeType){
+            return isset($item->product_attributes->where('type', $attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->value : null;
+        });
+
+        return $orderSizes->map(function($item)use($attributeType){
+            if (isset($item->product_attributes->where('type', $attributeType)->first()->pivot)) {
                 
                 $list = [];
-                $list['name'] = isset($item->product_attributes->where('type','text')->first()->pivot) ? $item->product_attributes->where('type','text')->first()->pivot->value : null;
-                $list['code'] = isset($item->product_attributes->where('type','text')->first()->pivot) ? strtolower($item->product_attributes->where('type','text')->first()->pivot->value) : null;
-                $list['product_id'] = isset($item->product_attributes->where('type','text')->first()->pivot) ? $item->product_attributes->where('type','text')->first()->pivot->product_id : null;
-
+                $list['name'] = isset($item->product_attributes->where('type',$attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->value : null;
+                $list['code'] = isset($item->product_attributes->where('type',$attributeType)->first()->pivot) ? strtolower($item->product_attributes->where('type',$attributeType)->first()->pivot->value) : null;
+                $list['product_id'] = isset($item->product_attributes->where('type',$attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->product_id : null;
 
                 
                 $slug = self::find($list['product_id'])->slug;
@@ -754,7 +757,7 @@ class Product extends Model
     public function getPivotValueAttribute()
     {
         if (isset($this->product_attributes->first()->pivot)){
-           return $this->product_attributes->first()->pivot->value; 
+           return strtolower($this->product_attributes->first()->pivot->value); 
        }else{
         return;
        }
