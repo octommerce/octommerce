@@ -16,6 +16,11 @@ fields:
         oc.commentPosition: ''
         span: auto
         type: dropdown
+    parent:
+        label: Parent
+        type: relation
+        span: left
+        emptyOption: -- Delete Parent --
     brand:
         label: Brand
         span: auto
@@ -109,10 +114,6 @@ tabs:
             span: auto
             type: relation
             tab: Information
-        product_variations:
-            type: partial
-            path: $/octommerce/octommerce/controllers/products/_relation_product_variations.htm
-            tab: Variations
         product_attributes:
             type: partial
             path: $/octommerce/octommerce/controllers/products/_relation_attributes.htm
