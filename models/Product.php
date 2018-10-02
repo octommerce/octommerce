@@ -9,7 +9,8 @@ use ApplicationException;
 use Cms\Classes\Page as CmsPage;
 use Octommerce\Octommerce\Classes\ProductManager;
 use Octommerce\Octommerce\Observers\Product as ProductObserver;
-use Octommerce\Octommerce\Models\Settings;
+use Redirect;
+use Cms\Classes\Page;
 
 /**
  * Product Model
@@ -128,10 +129,6 @@ class Product extends Model
             'key' => 'parent_id',
         ],
         'reviews' => 'Octommerce\Octommerce\Models\Review',
-        'product_variations' => [
-            'Octommerce\Octommerce\Models\Variation',
-            'table' => 'octommerce_octommerce_products_variations',
-        ],
     ];
 
     public $belongsTo = [
@@ -204,8 +201,7 @@ class Product extends Model
         'prospective_buyers' => [
             'RainLab\User\Models\User',
             'table' => 'octommerce_octommerce_product_user',
-        ],
-        
+        ]
     ];
 
     public $morphTo = [];
@@ -260,9 +256,17 @@ class Product extends Model
     public function filterFields($fields, $context = null)
     {
         // Hide category on update
+        $fields->parent->hidden = true;
+        $fields->guide->hidden = true;
+
+        if (empty($this->parent)) {
+            $fields->guide->hidden = false;
+        }
+
         if($context == 'update' && $this->parent) {
             isset($fields->type) ? $fields->type->hidden = true : '';
             isset($fields->categories) ? $fields->categories->hidden = true : '';
+            $fields->parent->hidden = false;
         }
     }
 
@@ -717,10 +721,45 @@ class Product extends Model
         return $url;
     }
 
-    public function getProductByListsAttribute()
+    public function getProductId($value)
     {
-        return self::published()->whereHas('lists',function($query){
-            $query->where('id', Settings::get('show_products_lists'));
-        })->get();
+        return \DB::table('octommerce_octommerce_product_product_attribute')->where('value', $value)->first()->product_id;
     }
+
+    public function getSizesProperty($parentId)
+    {
+        $sizes = self::whereParentId($parentId)->with('product_attributes')->has('product_attributes')->get();
+
+        return $sizes->map(function($item){
+            if (isset($item->product_attributes->where('type','text')->first()->pivot)) {
+                
+                $list = [];
+                $list['name'] = isset($item->product_attributes->where('type','text')->first()->pivot) ? $item->product_attributes->where('type','text')->first()->pivot->value : null;
+                $list['code'] = isset($item->product_attributes->where('type','text')->first()->pivot) ? strtolower($item->product_attributes->where('type','text')->first()->pivot->value) : null;
+                $list['product_id'] = isset($item->product_attributes->where('type','text')->first()->pivot) ? $item->product_attributes->where('type','text')->first()->pivot->product_id : null;
+
+
+                
+                $slug = self::find($list['product_id'])->slug;
+                $list['url'] = Page::url('products/detail', [ 'slug' => $slug ]);
+   
+                return $list;
+            }
+
+
+        });
+
+    }
+
+    public function getPivotValueAttribute()
+    {
+        if (isset($this->product_attributes->first()->pivot)){
+           return $this->product_attributes->first()->pivot->value; 
+       }else{
+        return;
+       }
+        
+        
+    }
+
 }
