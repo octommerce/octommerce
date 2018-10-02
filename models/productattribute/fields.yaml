@@ -8,6 +8,7 @@ fields:
         label: Type
         oc.commentPosition: ''
         options:
+            size: Size
             text: Text
             boolean: Boolean
             select: Select
@@ -68,6 +69,17 @@ fields:
             action: show
             field: type
             condition: value[date]
+    _default[size]:
+        label: Code (Default)
+        type: Text
+        span: left
+        trigger:
+            action: show
+            field: type
+            condition: value[size]
+        preset:
+            field: name
+            type: slug
 
     #
     # Options
