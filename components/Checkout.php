@@ -4,6 +4,7 @@ use Db;
 use Cart as CartHelper;
 use Flash;
 use Exception;
+use ApplicationException;
 use Redirect;
 use Cms\Classes\Page;
 use Cms\Classes\CodeBase;
