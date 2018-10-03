@@ -95,6 +95,3 @@
 1.0.27:
     - Modify session_id column to nullable on carts table
     - modify_session_id_column_to_nullable_on_carts_table.php
-1.0.28:
-    - Create Variations Product
-    - create_variations_table.php
