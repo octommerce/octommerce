@@ -17,6 +17,7 @@ class ProductList extends ComponentBase
 {
     public $list;
     public $brand;
+    public $brands;
     public $category;
     public $products;
     public $categories;
@@ -146,6 +147,7 @@ class ProductList extends ComponentBase
 
         $currentPage = post('page');
         $this->page['categories'] = $this->categories = $this->listCategories();
+        $this->page['brands'] = $this->brands = $this->listBrands();
         $products = $this->products = $this->listProducts();
 
         /*
@@ -393,6 +395,18 @@ class ProductList extends ComponentBase
 
         return $categories;
     }
+
+    /**
+     * List all Brands of products
+     * @return Collection
+     */
+    public function listBrands()
+    {
+        $brands = Brand::all();
+
+        return $brands;
+    }
+
 
     /**
      * Ajax Framework to handle on checked categories
