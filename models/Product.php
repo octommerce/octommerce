@@ -479,16 +479,27 @@ class Product extends Model
                     ->take(4)
                     ->get();
 
+        
+
         $productsCount = $relatedCategories->count();
+
         //Get limit based on how much related categories have. Is it less than 4 or not?
         $limit = $productsCount < 4 ? 4 - $productsCount : 0;
+
+        $relatedBrand = self::published()
+                    ->where('brand_id',$this->brand_id)
+                    ->where('id','<>', $this->id)
+                    ->orderBy(DB::raw('RAND()'))
+                    ->take($limit)
+                    ->get();
+
         $related = self::published()
                    ->where('id', '<>', $this->id)
                    ->orderBy(DB::raw('RAND()'))
                    ->take($limit)
                    ->get();
 
-        return $relatedCategories->merge($related);//array_merge($relatedCategories->toArray(), $related->toArray());
+        return $relatedCategories->merge($related)->merge($relatedBrand);//array_merge($relatedCategories->toArray(), $related->toArray());
     }
 
     public function getIsLowStockAttribute()
@@ -721,20 +732,20 @@ class Product extends Model
         return $url;
     }
 
-    public function getProductId($value)
-    {
-        return \DB::table('octommerce_octommerce_product_product_attribute')->where('value', $value)->first()->product_id;
-    }
+    // public function getProductId($value)
+    // {
+    //     return \DB::table('octommerce_octommerce_product_product_attribute')->where('value', $value)->first()->product_id;
+    // }
 
     public function getAttributesProperty($parentId,$attributeType)
     {
-        $sizes = self::whereParentId($parentId)->has('product_attributes')->get();
+        $attributes = self::whereParentId($parentId)->has('product_attributes')->get();
 
-        $orderSizes = $sizes->sortByDesc(function($item)use($attributeType){
+        $orderAttributes = $attributes->sortByDesc(function($item)use($attributeType){
             return isset($item->product_attributes->where('type', $attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->value : null;
         });
 
-        return $orderSizes->map(function($item)use($attributeType){
+        return $orderAttributes->map(function($item)use($attributeType){
             if (isset($item->product_attributes->where('type', $attributeType)->first()->pivot)) {
                 
                 $list = [];
