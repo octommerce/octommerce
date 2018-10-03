@@ -8,7 +8,6 @@ fields:
         label: Type
         oc.commentPosition: ''
         options:
-            size: Size
             text: Text
             boolean: Boolean
             select: Select
