@@ -732,48 +732,4 @@ class Product extends Model
         return $url;
     }
 
-    // public function getProductId($value)
-    // {
-    //     return \DB::table('octommerce_octommerce_product_product_attribute')->where('value', $value)->first()->product_id;
-    // }
-
-    public function getAttributesProperty($parentId,$attributeType)
-    {
-        $attributes = self::whereParentId($parentId)->has('product_attributes')->get();
-
-        $orderAttributes = $attributes->sortByDesc(function($item)use($attributeType){
-            return isset($item->product_attributes->where('type', $attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->value : null;
-        });
-
-        return $orderAttributes->map(function($item)use($attributeType){
-            if (isset($item->product_attributes->where('type', $attributeType)->first()->pivot)) {
-                
-                $list = [];
-                $list['name'] = isset($item->product_attributes->where('type',$attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->value : null;
-                $list['code'] = isset($item->product_attributes->where('type',$attributeType)->first()->pivot) ? strtolower($item->product_attributes->where('type',$attributeType)->first()->pivot->value) : null;
-                $list['product_id'] = isset($item->product_attributes->where('type',$attributeType)->first()->pivot) ? $item->product_attributes->where('type',$attributeType)->first()->pivot->product_id : null;
-
-                
-                $slug = self::find($list['product_id'])->slug;
-                $list['url'] = Page::url('products/detail', [ 'slug' => $slug ]);
-   
-                return $list;
-            }
-
-
-        });
-
-    }
-
-    public function getPivotValueAttribute()
-    {
-        if (isset($this->product_attributes->first()->pivot)){
-           return strtolower($this->product_attributes->first()->pivot->value); 
-       }else{
-        return;
-       }
-        
-        
-    }
-
 }
