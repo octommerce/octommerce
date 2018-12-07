@@ -8,7 +8,7 @@ class AddProfileColumnsToUsersTable extends Migration
 
     public function up()
     {
-        if (Schema::hasColumns('users', ['state_id', 'city_id'])) {
+        if (Schema::hasColumns('users', ['state_id', 'city_id', 'phone'])) {
             return;
         }
 
