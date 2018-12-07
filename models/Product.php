@@ -257,11 +257,6 @@ class Product extends Model
     {
         // Hide category on update
         $fields->parent->hidden = true;
-        $fields->guide->hidden = true;
-
-        if (empty($this->parent)) {
-            $fields->guide->hidden = false;
-        }
 
         if($context == 'update' && $this->parent) {
             isset($fields->type) ? $fields->type->hidden = true : '';
