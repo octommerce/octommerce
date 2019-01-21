@@ -46,7 +46,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('discount', 12, 2)->unsigned()->default(0);
 
             $table->string('name')->nullable();
-            $table->json('data')->nullable();
+            $table->text('data')->nullable();
 
             $table->primary(['order_id', 'product_id']);
         });

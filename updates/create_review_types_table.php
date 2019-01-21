@@ -12,7 +12,7 @@ class CreateReviewTypesTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name');
-            $table->json('product_type_codes')->nullable();
+            $table->text('product_type_codes')->nullable();
             $table->timestamps();
         });
     }

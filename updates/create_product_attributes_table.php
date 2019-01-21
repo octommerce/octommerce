@@ -15,7 +15,7 @@ class CreateProductAttributesTable extends Migration
 
             $table->string('name');
             $table->string('type')->default('text');
-            $table->json('options')->nullable();
+            $table->text('options')->nullable();
             $table->text('default')->nullable();
             $table->timestamps();
         });
@@ -27,7 +27,7 @@ class CreateProductAttributesTable extends Migration
             $table->integer('product_id')->unsigned()->nullable();
             $table->integer('attribute_id')->unsigned();
 
-            $table->json('value')->nullable();
+            $table->text('value')->nullable();
         });
     }
 

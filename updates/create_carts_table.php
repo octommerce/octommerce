@@ -30,7 +30,7 @@ class CreateCartsTable extends Migration
             $table->integer('qty')->unsigned()->default(1);
             $table->decimal('price', 12, 2)->unsigned()->default(0);
             $table->decimal('discount', 12, 2)->unsigned()->default(0);
-            $table->json('data')->nullable();
+            $table->text('data')->nullable();
 
             $table->primary(['cart_id', 'product_id']);
         });

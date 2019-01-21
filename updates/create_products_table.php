@@ -24,7 +24,7 @@ class CreateProductsTable extends Migration
             $table->string('type')->default('simple');
 
             // For custom fields
-            $table->json('options')->nullable();
+            $table->text('options')->nullable();
 
             // If grouped product
             $table->integer('parent_id')->unsigned()->nullable();

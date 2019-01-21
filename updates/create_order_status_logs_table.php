@@ -14,7 +14,7 @@ class CreateOrderStatusLogsTable extends Migration
 
             $table->integer('order_id')->unsigned();
             $table->string('status_code');
-            $table->json('data')->nullable();
+            $table->text('data')->nullable();
 
             $table->timestamp('timestamp');
             $table->integer('admin_id')->unsigned()->nullable();
