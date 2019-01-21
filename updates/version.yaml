@@ -5,7 +5,6 @@
     - create_products_table.php
     - create_product_attributes_table.php
     - create_product_lists_table.php
-    - create_product_product_list_table.php
     - create_reviews_table.php
     - create_carts_table.php
     - create_orders_table.php
